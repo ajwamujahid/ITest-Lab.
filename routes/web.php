@@ -58,8 +58,7 @@ Route::get('/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name
 
 });
 
-    // Route::get('/patient/test-form', [PatientTestController::class, 'create'])->name('patient.testForm');
-    // Route::post('/patient/submit-test', [PatientTestController::class, 'store'])->name('patient.submitTest');
+    
 use App\Http\Controllers\ComplaintController;
 Route::get('/complaints/create', [ComplaintController::class, 'create']);
 Route::post('/complaints', [ComplaintController::class, 'store'])->name('complaints.store');
@@ -258,11 +257,11 @@ use App\Http\Controllers\BranchInventoryReportController;
         });
         use App\Http\Controllers\BranchAdminTestController;
 
-Route::prefix('branchadmin')->middleware(['auth:branchadmin'])->group(function () {
+// Route::prefix('branchadmin')->middleware(['auth:branchadmin'])->group(function () {
     Route::get('/tests/pending', [BranchAdminTestController::class, 'pending'])->name('branchadmin.tests.pending');
     Route::get('/tests/completed', [BranchAdminTestController::class, 'completed'])->name('branchadmin.tests.completed');
     Route::get('/tests/all', [BranchAdminTestController::class, 'all'])->name('branchadmin.tests.all');
-});
+// });
 
 // use App\Http\Controllers\BranchAdminAppointmentController;
 
