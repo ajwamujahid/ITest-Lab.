@@ -42,8 +42,8 @@
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
-                        <li class="slide"><a href="{{ url('/branchadmin/tests/pending') }}" class="side-menu__item">⏳ Pending Tests</a></li>
-                        <li class="slide"><a href="{{ url('/branchadmin/tests/completed') }}" class="side-menu__item">✅ Completed Tests</a></li>
+                        <li class="slide"><a href="{{ route('branchadmin.tests.pending') }}" class="side-menu__item">⏳ Pending Tests</a></li>
+                        <li class="slide"><a href="{{ route('branchadmin.tests.completed') }}" class="side-menu__item">✅ Completed Tests</a></li>
                         <li class="slide"><a href="{{ route('branchadmin.tests.all')  }}" class="side-menu__item">📋 All Tests</a></li>
                     </ul>
                 </li>
