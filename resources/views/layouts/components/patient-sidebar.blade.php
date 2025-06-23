@@ -160,13 +160,19 @@
         <li class="slide">
             <a href="{{ url('appointments/schedule') }}" class="side-menu__item">Schedule Appointment</a>
         </li>
-        {{-- <li class="slide">
-            <a href="{{ url('appointments/notifications') }}" class="side-menu__item">Notifications</a>
-        </li>
-        <li class="slide">
-            <a href="{{ url('appointments/reminders') }}" class="side-menu__item">Reminders</a>
-        </li> --}}
+    
     </ul>
+    <li class="slide">
+        <a href="{{ route('patient.logout') }}" class="side-menu__item"
+           onclick="event.preventDefault(); document.getElementById('patient-logout-form').submit();">
+            <i class="bx bx-log-out side-menu__icon"></i>
+            <span class="side-menu__label">Logout</span>
+        </a>
+    
+        <form id="patient-logout-form" action="{{ route('patient.logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    </li>
 </li>
 <!-- End::slide -->
 

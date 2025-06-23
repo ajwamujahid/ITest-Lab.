@@ -71,9 +71,12 @@ class PatientController extends Controller
         return view('patients.dashboard', compact('patient', 'visits'));
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::guard('patient')->logout();
-        return redirect()->route('patient.login.form')->with('status', 'Logged out successfully!');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('patient.login');
     }
+    
 }
