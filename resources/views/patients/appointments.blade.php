@@ -3,9 +3,15 @@
 @section('content')
 <div class="container mt-4">
     <h3 class="mb-4">📋 My Scheduled Appointments</h3>
+{{-- debug only --}}
+{{-- <pre>{{ print_r($appointments->pluck('patient_id'), true) }}</pre> --}}
 
     @if($appointments->isEmpty())
-        <p>No appointments found.</p>
+    <div class="alert alert-info text-center">
+        <strong>No appointments found.</strong><br>
+        You haven’t booked or been assigned any appointments yet.
+    </div>
+
     @else
         <div class="table-responsive">
             <table class="table table-bordered table-striped">

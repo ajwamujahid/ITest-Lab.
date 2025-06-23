@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\TestRequest;
 use App\Models\Rider;
 use App\Models\Test;
@@ -60,18 +60,23 @@ public function assignAppointment(Request $request, $id)
     return back()->with('success', 'Appointment assigned successfully.');
 }
 
-    
-    public function myAppointments()
-    {
-        $patientId = auth()->id();
-        $appointments = Appointment::with(['rider', 'testRequest', 'branch'])->latest()->paginate(10);
 
-    
-    $tests = \App\Models\Test::all()->keyBy('id'); // ✅ get all test names
-    
-    
-        return view('patients.appointments', compact('appointments', 'tests'));
-    }
+public function myAppointments()
+{
+    $patientId = Auth::guard('patient')->id();   // ✅ correct guard
+
+    $appointments = Appointment::with(['rider', 'testRequest', 'branch'])
+        ->where('patient_id', $patientId)        // only THIS patient
+        ->where('status', 'scheduled')           // keep if you really need it
+        ->latest()
+        ->paginate(10);
+
+    $tests = Test::all()->keyBy('id');
+
+    return view('patients.appointments', compact('appointments', 'tests'));
+}
+
+
     public function trackRider(Appointment $appointment)
 {
     $rider = $appointment->rider;

@@ -10,7 +10,7 @@ class Patient extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'phone', 'age', 'gender', 'dob', 'address',
-        'tests', 'branch', 'payment_method', 'total_amount'
+        'tests', 'branch_id','password','payment_method', 'total_amount'
     ];
     
     public function testRequests()
