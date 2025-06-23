@@ -81,41 +81,42 @@
                                 <ul class="slide-menu child1">
                                     <!-- All Employees -->
                                      <!-- Add New Employee -->
-                                     <li class="slide">
+                                     {{-- <li class="slide">
                                         <a href="{{ url('branch-admin/create') }}" class="side-menu__item">Add Branch Admin</a>
+                                    </li> --}}
+                                    <li class="slide">
+                                        <a href="{{ url('employees') }}" class="side-menu__item">Branch Admins</a>
                                     </li>
                                     <li class="slide">
-                                        <a href="{{ url('employees') }}" class="side-menu__item">Branch Admin List</a>
+                                        <a href="{{ route('employees.filter') }}" class="side-menu__item">
+                                           
+                                            <span class="side-menu__label">Branch Managers</span>
+                                        </a>
                                     </li>
-                            
-                                    <li class="slide">
+                                    {{-- <li class="slide">
                                         <a href="{{ route('managers.create') }}" class="side-menu__item">Add Manager</a>
 
-                                    </li>
+                                    </li> --}}
                                     
                                     <li class="slide">
                                         <a href="{{ url('departments') }}" class="side-menu__item">Departments</a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('roles.create') }}" class="side-menu__item">Roles & Permissions</a>
+                                    </li>
                                     <!-- Role-specific sections (Optional filtered views) -->
-                                    <li class="slide has-sub">
+                                    {{-- <li class="slide has-sub">
                                         <a href="javascript:void(0);" class="side-menu__item">By Role<i class="fe fe-chevron-right side-menu__angle"></i></a>
                                         <ul class="slide-menu child2">
                                             {{-- <li><a href="{{ url('employees?role=Super Admin') }}" class="side-menu__item">Super Admins</a></li>
                                             <li><a href="{{ url('employees?role=Branch Manager') }}" class="side-menu__item">Branch Managers</a></li> --}}
                                            
-                                            <li>
-                                                <a href="{{ route('roles.create') }}" class="side-menu__item">Roles & Permissions</a>
-                                            </li>
-                                            <li class="slide">
-                                                <a href="{{ route('employees.filter') }}" class="side-menu__item">
-                                                   
-                                                    <span class="side-menu__label">Employee list</span>
-                                                </a>
-                                            </li>
+                                           
+                                          
                                             
-                                            </ul>
+                                            {{-- </ul>
                                         
-                                    </li>
+                                    </li> --}} 
                             
                                     <!-- Additional Modules -->
                                     {{-- <li class="slide">
@@ -131,19 +132,20 @@
                                     {{-- <li class="slide">
                                         <a href="{{ url('attendance') }}" class="side-menu__item">Attendance</a>
                                     </li> --}}
-                                    <li class="slide">
-                                        <a href="{{ route('payroll.index') }}" class="side-menu__item">
-                                          
-                                          Payroll List
-                                        </a>
-                                    </li>
-                                    
-                                    <li class="slide">
+                                    {{-- <li class="slide">
                                         <a href="{{ route('payroll.create') }}" class="side-menu__item">
                                            
                                            Add Payroll
                                         </a>
+                                    </li> --}}
+                                    <li class="slide">
+                                        <a href="{{ route('payroll.index') }}" class="side-menu__item">
+                                          
+                                          Payroll
+                                        </a>
                                     </li>
+                                    
+
                                     
                                     {{-- <li class="slide">
                                         <a href="{{ url('performance-reviews') }}" class="side-menu__item">Performance Reviews</a>
@@ -169,9 +171,9 @@
                                     <li class="slide">
                                         <a href="{{ url('inventory-items') }}" class="side-menu__item">Items List</a>
                                     </li>
-                                    <li class="slide">
+                                    {{-- <li class="slide">
                                         <a href="{{ url('inventory-add') }}" class="side-menu__item">Add New Item</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="slide">
                                         <a href="{{ url('inventory-category') }}" class="side-menu__item">Categories</a>
                                     </li>

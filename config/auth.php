@@ -22,6 +22,17 @@ return [
             'driver' => 'session',
             'provider' => 'branch_admins',
         ],
+        'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+    'branchadmin' => [
+        'driver' => 'session',
+        'provider' => 'branch_admins', // or maybe 'users' if you're reusing the user table
+    ],
+],
+
 
         'patient' => [
             'driver' => 'session',

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">🧾 Your Medical Reports</h4>
+    <h4 class="mb-4"> Your Medical Reports</h4>
 
     @if($testRequests->isEmpty())
         <div class="alert alert-info">
@@ -14,7 +14,7 @@
                 <div class="col">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body">
-                            <h5 class="card-title mb-2">🧪 {{ $test->test_type ?? 'Test Report' }}</h5>
+                            <h5 class="card-title mb-2"> {{ $test->test_type ?? 'Test Report' }}</h5>
                             <p class="card-text">
                                 <strong>Date:</strong> {{ $test->created_at->format('d M, Y') }} <br>
                                 <strong>Report Status:</strong> 

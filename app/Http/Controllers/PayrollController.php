@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+
 use App\Models\Branch;
 use App\Models\Payroll;
 use App\Models\Employee;
@@ -65,5 +67,33 @@ class PayrollController extends Controller
     
         return view('payroll.create', compact('allEmployees'));
     }
-    
+    public function store(Request $request)
+{
+    $request->validate([
+        'employee_id' => 'required|numeric',
+        'employee_type' => 'required|string',
+        'basic_salary' => 'required|numeric|min:0',
+        'allowances' => 'nullable|numeric|min:0',
+        'deductions' => 'nullable|numeric|min:0',
+        'month' => 'required|string',
+        'year' => 'required|numeric',
+    ]);
+
+    $payroll = new \App\Models\Payroll();
+    $payroll->employee_id = $request->employee_id;
+    $payroll->employee_type = $request->employee_type;
+    $payroll->basic_salary = $request->basic_salary;
+    $payroll->allowances = $request->allowances ?? 0;
+    $payroll->deductions = $request->deductions ?? 0;
+    $payroll->month = $request->month;
+    $payroll->year = $request->year;
+
+    // Calculate total salary
+    $payroll->total_salary = ($payroll->basic_salary + $payroll->allowances) - $payroll->deductions;
+
+    $payroll->save();
+
+    return redirect()->route('payroll.index')->with('success', 'Payroll record created successfully!');
+}
+
 }

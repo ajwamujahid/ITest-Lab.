@@ -21,7 +21,7 @@
 
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <label for="patient_name" class="form-label">👤 Your Name</label>
+                                <label for="patient_name" class="form-label">Your Name</label>
                                 <input type="text" name="patient_name" id="patient_name"
                                        class="form-control @error('patient_name') is-invalid @enderror"
                                        value="{{ old('patient_name') }}" required>
@@ -31,7 +31,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="target_role" class="form-label">🎯 Complain To</label>
+                                <label for="target_role" class="form-label"> Complain To</label>
                                 <select name="target_role" id="target_role"
                                         class="form-select @error('target_role') is-invalid @enderror" required>
                                     <option value="" disabled {{ old('target_role') ? '' : 'selected' }}>Select Role</option>
@@ -44,7 +44,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="branch" class="form-label">🏢 Branch</label>
+                                <label for="branch" class="form-label">Branch</label>
                                 <select name="branch" id="branch"
                                         class="form-select @error('branch') is-invalid @enderror" required>
                                     <option value="" disabled {{ old('branch') ? '' : 'selected' }}>Select Branch</option>
@@ -58,7 +58,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="attachment" class="form-label">📎 Attachment (optional)</label>
+                                <label for="attachment" class="form-label">Attachment (optional)</label>
                                 <input type="file" name="attachment" id="attachment"
                                        class="form-control @error('attachment') is-invalid @enderror">
                                 @error('attachment')
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="col-12">
-                                <label for="complaint_text" class="form-label">📝 Your Complaint</label>
+                                <label for="complaint_text" class="form-label"> Your Complaint</label>
                                 <textarea name="complaint_text" id="complaint_text" rows="4"
                                           class="form-control @error('complaint_text') is-invalid @enderror"
                                           placeholder="Write your complaint in detail..." required>{{ old('complaint_text') }}</textarea>

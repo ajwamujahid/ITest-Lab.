@@ -60,13 +60,20 @@ class BranchAdminController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+    
+        $admin = BranchAdmin::where('email', $credentials['email'])->first();
+    
+        if (!$admin || $admin->status !== 'active') {
+            return back()->with('error', 'This account is inactive.');
+        }
+    
         if (Auth::guard('branchadmin')->attempt($credentials)) {
             return redirect()->route('branchadmin.dashboard');
         }
-
-        return redirect()->back()->with('error', 'Invalid credentials');
+    
+        return back()->with('error', 'Invalid credentials');
     }
+    
 
     public function logout(Request $request)
     {
@@ -75,7 +82,16 @@ class BranchAdminController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('branchadmin.login')->with('success', 'Logged out successfully');
     }
-
+    public function toggleStatus($id)
+    {
+        $admin = BranchAdmin::findOrFail($id);
+    
+        $admin->status = $admin->status === 'active' ? 'inactive' : 'active';
+        $admin->save();
+    
+        return redirect()->back()->with('success', 'Status updated successfully.');
+    }
+    
     public function dashboard()
     {
         return view('branchadmin.dashboard');

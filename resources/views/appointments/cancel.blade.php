@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h4 class="mb-3">📋 Scheduled Appointments</h4>
+    <h4 class="mb-3"> Scheduled Appointments</h4>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -26,9 +26,9 @@
                     {{-- Test Type --}}
                     <td>
                         @if($appointment->test_type == 'physical')
-                        <span class="badge bg-primary">🏥 Physical Test</span>
+                        <span class="badge bg-primary"> Physical Test</span>
                     @else
-                        <span class="badge bg-warning text-dark">🧪 Sample Test</span>
+                        <span class="badge bg-warning text-dark"> Sample Test</span>
                     @endif
                     
                     </td>

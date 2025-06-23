@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <div class="card shadow rounded">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">🧭 Rider Tracking</h4>
+            <h4 class="mb-0"> Rider Tracking</h4>
         </div>
 
         <div class="card-body">

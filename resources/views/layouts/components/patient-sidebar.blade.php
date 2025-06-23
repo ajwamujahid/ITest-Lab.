@@ -43,21 +43,21 @@
         <!-- Test Form -->
         <li class="slide">
             <a href="{{ url('/patient/test-step1') }}" class="side-menu__item">
-                🧪 Request Test
+                Request Test
             </a>
         </li>
 
         <!-- Payments -->
         <li class="slide">
             <a href="{{ url('/patient/payments') }}" class="side-menu__item">
-                💳 Payments
+                Payments
             </a>
         </li>
 
         <!-- View Reports -->
         <li class="slide">
             <a href="{{ url('/patient/reports') }}" class="side-menu__item">
-                📁 View Reports
+                View Reports
             </a>
         </li>
     </ul>
@@ -78,24 +78,24 @@
 
         <!-- Lodge Complaint -->
         <li class="slide">
-            <a href="{{ url('/complaints/create') }}" class="side-menu__item">📝 Lodge Complaint</a>
+            <a href="{{ url('/complaints/create') }}" class="side-menu__item">Lodge Complaint</a>
         </li>
 
         <!-- View All Complaints -->
         <li class="slide">
-            <a href="{{ url('/complaints') }}" class="side-menu__item">📋 View My Complaints</a>
+            <a href="{{ url('/complaints') }}" class="side-menu__item">View My Complaints</a>
         </li>
 
         <!-- Filtered Complaint Statuses -->
-        <li class="slide">
-            <a href="{{ url('/complaints?status=in-progress') }}" class="side-menu__item">🔄 In-Progress</a>
+        {{-- <li class="slide">
+            <a href="{{ url('/complaints?status=in-progress') }}" class="side-menu__item">In-Progress</a>
         </li>
         <li class="slide">
-            <a href="{{ url('/complaints?status=resolved') }}" class="side-menu__item">✅ Resolved</a>
+            <a href="{{ url('/complaints?status=resolved') }}" class="side-menu__item">Resolved</a>
         </li>
         <li class="slide">
-            <a href="{{ url('/complaints?status=rejected') }}" class="side-menu__item">❌ Rejected</a>
-        </li>
+            <a href="{{ url('/complaints?status=rejected') }}" class="side-menu__item">Rejected</a>
+        </li> --}}
     </ul>
 </li>
 <!-- End::Complain Section -->

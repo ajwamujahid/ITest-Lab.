@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h4 class="mb-3">📆 Reschedule Cancelled Appointments</h4>
+    <h4 class="mb-3">Reschedule Cancelled Appointments</h4>
 {{-- /<p class="text-muted">Only appointments with <strong>status = cancelled</strong> are shown here.</p> --}}
     
     @if(session('success'))
@@ -36,7 +36,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4">🚫 No pending appointments found.</td>
+                    <td colspan="4">No pending appointments found.</td>
                 </tr>
             @endforelse
         </tbody>

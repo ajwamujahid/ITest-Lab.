@@ -14,14 +14,21 @@ class ManagerAuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::guard('manager')->attempt($credentials)) {
+            $manager = Auth::guard('manager')->user();
+    
+            if ($manager->status !== 'active') {
+                Auth::guard('manager')->logout();
+                return back()->withErrors(['email' => 'Your account is inactive.'])->withInput();
+            }
+    
             return redirect()->route('manager.manager-dashboard');
         }
-
+    
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
-
+    
     public function dashboard()
     {
         $manager = Auth::guard('manager')->user();

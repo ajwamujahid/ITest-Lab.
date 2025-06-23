@@ -1,10 +1,13 @@
 @extends('layouts.master')
 
+@section('title', 'Finance | Total Expenses')
+
 @section('content')
-<div class="container my-4">
+<div class="container py-4">
+
     <h2 class="mb-4">Total Expenses</h2>
 
-    <!-- Filter Form -->
+    {{-- 🔎 Filter Form --}}
     <form method="GET" action="{{ url('finance/expenses') }}" class="mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
@@ -16,68 +19,79 @@
                 <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>
             <div class="col-md-3">
-                <label class="form-label fs-14 text-dark">Branch <span class="text-danger">*</span></label>
-                <select name="branch_id" class="form-control" required>
+                <label for="branch_id" class="form-label">Branch <span class="text-danger">*</span></label>
+                <select name="branch_id" id="branch_id" class="form-select" required>
                     <option value="">Select Branch</option>
                     @foreach($branches as $branch)
-                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                        <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
+                            {{ $branch->name }}
+                        </option>
                     @endforeach
                 </select>
-                @error('branch_id') <small class="text-danger">{{ $message }}</small> @enderror
+                @error('branch_id') 
+                    <small class="text-danger">{{ $message }}</small> 
+                @enderror
             </div>
-     
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <div class="col-md-3 d-grid">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
             </div>
         </div>
     </form>
 
-    <!-- Summary -->
+    {{-- 💰 Summary Box --}}
     <div class="mb-4">
-        <div class="card bg-light p-3">
-            <h4>Total Expenses: <span class="text-danger">PKR {{ number_format($totalExpenses, 2) }}</span></h4>
+        <div class="card shadow-sm border-0 bg-light p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="mb-1">Total Expenses</h5>
+                    <h3 class="text-danger fw-bold">PKR {{ number_format($totalExpenses, 2) }}</h3>
+                </div>
+                <div>
+                    <i class="bi bi-credit-card fs-1 text-danger"></i>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Expenses Table -->
-    <div class="card">
-        <div class="card-header">
-            Expenses List
+    {{-- 📋 Expenses Table --}}
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-black fw-semibold">
+             Expense Records
         </div>
         <div class="card-body p-0">
-            <table class="table table-striped mb-0">
-                <thead class="table-dark">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
                     <tr>
                         <th>#</th>
                         <th>Description</th>
                         <th>Amount (PKR)</th>
                         <th>Date</th>
-                        <th>Branch ID</th>
+                        <th>Branch</th>
                         <th>Category</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($expenses as $expense)
-                    <tr>
-                        <td>{{ $loop->iteration + ($expenses->currentPage() - 1) * $expenses->perPage() }}</td>
-                        <td>{{ $expense->description }}</td>
-                        <td>{{ number_format($expense->amount, 2) }}</td>
-                        <td>{{ $expense->expense_date ? \Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') : '-' }}</td>
-                        <td>{{ $expense->branch_id }}</td>
-                        <td>{{ $expense->category ?? '-' }}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ $loop->iteration + ($expenses->currentPage() - 1) * $expenses->perPage() }}</td>
+                            <td>{{ $expense->description }}</td>
+                            <td class="fw-semibold">PKR {{ number_format($expense->amount, 2) }}</td>
+                            <td>{{ \Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') }}</td>
+                            <td>{{ $expense->branch->name ?? 'N/A' }}</td>
+                            <td>{{ $expense->category ?? '-' }}</td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="6" class="text-center">No expenses found.</td>
-                    </tr>
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-3">No expenses found for the selected filters.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="mt-3">
+    {{-- 📄 Pagination --}}
+    <div class="mt-4 d-flex justify-content-center">
         {{ $expenses->withQueryString()->links() }}
     </div>
 </div>

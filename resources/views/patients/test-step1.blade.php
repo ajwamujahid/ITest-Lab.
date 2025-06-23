@@ -7,7 +7,7 @@
         <div class="col-lg-10 col-xl-9">
             <div class="card shadow-lg border-0 rounded-4">
                 <div class="card-body p-5">
-                    <h2 class="text-center mb-4 text-primary">📝 Step 1: Enter Your Information</h2>
+                    <h2 class="text-center mb-4 text-primary">Step 1: Enter Your Information</h2>
                     <form action="{{ route('test.step1.post') }}" method="POST">
                         @csrf
                         <div class="row g-3">

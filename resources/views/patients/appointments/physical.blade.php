@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h3 class="mb-4">🧪 Your Physical Test Appointments</h3>
+    <h3 class="mb-4"> Your Physical Test Appointments</h3>
 
     @if($appointments->count())
         <table class="table table-bordered align-middle">

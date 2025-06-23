@@ -72,7 +72,8 @@ Route::get('/patient-complaints/view', [ComplaintController::class, 'viewComplai
     // ✅ Superadmin creating branch admins
     Route::get('branch-admin/create', [BranchAdminController::class, 'create'])->name('branch-admin.create');
     Route::post('branch-admin/store', [BranchAdminController::class, 'store'])->name('branchadmin.store');
-    
+    Route::patch('/branch-admins/{id}/toggle', [BranchAdminController::class, 'toggleStatus'])->name('branchadmin.toggle');
+
     // ✅ Branch Admin Auth Routes
     Route::get('branch-admin/login', [BranchAdminController::class, 'showLoginForm'])->name('branchadmin.login');
     Route::post('branch-admin/login', [BranchAdminController::class, 'login'])->name('branchadmin.login.submit');
@@ -92,7 +93,8 @@ Route::get('/patient-complaints/view', [ComplaintController::class, 'viewComplai
     Route::get('/employees/filter', [EmployeeController::class, 'filter'])->name('employees.filter');
 
     use App\Http\Controllers\InventoryController;
-    Route::get('inventory-add', [InventoryController::class, 'create']);
+    Route::get('inventory-add', [InventoryController::class, 'create'])->name('inventory.create');
+
 Route::post('inventory-add', [InventoryController::class, 'store'])->name('inventory.store');
 Route::get('inventory-items', [InventoryController::class, 'index'])->name('inventory.index');
 use App\Http\Controllers\InventoryCategoryController;
@@ -156,6 +158,13 @@ Route::post('/roles/store-with-permission', [RoleController::class, 'storeWithPe
 use App\Http\Controllers\ManagerController;
 Route::get('/managers/create', [ManagerController::class, 'create'])->name('managers.create');
 Route::post('/managers/store', [ManagerController::class, 'store'])->name('managers.store');
+Route::post('/managers/{id}/toggle-status', [ManagerController::class, 'toggleStatus'])->name('managers.toggleStatus');
+// Show form (GET)
+Route::get('/users/create', [ManagerController::class, 'create'])->name('users.create');
+
+// Handle form submit (POST)
+Route::post('/users/store', [ManagerController::class, 'store'])->name('users.store');
+
 use App\Http\Controllers\ManagerAuthController;
 
 Route::get('/manager/login', [ManagerAuthController::class, 'showLoginForm'])->name('manager.login');

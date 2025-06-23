@@ -5,32 +5,36 @@
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-10 col-lg-8">
-            <div class="card shadow rounded-4 border-0">
-            
-                    @if(session('success'))
-                        <div class="alert alert-success text-center">{{ session('success') }}</div>
-                    @endif
+        <div class="col-lg-10 col-md-12">
+            <div class="card border-0 shadow rounded-4">
 
-                    <form method="POST" action="{{ route('inventory.store') }}" class="p-4 border rounded shadow-sm" style="background-color: #fff;">
+                @if(session('success'))
+                    <div class="alert alert-success text-center mt-3 mx-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <div class="card-body p-4">
+                    <h3 class="mb-4 text-center text-primary fw-bold">Add Inventory Item</h3>
+
+                    <form method="POST" action="{{ route('inventory.store') }}">
                         @csrf
-                        <h3 class="mb-4 text-center">🧾 Add Inventory Item</h3>
 
                         <div class="mb-3">
-                            <label class="form-label">Item Name <span class="text-danger">*</span></label>
-                            <input type="text" name="item_name" value="{{ old('item_name') }}" class="form-control @error('item_name') is-invalid @enderror" required>
+                            <label class="form-label fw-semibold">Item Name <span class="text-danger">*</span></label>
+                            <input type="text" name="item_name" value="{{ old('item_name') }}" class="form-control shadow-sm @error('item_name') is-invalid @enderror" placeholder="Enter item name" required>
                             @error('item_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">SKU / Barcode <span class="text-danger">*</span></label>
-                            <input type="text" name="sku" value="{{ old('sku') }}" class="form-control @error('sku') is-invalid @enderror" required>
+                            <label class="form-label fw-semibold">SKU / Barcode <span class="text-danger">*</span></label>
+                            <input type="text" name="sku" value="{{ old('sku') }}" class="form-control shadow-sm @error('sku') is-invalid @enderror" placeholder="Scan or enter SKU" required>
                             @error('sku') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Category <span class="text-danger">*</span></label>
-                            <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
+                            <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
+                            <select name="category_id" class="form-select shadow-sm @error('category_id') is-invalid @enderror" required>
                                 <option value="">Select Category</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>
@@ -43,21 +47,21 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Quantity <span class="text-danger">*</span></label>
-                                <input type="number" name="quantity" value="{{ old('quantity') }}" class="form-control @error('quantity') is-invalid @enderror" required>
+                                <label class="form-label fw-semibold">Quantity <span class="text-danger">*</span></label>
+                                <input type="number" name="quantity" value="{{ old('quantity') }}" class="form-control shadow-sm @error('quantity') is-invalid @enderror" placeholder="e.g. 50" required>
                                 @error('quantity') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Unit <span class="text-danger">*</span></label>
-                                <input type="text" name="unit" placeholder="e.g., boxes, liters" value="{{ old('unit') }}" class="form-control @error('unit') is-invalid @enderror" required>
+                                <label class="form-label fw-semibold">Unit <span class="text-danger">*</span></label>
+                                <input type="text" name="unit" value="{{ old('unit') }}" class="form-control shadow-sm @error('unit') is-invalid @enderror" placeholder="e.g., boxes, liters" required>
                                 @error('unit') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Branch <span class="text-danger">*</span></label>
-                            <select name="branch_id" class="form-select @error('branch_id') is-invalid @enderror" required>
+                            <label class="form-label fw-semibold">Branch <span class="text-danger">*</span></label>
+                            <select name="branch_id" class="form-select shadow-sm @error('branch_id') is-invalid @enderror" required>
                                 <option value="">Select Branch</option>
                                 @foreach($branches as $branch)
                                     <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
@@ -70,23 +74,25 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Expiry Date (optional)</label>
-                                <input type="date" name="expiry_date" value="{{ old('expiry_date') }}" class="form-control">
+                                <label class="form-label fw-semibold">Expiry Date</label>
+                                <input type="date" name="expiry_date" value="{{ old('expiry_date') }}" class="form-control shadow-sm">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Supplier Info (optional)</label>
-                                <input type="text" name="supplier" value="{{ old('supplier') }}" class="form-control">
+                                <label class="form-label fw-semibold">Supplier Info</label>
+                                <input type="text" name="supplier" value="{{ old('supplier') }}" class="form-control shadow-sm" placeholder="Optional">
                             </div>
                         </div>
 
                         <div class="text-center mt-4">
-                            <button class="btn btn-primary" type="submit">
-                                ➕ Add Item
+                            <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
+                                 Add Item
                             </button>
                         </div>
+
                     </form>
                 </div>
+
             </div>
         </div>
     </div>

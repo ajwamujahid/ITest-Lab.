@@ -7,7 +7,7 @@
         <div class="col-xl-10 col-lg-11">
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body p-5">
-                    <h2 class="text-center text-primary mb-4">🧪 Step 2: Select Your Tests</h2>
+                    <h2 class="text-center text-primary mb-4">Step 2: Select Your Tests</h2>
 
                     <form action="{{ route('test.final.post') }}" method="POST">
                         @csrf
