@@ -42,9 +42,9 @@
                         <i class="fe fe-chevron-right side-menu__angle"></i>
                     </a>
                     <ul class="slide-menu child1">
-                        <li class="slide"><a href="{{ route('branchadmin.tests.pending') }}" class="side-menu__item">⏳ Pending Tests</a></li>
-                        <li class="slide"><a href="{{ route('branchadmin.tests.completed') }}" class="side-menu__item">✅ Completed Tests</a></li>
-                        <li class="slide"><a href="{{ route('branchadmin.tests.all')  }}" class="side-menu__item">📋 All Tests</a></li>
+                        <li class="slide"><a href="{{ route('branchadmin.tests.pending') }}" class="side-menu__item">Pending Tests</a></li>
+                        <li class="slide"><a href="{{ route('branchadmin.tests.completed') }}" class="side-menu__item">Completed Tests</a></li>
+                        <li class="slide"><a href="{{ route('branchadmin.tests.all')  }}" class="side-menu__item">All Tests</a></li>
                     </ul>
                 </li>
                 {{-- <a href="{{ route('branchadmin.patients.index') }}" class="side-menu__item">
@@ -103,12 +103,12 @@
                 </li>
 
                 <!-- Complaints -->
-                <li class="slide">
+                {{-- <li class="slide">
                     <a href="{{ url('/branchadmin/complaints') }}" class="side-menu__item">
                         <i class="bx bx-comment-detail side-menu__icon"></i>
                         <span class="side-menu__label">Complaints</span>
                     </a>
-                </li>
+                </li> --}}
                
 <!-- Riders Menu in Sidebar -->
 <li class="slide">
@@ -147,41 +147,17 @@
     <ul class="slide-menu child1">
         <li class="slide">
             <a href="{{ route('branchadmin.inventory.view_items') }}" class="side-menu__item">
-                📦 View My Inventory
+                View My Inventory
             </a>
             
         </li>
         
-        <li class="slide"><a href="{{ url('/branchadmin/create_report') }}" class="side-menu__item">🗂️ Inventory Report</a></li>
-        <li class="slide"><a href="{{ route('low.stock.report.create') }}" class="side-menu__item">📉 Report Low Stock</a></li>
-        <li class="slide"><a href="{{ route('branchadmin.low.stock.reports') }}" class="side-menu__item">📊 My Low Stock Reports</a></li>
+        <li class="slide"><a href="{{ url('/branchadmin/create_report') }}" class="side-menu__item">Inventory Report</a></li>
+        <li class="slide"><a href="{{ route('low.stock.report.create') }}" class="side-menu__item">Report Low Stock</a></li>
+        <li class="slide"><a href="{{ route('branchadmin.low.stock.reports') }}" class="side-menu__item"> My Low Stock Reports</a></li>
 </li>
 <!-- Expenses List -->
-<li class="slide">
-    <a href="{{ route('branchadmin.expenses.index') }}" class="side-menu__item">
-        <i class="bx bx-list-ul side-menu__icon"></i>
-        <span class="side-menu__label">All Expenses</span>
-    </a>
-</li>
 
-<!-- Add New Expense -->
-<li class="slide">
-    <a href="{{ route('branchadmin.expenses.create') }}" class="side-menu__item">
-        <i class="bx bx-plus side-menu__icon"></i>
-        <span class="side-menu__label">Add Expense</span>
-    </a>
-</li>
-
-
-<!-- Income -->
-<li class="slide">
-  <!-- Sidebar -->
-<li class="slide">
-    <a href="{{ route('income.index') }}" class="side-menu__item">
-        <i class="bx bx-dollar-circle side-menu__icon"></i>
-        <span class="side-menu__label">Income</span>
-    </a>
-</li>
 
     {{-- <li>
         <a href="{{ route('income.index') }}" class="slide-item">All Income</a>
@@ -200,18 +176,44 @@
 </li> --}}
 
                 <!-- Logout -->
-                <li class="slide">
-                    <a href="{{ route('branchadmin.logout') }}" class="side-menu__item"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="bx bx-log-out side-menu__icon"></i>
-                        <span class="side-menu__label">Logout</span>
-                    </a>
-                    <form id="logout-form" action="{{ route('branchadmin.logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </li>
+              
 
             </ul>
+            <li class="slide">
+                <a href="{{ route('branchadmin.expenses.index') }}" class="side-menu__item">
+                    <i class="bx bx-list-ul side-menu__icon"></i>
+                    <span class="side-menu__label">All Expenses</span>
+                </a>
+            </li>
+            
+            <!-- Add New Expense -->
+            <li class="slide">
+                <a href="{{ route('branchadmin.expenses.create') }}" class="side-menu__item">
+                    <i class="bx bx-plus side-menu__icon"></i>
+                    <span class="side-menu__label">Add Expense</span>
+                </a>
+            </li>
+            
+            
+            <!-- Income -->
+            <li class="slide">
+              <!-- Sidebar -->
+            <li class="slide">
+                <a href="{{ route('income.index') }}" class="side-menu__item">
+                    <i class="bx bx-dollar-circle side-menu__icon"></i>
+                    <span class="side-menu__label">Income</span>
+                </a>
+            </li>
+            <li class="slide">
+                <a href="{{ route('branchadmin.logout') }}" class="side-menu__item"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="bx bx-log-out side-menu__icon"></i>
+                    <span class="side-menu__label">Logout</span>
+                </a>
+                <form id="logout-form" action="{{ route('branchadmin.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            </li>
         </nav>
     </div>
 </aside>

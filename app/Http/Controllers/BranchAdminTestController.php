@@ -22,7 +22,15 @@ class BranchAdminTestController extends Controller
 
     public function completed()
     {
-        $branchId = auth('branchadmin')->user()->branch_id;
+        
+        $branchAdmin = auth('branchadmin')->user();
+
+if (!$branchAdmin) {
+    abort(403, 'Unauthorized access'); // or redirect()->route('branchadmin.login');
+}
+
+$branchId = $branchAdmin->branch_id;
+
 
         $appointments = Appointment::with('patient')
             ->where('branch_id', $branchId)

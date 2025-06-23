@@ -143,28 +143,28 @@ class PatientTestController extends Controller
         return redirect()->route('test.invoice', $invoice->id);
     }
 
-    /**
-     * Show patient invoice.
-     */
     public function showInvoice($id)
-    {
-        $invoice = Invoice::findOrFail($id);
+{
+    $invoice = Invoice::findOrFail($id);
 
-        $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
-            ->where('branch', Branch::find($invoice->branch_id)->name)
-            ->latest()
-            ->first();
+    $branch = \App\Models\Branch::find($invoice->branch_id); // ✅ fetch the branch
 
-        $selectedTests = collect();
-        if ($testRequest && is_array($testRequest->tests)) {
-            // ✅ no json_decode needed
-            $selectedTests = Test::whereIn('id', $testRequest->tests)->get();
-        }
+    $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
+        ->where('branch', $branch?->name)
+        ->latest()
+        ->first();
 
-        return view('patients.invoice', [
-            'invoice' => $invoice,
-            'patient' => $testRequest,
-            'selectedTests' => $selectedTests,
-        ]);
+    $selectedTests = collect();
+    if ($testRequest && is_array($testRequest->tests)) {
+        $selectedTests = Test::whereIn('id', $testRequest->tests)->get();
     }
+
+    return view('patients.invoice', [
+        'invoice' => $invoice,
+        'patient' => $testRequest,
+        'selectedTests' => $selectedTests,
+        'branch' => $branch, // ✅ pass to view
+    ]);
+}
+
 }
