@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Test;
@@ -19,31 +20,32 @@ class TestController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
-            'branch_id' => 'required|exists:branches,id'
+            'branch_id' => 'required|exists:branches,id',
+            'type' => 'required|in:physical,online',
         ]);
 
         Test::create($request->all());
 
         return back()->with('success', 'Test added successfully!');
     }
+
     public function update(Request $request, Test $test)
-{
-    $request->validate([
-        'name' => 'required',
-        'price' => 'required|numeric',
-        'branch_id' => 'required|exists:branches,id',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'branch_id' => 'required|exists:branches,id',
+            'type' => 'required|in:physical,online',
+        ]);
 
-    $test->update($request->all());
+        $test->update($request->all());
 
-    return back()->with('success', 'Test updated successfully!');
-}
+        return back()->with('success', 'Test updated successfully!');
+    }
 
-public function destroy(Test $test)
-{
-    $test->delete();
-
-    return back()->with('success', 'Test deleted successfully!');
-}
-
+    public function destroy(Test $test)
+    {
+        $test->delete();
+        return back()->with('success', 'Test deleted successfully!');
+    }
 }

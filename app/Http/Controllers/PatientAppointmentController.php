@@ -11,33 +11,36 @@ use Illuminate\Http\Request;
 
 class PatientAppointmentController extends Controller
 {
-   
-public function index()
+    public function index()
 {
     $branchAdmin = auth('branchadmin')->user();
 
     if (!$branchAdmin || !$branchAdmin->branch_id) {
         abort(403, 'You must be logged in as a branch admin.');
     }
-    
-    $branchId = $branchAdmin->branch_id;
-    
 
-    $appointments = Appointment::where('branch_id', $branchId)
-    ->with(['rider', 'testRequest']) // ✅ loading testRequest relationship
+    // Get the branch name from branch ID
+    $branchName = \App\Models\Branch::find($branchAdmin->branch_id)?->name;
+
+    if (!$branchName) {
+        abort(403, 'Branch not found.');
+    }
+
+    // Fetch only the appointments where the test request's branch name matches
+    $appointments = \App\Models\Appointment::whereHas('testRequest', function ($query) use ($branchName) {
+        $query->where('branch', $branchName);
+    })
+    ->with(['rider', 'testRequest'])
     ->latest()
     ->paginate(10);
 
-    $tests = Test::all()->keyBy('id');
-   // dd(Test::where('id', 1)->get());
-
-
-    $riders = Rider::where('branch_id', $branchId)->get();
-   // $tests = Test::where('branch_id', $branchId)->get()->keyBy('id');
+    $tests = \App\Models\Test::all()->keyBy('id');
+    $riders = \App\Models\Rider::where('branch_id', $branchAdmin->branch_id)->get();
 
     return view('branchadmin.patients.index', compact('appointments', 'riders', 'tests'));
 }
 
+    
 public function assignAppointment(Request $request, $id)
 {
     $request->validate([
@@ -67,7 +70,35 @@ public function assignAppointment(Request $request, $id)
     return back()->with('success', 'Appointment assigned successfully.');
 }
 
-    
+public function createAppointment(Request $request, $testRequestId)
+{
+    $request->validate([
+        'appointment_date' => 'required|date',
+        'rider_id' => 'required|exists:riders,id',
+    ]);
+
+    $testRequest = TestRequest::findOrFail($testRequestId);
+
+    if (!$testRequest->patient_id || !$testRequest->branch_id) {
+        return back()->with('error', 'Invalid test request.');
+    }
+
+    if ($testRequest->appointment) {
+        return back()->with('error', 'Appointment already exists.');
+    }
+
+    Appointment::create([
+        'test_request_id' => $testRequest->id,
+        'patient_id' => $testRequest->patient_id,
+        'branch_id' => $testRequest->branch_id,
+        'rider_id' => $request->rider_id,
+        'appointment_date' => $request->appointment_date,
+        'status' => 'scheduled',
+    ]);
+
+    return back()->with('success', 'Appointment assigned.');
+}
+
     public function myAppointments()
     {
         $patientId = auth()->id();
