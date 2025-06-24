@@ -74,8 +74,11 @@ class PatientTestController extends Controller
         $tests = Test::whereIn('id', $request->tests)->get();
         $total = $tests->sum('price');
 
-        // ✅ Store as ARRAY — Laravel will cast it to JSON for DB:
-        TestRequest::create([
+        $testNames = $tests->pluck('name')->join(', ');
+        $testTypes = $tests->pluck('type')->unique();
+        $finalType = $testTypes->count() === 1 ? $testTypes->first() : 'mixed';
+
+        $testRequest = TestRequest::create([
             'patient_id' => $patientId,
             'name' => $info['name'],
             'email' => $info['email'],
@@ -83,7 +86,8 @@ class PatientTestController extends Controller
             'age' => $info['age'],
             'gender' => $info['gender'],
             'address' => $info['address'],
-            'tests' => $tests->pluck('id')->toArray(), // ✅ no json_encode here!
+            'test_name' => $testNames,
+            'test_type' => $finalType,
             'branch' => $request->branch,
             'payment_method' => $request->payment_method,
             'total_amount' => $total,
@@ -115,7 +119,10 @@ class PatientTestController extends Controller
         $tests = Test::whereIn('id', $request->tests)->get();
         $total = $tests->sum('price');
 
-        // ✅ Store as ARRAY
+        $testNames = $tests->pluck('name')->join(', ');
+        $testTypes = $tests->pluck('type')->unique();
+        $finalType = $testTypes->count() === 1 ? $testTypes->first() : 'mixed';
+
         $testRequest = TestRequest::create([
             'patient_id' => $patientId,
             'name' => $info['name'],
@@ -124,13 +131,13 @@ class PatientTestController extends Controller
             'age' => $info['age'],
             'gender' => $info['gender'],
             'address' => $info['address'],
-          'tests' => $tests->pluck('id')->toArray(),
+            'test_name' => $testNames,
+            'test_type' => $finalType,
             'branch' => $request->branch,
             'payment_method' => $request->payment_method,
             'total_amount' => $total,
         ]);
 
-        // ✅ Create invoice linked to test request
         $invoice = Invoice::create([
             'invoice_number' => 'INV-' . strtoupper(uniqid()),
             'branch_id' => Branch::where('name', $request->branch)->value('id'),
@@ -144,27 +151,27 @@ class PatientTestController extends Controller
     }
 
     public function showInvoice($id)
-{
-    $invoice = Invoice::findOrFail($id);
+    {
+        $invoice = Invoice::findOrFail($id);
 
-    $branch = \App\Models\Branch::find($invoice->branch_id); // ✅ fetch the branch
+        $branch = \App\Models\Branch::find($invoice->branch_id);
 
-    $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
-        ->where('branch', $branch?->name)
-        ->latest()
-        ->first();
+        $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
+            ->where('branch', $branch?->name)
+            ->latest()
+            ->first();
 
-    $selectedTests = collect();
-    if ($testRequest && is_array($testRequest->tests)) {
-        $selectedTests = Test::whereIn('id', $testRequest->tests)->get();
+        $selectedTests = collect();
+        if ($testRequest && $testRequest->test_name) {
+            $names = explode(', ', $testRequest->test_name);
+            $selectedTests = collect($names)->map(fn($name) => ['name' => $name]);
+        }
+
+        return view('patients.invoice', [
+            'invoice' => $invoice,
+            'patient' => $testRequest,
+            'selectedTests' => $selectedTests,
+            'branch' => $branch,
+        ]);
     }
-
-    return view('patients.invoice', [
-        'invoice' => $invoice,
-        'patient' => $testRequest,
-        'selectedTests' => $selectedTests,
-        'branch' => $branch, // ✅ pass to view
-    ]);
-}
-
 }

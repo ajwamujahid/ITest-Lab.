@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container py-5">
-    <h3 class="text-center ">
+<div class="container">
+    <h3 class=" ">
         {{-- <i class="bi bi-tags-fill me-2"></i> --}}
         Inventory Categories
     </h3>
-    <div class="d-flex justify-content-center">
+    <div class="">
         <form method="POST" action="{{ route('inventory-category.store') }}" class="d-flex gap-2 align-items-center">
             @csrf
             <label class="mb-0">
@@ -16,10 +16,10 @@
         </form>
     </div>
     
-    <div class="row justify-content-center mt-3">
-        <div class="col-xl-10 col-lg-11">
-            <div class="card  r border-0">
-                <div class="card-body p-4 px-md-5">
+    {{-- <div class="row  mt-3">
+        <div class="col-lg-10 col-md-12"> --}}
+            <div class="card  mt-4 border-0">
+                <div class="card-body p-4 ">
 
                    
 

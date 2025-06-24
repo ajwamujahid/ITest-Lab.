@@ -14,7 +14,8 @@
                 <div class="card-body p-5">
                     <h2 class="text-center text-primary mb-4">Step 2: Select Your Tests</h2>
 
-                    <form action="{{ route('test.final.post') }}" method="POST">
+                    <form id="finalTestForm" action="{{ route('test.final.post') }}" method="POST">
+
                         @csrf
 
                         {{-- Test List Grouped by Branch --}}
@@ -54,7 +55,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Payment Method</label>
                             <select name="payment_method" class="form-select select2" required>
-                                <option value="">-- Select Payment Option --</option>
+                                <option value="">Select Payment Option</option>
                                 <option value="Cash">Cash</option>
                                 <option value="Card">Card</option>
                                 <option value="Online">Online</option>

@@ -21,7 +21,7 @@
                       {{-- Branch Info --}}
 @if($branch)
 <div class="mb-4">
-    <h5 class="mb-2 text-muted">🏥 Branch Information</h5>
+    <h5 class="mb-2 text-muted">Branch Information</h5>
     <p class="mb-1"><strong>Name:</strong> {{ $branch->name }}</p>
     <p class="mb-1"><strong>Zip Code:</strong> {{ $branch->zip_code ?? 'N/A' }}</p>
     <p class="mb-1"><strong>City:</strong> {{ $branch->city ?? 'N/A' }}</p>
@@ -55,17 +55,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($selectedTests as $test)
-                                    <tr>
-                                        <td>{{ $test->name }}</td>
-                                        <td class="text-end">{{ number_format($test->price, 2) }}</td>
-                                    </tr>
-                                @empty
+                                @php
+                                    $tests = is_array($patient->tests) ? $patient->tests : json_decode($patient->tests, true);
+                                @endphp
+                            
+                                @if(!empty($tests))
+                                @foreach($selectedTests as $test)
+                                <tr>
+                                    <td>{{ $test['name'] }}</td>
+                                    <td>{{ ucfirst($test['type']) }}</td>
+                                    <td class="text-end">{{ number_format($test['price'] ?? 0, 2) }}</td>
+                                </tr>
+                            @endforeach
+                            
+                            
+                                @else
                                     <tr>
                                         <td colspan="2" class="text-center text-muted">No tests found.</td>
                                     </tr>
-                                @endforelse
+                                @endif
                             </tbody>
+                            
                         </table>
                     </div>
 

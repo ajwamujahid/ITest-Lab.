@@ -3,7 +3,7 @@
 @section('title', 'Payroll Records')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     <h3 class=" mb-4"> Payroll Records</h3>
     <a href="{{ route('payroll.create') }}" class="btn btn-primary mb-3">Add Payroll</a>
     {{-- <div class="row justify-content-center">

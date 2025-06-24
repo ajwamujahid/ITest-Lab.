@@ -62,6 +62,21 @@ public function visits()
 {
     return $this->hasMany(RiderVisit::class);
 }
+public function tests()
+{
+    return $this->belongsToMany(Test::class, 'test_request_test')
+        ->withPivot('quantity', 'price');
+}
+
+public function branch()
+{
+    return $this->belongsTo(Branch::class);
+}
+
+// public function patient()
+// {
+//     return $this->belongsTo(Patient::class);
+// }
 
 
 }
