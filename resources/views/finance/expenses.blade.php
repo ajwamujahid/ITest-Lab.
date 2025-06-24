@@ -3,6 +3,11 @@
 @section('title', 'Finance | Total Expenses')
 
 @section('content')
+@push('styles')
+    {{-- Select2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container py-4">
 
     <h2 class="mb-4">Total Expenses</h2>
@@ -19,15 +24,16 @@
                 <input type="date" id="end_date" name="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>
             <div class="col-md-3">
-                <label for="branch_id" class="form-label">Branch <span class="text-danger">*</span></label>
-                <select name="branch_id" id="branch_id" class="form-select" required>
-                    <option value="">Select Branch</option>
+                <label for="branch" class="form-label">Branch</label>
+                <select id="branch" name="branch" class="form-select select2">
+                    <option value="">All Branches</option>
                     @foreach($branches as $branch)
-                        <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
+                        <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
                             {{ $branch->name }}
                         </option>
                     @endforeach
                 </select>
+                
                 @error('branch_id') 
                     <small class="text-danger">{{ $message }}</small> 
                 @enderror
@@ -96,3 +102,18 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select a branch",
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+
+@endpush

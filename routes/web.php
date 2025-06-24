@@ -190,7 +190,9 @@ Route::get('/performance-reviews/{id}', [PerformanceReviewController::class, 'sh
   use App\Http\Controllers\TestController;
 Route::get('/tests/manage', [TestController::class, 'index'])->name('tests.manage');
 Route::post('/tests/store', [TestController::class, 'store'])->name('tests.store');
-Route::post('/tests/update/{test}', [TestController::class, 'update'])->name('tests.update');
+//Route::post('/tests/update/{test}', [TestController::class, 'update'])->name('tests.update');
+Route::put('tests/update/{test}', [TestController::class, 'update'])->name('tests.update');
+
 Route::delete('/tests/delete/{test}', [TestController::class, 'destroy'])->name('tests.destroy');
 
 

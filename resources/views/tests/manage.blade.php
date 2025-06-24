@@ -1,8 +1,17 @@
 @extends('layouts.master')
 
 @section('content')
+@push('styles')
+    {{-- Select2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container mt-4">
-    <h3>Test Management</h3>
+    <h3 class="mb-4">
+        <i class="bi bi-clipboard-check me-2"></i>
+        Test Management
+    </h3>
+    
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -19,13 +28,16 @@
                 <input type="number" step="0.01" name="price" class="form-control" placeholder="Price" required>
             </div>
             <div class="col-md-2">
-                <select name="branch_id" class="form-control" required>
+                {{-- <label for="branch_id" class="form-label">Select Branch</label> --}}
+                <select name="branch_id" class="form-control select2" required>
                     <option value="">Select Branch</option>
                     @foreach($branches as $branch)
                         <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                     @endforeach
                 </select>
             </div>
+     
+            
             <div class="col-md-2">
                 <select name="type" class="form-control" required>
                     <option value="">Select Type</option>
@@ -46,6 +58,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th>#</th>
                 <th>Test Name</th>
                 <th>Price</th>
                 <th>Branch</th>
@@ -57,7 +70,8 @@
         <tbody>
         @foreach($tests as $test)
             <tr>
-                <form method="POST" action="{{ route('tests.update', $test) }}">
+                <td>{{$test->id}}</td>
+                <form method="POST" action="{{ route('tests.update', $test->id) }}">
                     @csrf
                     @method('PUT')
                     <td>
@@ -85,15 +99,16 @@
                         </select>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-warning edit-btn">Edit</button>
-                        <button type="submit" class="btn btn-sm btn-success d-none save-btn">Update</button>
+                        <div class="d-flex gap-1">
+                            <button type="button" class="btn btn-sm btn-warning edit-btn">Edit</button>
+                            <button type="submit" class="btn btn-sm btn-success d-none save-btn">Update</button>
                 </form>
-
-                <form method="POST" action="{{ route('tests.destroy', $test) }}" style="display:inline;" onsubmit="return confirm('Are you sure?');">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                </form>
+                            <form method="POST" action="{{ route('tests.destroy', $test->id) }}" onsubmit="return confirm('Are you sure?');">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </td>
             </tr>
         @endforeach
@@ -103,14 +118,31 @@
 @endsection
 
 @push('scripts')
+
 <script>
     document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const row = this.closest('tr');
-            row.querySelectorAll('input, select').forEach(input => input.removeAttribute('disabled'));
+            row.querySelectorAll('input, select').forEach(field => field.disabled = false);
             row.querySelector('.save-btn').classList.remove('d-none');
             this.classList.add('d-none');
         });
     });
+   
 </script>
+ {{-- jQuery (required for Select2) --}}
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+ {{-- Select2 JS --}}
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+ <script>
+     $(document).ready(function () {
+         $('.select2').select2({
+             placeholder: "Select Branch",
+             allowClear: true,
+             width: '100%'
+         });
+     });
+ </script>
 @endpush

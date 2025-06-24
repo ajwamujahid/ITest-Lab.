@@ -3,6 +3,11 @@
 @section('title', 'Finance | Total Revenue')
 
 @section('content')
+@push('styles')
+    {{-- Select2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container py-4">
 
     <h2 class="mb-4">Total Revenue Overview</h2>
@@ -20,7 +25,7 @@
             </div>
             <div class="col-md-3">
                 <label for="branch" class="form-label">Branch</label>
-                <select id="branch" name="branch" class="form-select">
+                <select id="branch" name="branch" class="form-select select2">
                     <option value="">All Branches</option>
                     @foreach($branches as $branch)
                         <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
@@ -28,6 +33,7 @@
                         </option>
                     @endforeach
                 </select>
+                
             </div>
             <div class="col-md-3 d-grid">
                 <button type="submit" class="btn btn-primary mt-md-0 mt-2"> Apply Filters</button>
@@ -56,7 +62,7 @@
 
     {{-- 📍 Revenue by Branch --}}
     <div class="card shadow-sm mb-4">
-        <div class="card-header bg-light fw-semibold">📍 Revenue by Branch</div>
+        <div class="card-header bg-light fw-semibold">Revenue by Branch</div>
         <div class="card-body p-0">
             <table class="table table-hover table-bordered mb-0">
                 <thead class="table-light">
@@ -83,7 +89,7 @@
 
     {{-- 🧪 Revenue by Test Type --}}
     <div class="card shadow-sm mb-5">
-        <div class="card-header bg-light fw-semibold">🧪 Revenue by Test Type</div>
+        <div class="card-header bg-light fw-semibold">Revenue by Test Type</div>
         <div class="card-body p-0">
             <table class="table table-hover table-bordered mb-0">
                 <thead class="table-light">
@@ -110,3 +116,18 @@
 
 </div>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select a branch",
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+
+@endpush

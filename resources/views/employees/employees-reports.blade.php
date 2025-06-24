@@ -1,13 +1,17 @@
 @extends('layouts.master')
 
 @section('content')
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container mt-4">
     <h2>Manager Reports</h2>
 
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-3">
             <label>Role</label>
-            <select name="role" class="form-select">
+            <select name="role" class="form-select select2">
                 <option value="">All Roles</option>
                 @foreach($roles as $role)
                     <option value="{{ $role }}" {{ request('role') == $role ? 'selected' : '' }}>
@@ -16,18 +20,17 @@
                 @endforeach
             </select>
         </div>
-
+        
         <div class="col-md-3">
             <label>Branch</label>
-            <select name="branch" class="form-select">
+            <select name="branch" class="form-select select2">
                 <option value="">All Branches</option>
                 @foreach($branches as $branch)
-    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-@endforeach
-
+                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                @endforeach
             </select>
         </div>
-
+        
 
         <div class="col-md-3">
             <label>From Date</label>
@@ -47,8 +50,10 @@
             <a href="{{ route('employee.reports.export') }}" class="btn btn-success w-100">Export CSV</a>
         </div>
     </form>
-
-    <table class="table table-bordered table-striped">
+    <div class="card ">
+        <div class="card-body p-4">
+    <div class="table-responsive">
+    <table class="table table-bordered  align-middle">
         <thead class="table-dark">
             <tr>
                 <th>#</th>
@@ -81,4 +86,21 @@
 
     {{ $managers->withQueryString()->links() }}
 </div>
+</div>
+</div>
+</div>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: "Select an option",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+@endpush

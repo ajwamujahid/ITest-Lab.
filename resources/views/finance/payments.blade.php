@@ -23,7 +23,7 @@
 
     {{-- 📋 Payment Table --}}
     <div class="table-responsive">
-        <table class="table table-striped table-bordered align-middle">
+        <table class="table  align-middle">
             <thead class="table-light">
                 <tr>
                     <th>#</th>

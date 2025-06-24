@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="container mt-5">
-    <h3 class="mb-4">🏢 Branch Managers</h3>
+    <h3 class="mb-4">Branch Managers</h3>
     <a href="{{ route('branch-admin.create') }}" class="btn btn-primary mb-3">Add New Branch admin</a>
 
-    <div class="card p-4 shadow-sm">
+    <div class="card p-4">
       
         @if($branchAdmins->isEmpty())
             <div class="alert alert-info">No Branch Managers found.</div>
         @else
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>

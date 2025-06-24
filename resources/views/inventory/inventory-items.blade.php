@@ -1,34 +1,23 @@
 @extends('layouts.master')
 
 @section('title', 'Inventory Items List')
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
 
 @section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-xl-12">
-            <div class="card border-0 shadow-lg rounded-4">
-                <div class="card-body p-4">
-
-                    {{-- Header --}}
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-bold text-primary m-0">
-                           Inventory Items
-                        </h3>
-                        <a href="{{ route('inventory.create') }}" class="btn btn-primary shadow-sm px-4 py-2 rounded-3">
-                            <i class="bi bi-plus-circle me-1"></i> Add Item
-                        </a>
-                    </div>
-
-                    {{-- Success Message --}}
-                    @if(session('success'))
-                        <div class="alert alert-success text-center shadow-sm">{{ session('success') }}</div>
-                    @endif
-
-                    {{-- Filter Form --}}
-                    <form method="GET" class="row g-3 mb-4">
+<div class="container mt-5">
+    <h3 class="mb-4">
+        <i class="bi bi-box-seam me-2"></i>
+        Inventory Items
+    </h3>
+    
+        <a href="{{ route('inventory.create') }}" class="btn btn-primary  mb-3">Add New Item</a>
+                      {{-- Filter Form --}}
+                      <form method="GET" class="row g-3 mb-4">
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Category</label>
-                            <select name="category" class="form-select shadow-sm">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select select2">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
@@ -37,9 +26,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Branch</label>
-                            <select name="branch" class="form-select shadow-sm">
+                            <label class="form-label">Branch</label>
+                            <select name="branch" class="form-select select2">
                                 <option value="">All Branches</option>
                                 @foreach($branches as $branch)
                                     <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
@@ -48,21 +38,34 @@
                                 @endforeach
                             </select>
                         </div>
+                        
                         <div class="col-md-4 d-flex gap-2 align-items-end">
-                            <button type="submit" class="btn btn-primary w-50">
+                            <button type="submit" class="btn btn-primary w-30">
                                 {{-- <i class="bi bi-funnel-fill me-1"></i>  --}}
                                 Filter
                             </button>
-                            <a href="{{ route('inventory.index') }}" class="btn btn-outline-secondary w-50">
+                            <a href="{{ route('inventory.index') }}" class="btn btn-outline-secondary w-30">
                                 {{-- <i class="bi bi-x-circle me-1"></i>  --}}
                                 Reset
                             </a>
                         </div>
                     </form>
 
+    <div class="row justify-content-center">
+        <div class="col-xl-12">
+            <div class="card border-0">
+                <div class="card-body p-4">
+
+                   
+                    {{-- Success Message --}}
+                    @if(session('success'))
+                        <div class="alert alert-success text-center shadow-sm">{{ session('success') }}</div>
+                    @endif
+
+
                     {{-- Inventory Table --}}
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover align-middle" id="itemsTable">
+                        <table class="table table-bordered align-middle"  id="itemsTable">
                             <thead class="table-dark text-center">
                                 <tr>
                                     <th>#</th>
@@ -134,6 +137,16 @@
 @endsection
 
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Select an option',
+            allowClear: true
+        });
+    });
+</script>
 <script>
     $(document).ready(function () {
         $('#itemsTable').DataTable();

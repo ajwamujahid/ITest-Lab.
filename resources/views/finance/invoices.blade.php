@@ -3,6 +3,11 @@
 @section('title', 'Finance | Invoices')
 
 @section('content')
+@push('styles')
+    {{-- Select2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container py-4">
     <h3 class="mb-4"> Invoice Management</h3>
 
@@ -10,15 +15,15 @@
     <form method="GET" class="mb-3">
         <div class="row g-3 align-items-end">
             <div class="col-md-4">
-                <label class="form-label fw-semibold">Branch</label>
-                <select name="branch_id" class="form-select">
-                    <option value="">All Branches</option>
-                    @foreach($branches as $branch)
-                        <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
-                            {{ $branch->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="branch" class="form-label">Branch</label>
+            <select id="branch" name="branch" class="form-select select2">
+                <option value="">All Branches</option>
+                @foreach($branches as $branch)
+                    <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
+                        {{ $branch->name }}
+                    </option>
+                @endforeach
+            </select>
             </div>
 
             <div class="col-md-3">
@@ -32,7 +37,7 @@
             </div>
 
             <div class="col-md-2 d-grid">
-                <button class="btn btn-primary">🔍 Filter</button>
+                <button class="btn btn-primary">Filter</button>
             </div>
         </div>
     </form>
@@ -52,7 +57,7 @@
 
     {{-- 📄 Invoice Table --}}
     <div class="table-responsive">
-        <table class="table table-striped table-bordered align-middle">
+        <table class="table  align-middle">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
@@ -86,3 +91,18 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select a branch",
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+
+@endpush

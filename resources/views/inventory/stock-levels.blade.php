@@ -3,22 +3,27 @@
 @section('title', 'Inventory Stock Levels')
 
 @section('content')
-<div class="container py-5">
-    <div class="card border-0 shadow-lg rounded-4">
-        <div class="card-body p-4">
+{{-- CSS --}}
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
 
-            {{-- Page Header --}}
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-primary m-0">
-                    <i class="bi bi-clipboard-data me-2"></i> Inventory Stock Levels
-                </h3>
-            </div>
+<div class="container py-5">
+    {{-- Page Header --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold  m-0">
+            <i class="bi bi-clipboard-data me-2"></i> Inventory Stock Levels
+        </h3>
+        
+    </div>
+   
+         
 
             {{-- Filters --}}
             <form method="GET" class="row g-3 align-items-end mb-4">
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Branch</label>
-                    <select name="branch_id" class="form-select shadow-sm">
+                    <select name="branch_id" class="form-select select2  shadow-sm">
                         <option value="">All Branches</option>
                         @foreach ($branches as $branch)
                             <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
@@ -30,7 +35,7 @@
 
                 <div class="col-md-4">
                     <label class="form-label fw-semibold">Category</label>
-                    <select name="category_id" class="form-select shadow-sm">
+                    <select name="category_id" class="form-select  select2 shadow-sm">
                         <option value="">All Categories</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -40,23 +45,28 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary shadow-sm">
+                <div class="col-md-4  gap-3">
+                    <button type="submit" class="btn btn-primary">
                         {{-- <i class="bi bi-funnel me-1"></i>  --}}
                         Filter
                     </button>
-                    <a href="{{ route('inventory.stock-levels') }}" class="btn btn-secondary shadow-sm">
+                    <a href="{{ route('inventory.stock-levels') }}" class="btn btn-secondary">
                         {{-- <i class="bi bi-x-circle me-1"></i>  --}}
                         Reset
                     </a>
                 </div>
             </form>
+    
+    <div class="card  rounded-4">
+        <div class="card-body p-4">
+
 
             {{-- Table --}}
             <div class="table-responsive">
-                <table class="table table-bordered table-striped align-middle text-center" id="stockTable">
+                <table class="table table-bordered text-center" id="stockTable">
                     <thead class="table-dark">
                         <tr>
+                            <th>#</th>
                             <th>Item Name</th>
                             <th>SKU</th>
                             <th>Category</th>
@@ -68,7 +78,8 @@
                     <tbody>
                         @forelse ($items as $item)
                             <tr>
-                                <td class="fw-semibold">{{ $item->item_name }}</td>
+                                <td class="">{{ $item->id }}</td>
+                                <td class="">{{ $item->item_name }}</td>
                                 <td>{{ $item->sku }}</td>
                                 <td>{{ $item->category->name ?? '-' }}</td>
                                 <td>{{ $item->branch->name ?? '-' }}</td>
@@ -96,6 +107,18 @@
     </div>
 </div>
 @endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: 'Select an option',
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
 
 @push('scripts')
 <script>

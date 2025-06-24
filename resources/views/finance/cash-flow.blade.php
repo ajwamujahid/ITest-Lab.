@@ -3,6 +3,11 @@
 @section('title', 'Finance | Cash Flow Statement')
 
 @section('content')
+@push('styles')
+    {{-- Select2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container py-4">
     <h2 class="mb-4">Cash Flow Statement</h2>
 
@@ -18,14 +23,15 @@
         </div>
         <div class="col-md-3">
             <label for="branch" class="form-label">Branch</label>
-            <select name="branch" class="form-select">
+            <select id="branch" name="branch" class="form-select select2">
                 <option value="">All Branches</option>
                 @foreach($branches as $branch)
-                    <option value="{{ $branch }}" {{ $selectedBranch == $branch ? 'selected' : '' }}>
-                        {{ $branch }}
+                    <option value="{{ $branch->id }}" {{ request('branch') == $branch->id ? 'selected' : '' }}>
+                        {{ $branch->name }}
                     </option>
                 @endforeach
             </select>
+            
         </div>
         <div class="col-md-3">
             <button class="btn btn-primary w-100">Apply Filter</button>
@@ -52,9 +58,9 @@
 
     {{-- 🏢 Branch-Wise Cash Flow --}}
     <div class="card mb-4">
-        <div class="card-header fw-semibold">Branch-wise Cash Flow</div>
+        <div class="card-header ">Branch-wise Cash Flow</div>
         <div class="card-body p-0">
-            <table class="table table-bordered table-striped mb-0">
+            <table class="table  mb-0">
                 <thead class="table-light">
                     <tr>
                         <th>Branch</th>
@@ -87,9 +93,9 @@
         {{-- Inflows --}}
         <div class="col-md-6">
             <div class="card mb-4">
-                <div class="card-header bg-light fw-semibold">Inflow Transactions</div>
+                <div class="card-header ">Inflow Transactions</div>
                 <div class="card-body p-0">
-                    <table class="table table-sm table-bordered mb-0">
+                    <table class="table mb-0">
                         <thead class="table-light">
                             <tr><th>Date</th><th>Patient</th><th>Amount</th><th>Branch</th></tr>
                         </thead>
@@ -113,9 +119,9 @@
         {{-- Outflows --}}
         <div class="col-md-6">
             <div class="card mb-4">
-                <div class="card-header bg-light fw-semibold">Outflow Transactions</div>
+                <div class="card-header bg-light ">Outflow Transactions</div>
                 <div class="card-body p-0">
-                    <table class="table table-sm table-bordered mb-0">
+                    <table class="table  mb-0">
                         <thead class="table-light">
                             <tr><th>Date</th><th>Description</th><th>Amount</th><th>Branch</th></tr>
                         </thead>
@@ -138,3 +144,18 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select a branch",
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+
+@endpush

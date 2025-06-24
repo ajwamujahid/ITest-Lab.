@@ -2,37 +2,39 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="row justify-content-center">
+    <h3 class="text-center ">
+        {{-- <i class="bi bi-tags-fill me-2"></i> --}}
+        Inventory Categories
+    </h3>
+    <div class="d-flex justify-content-center">
+        <form method="POST" action="{{ route('inventory-category.store') }}" class="d-flex gap-2 align-items-center">
+            @csrf
+            <label class="mb-0">
+                <input type="text" name="name" class="form-control" placeholder="Enter New Category" required>
+            </label>
+            <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+    </div>
+    
+    <div class="row justify-content-center mt-3">
         <div class="col-xl-10 col-lg-11">
-            <div class="card shadow-lg rounded-4 border-0">
+            <div class="card  r border-0">
                 <div class="card-body p-4 px-md-5">
 
-                    <h3 class="mb-4 fw-bold text-center text-primary">
-                        {{-- <i class="bi bi-tags-fill me-2"></i> --}}
-                        Inventory Categories
-                    </h3>
+                   
 
                     {{-- Success Message --}}
                     @if(session('success'))
-                        <div class="alert alert-success text-center shadow-sm">
+                        <div class="alert alert-success text-center">
                             {{ session('success') }}
                         </div>
                     @endif
-
-                    {{-- Add Category Form --}}
-                    <form method="POST" action="{{ route('inventory-category.store') }}" class="mb-4">
-                        @csrf
-                        <div class="input-group shadow-sm">
-                            <input type="text" name="name" class="form-control rounded-start" placeholder="Enter New Category Name" required>
-                            <button class="btn btn-primary fw-semibold" type="submit">
-                                <i class="bi bi-plus-circle me-1"></i> Add
-                            </button>
-                        </div>
-                    </form>
+                  
+                  
 
                     {{-- Categories Table --}}
                     <div class="table-responsive">
-                        <table class="table table-bordered align-middle table-striped table-hover">
+                        <table class="table table-bordered">
                             <thead class="table-primary text-dark">
                                 <tr>
                                     <th style="width: 60px;">#</th>

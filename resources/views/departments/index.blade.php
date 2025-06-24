@@ -3,20 +3,19 @@
 @section('title', 'Departments')
 
 @section('content')
-<div class="container py-5">
+<div class="container mt-5">
+        <h3 class=" mb-4">Departments</h3>
+        <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3">
+             Add New Department
+        </a>
+   
+
     <div class="row justify-content-center">
-        <div class="col-xl-11">
-            <div class="card shadow border-0 rounded-4">
+        <div class="col-xl-12">
+            <div class="card border-0 shadow-lg rounded-4">
                 <div class="card-body p-4">
 
-                    {{-- Header --}}
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-primary fw-bold mb-0">Departments</h3>
-                        <a href="{{ route('departments.create') }}" class="btn btn-sm btn-primary shadow-sm">
-                             Add New Department
-                        </a>
-                    </div>
-
+                  
                     {{-- Success Alert --}}
                     @if(session('success'))
                         <div class="alert alert-success text-center shadow-sm">
@@ -26,22 +25,26 @@
 
                     {{-- Table --}}
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped table-hover align-middle text-center">
+                        <table class="table table-bordered  align-middle">
                             <thead class="table-dark">
                                 <tr>
-                                    <th style="width: 20%;">Name</th>
-                                    <th style="width: 20%;">Manager</th>
-                                    <th style="width: 40%;">Description</th>
-                                    <th style="width: 20%;">Actions</th>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Manager</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($departments as $dept)
                                     <tr>
-                                        <td class="text-start fw-semibold">{{ $dept->name }}</td>
+                                        <td class="text-start">
+                                            {{ $loop->iteration }}
+                                        </td>
+                                        <td class="text-start">{{ $dept->name }}</td>
                                         <td>
                                             @if($dept->manager)
-                                                <span class=" text-start fw-semibold px-3 py-2">{{ $dept->manager->name }}</span>
+                                                <span class=" text-start">{{ $dept->manager->name }}</span>
                                             @else
                                                 <span class="text-muted">Not assigned</span>
                                             @endif

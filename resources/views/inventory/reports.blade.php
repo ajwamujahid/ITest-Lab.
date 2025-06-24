@@ -3,25 +3,28 @@
 @section('title', 'Inventory Reports')
 
 @section('content')
+{{-- CSS --}}
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
 <div class="container py-5">
-    <div class="card border-0 shadow-lg rounded-4">
-        <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class=" m-0">
+            <i class="bi bi-bar-chart-line me-2"></i> Inventory Reports
+        </h3>
+    </div>
 
             {{-- Page Header --}}
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-primary m-0">
-                    <i class="bi bi-bar-chart-line me-2"></i> Inventory Reports
-                </h3>
-            </div>
-
+           
             {{-- Report Filter Form --}}
             <form method="POST" action="{{ route('inventory.reports.generate') }}" class="mb-4">
                 @csrf
 
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Report Type <span class="text-danger">*</span></label>
-                        <select name="report_type" class="form-select shadow-sm" required>
+                        <label class="form-label">Report Type</label>
+                        <select name="report_type" class="form-select select2" required>
                             <option value="">-- Select Report --</option>
                             <option value="stock_summary" {{ request('report_type') == 'stock_summary' ? 'selected' : '' }}>Stock Summary</option>
                             <option value="low_stock" {{ request('report_type') == 'low_stock' ? 'selected' : '' }}>Low Stock</option>
@@ -30,8 +33,8 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Category</label>
-                        <select name="category_id" class="form-select shadow-sm">
+                        <label class="form-label ">Category</label>
+                        <select name="category_id" class="form-select select2">
                             <option value="">All Categories</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
@@ -43,7 +46,7 @@
 
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Branch</label>
-                        <select name="branch_id" class="form-select shadow-sm">
+                        <select name="branch_id" class="form-select  select2">
                             <option value="">All Branches</option>
                             @foreach ($branches as $branch)
                                 <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
@@ -75,11 +78,14 @@
                 --}}
             </form>
 
+    <div class="card  rounded-4">
+        <div class="card-body p-4">
+
             {{-- Report Results --}}
             @if(isset($items))
-                <hr class="my-4">
+              
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-semibold m-0">📄 Report Results</h5>
+                    <h5 class=" m-0">Report Results</h5>
                     <div>
                         <a href="#" onclick="window.print()" class="btn btn-outline-secondary btn-sm me-2">
                             <i class="bi bi-printer me-1"></i> Print
@@ -93,9 +99,10 @@
 
                 @if($items->count() > 0)
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped align-middle" id="reportTable">
+                        <table class="table table-bordered align-middle" id="reportTable">
                             <thead class="table-dark text-center">
                                 <tr>
+                                    <th>#</th>
                                     <th>Item Name</th>
                                     <th>SKU</th>
                                     <th>Category</th>
@@ -109,7 +116,8 @@
                             <tbody>
                                 @foreach ($items as $item)
                                     <tr class="text-center">
-                                        <td class="fw-semibold">{{ $item->name }}</td>
+                                        <td class="">{{ $item->id }}</td>
+                                        <td class="">{{ $item->item_name }}</td>
                                         <td>{{ $item->sku }}</td>
                                         <td>{{ $item->category->name ?? 'N/A' }}</td>
                                         <td>{{ $item->quantity }}</td>
@@ -140,7 +148,21 @@
 </div>
 @endsection
 
+{{-- JS --}}
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: 'Select an option',
+            width: '100%',
+            allowClear: true
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function () {
         $('#reportTable').DataTable({

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Manager; // <-- Import Manager model
 use Illuminate\Http\Request;
-
+use App\Models\Role;
 class DepartmentController extends Controller
 {
     // Show list of departments
@@ -19,7 +19,9 @@ class DepartmentController extends Controller
     public function create()
     {
         $managers = Manager::all(); // fetch from managers table
-        return view('departments.create', compact('managers'));
+        $roles = Role::all(); // make sure this is added
+ 
+        return view('departments.create', compact('managers','roles'));
     }
 
     // Store new department

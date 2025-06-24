@@ -3,20 +3,13 @@
 @section('title', 'Payroll Records')
 
 @section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
+<div class="container mt-5">
+    <h3 class=" mb-4"> Payroll Records</h3>
+    <a href="{{ route('payroll.create') }}" class="btn btn-primary mb-3">Add Payroll</a>
+    {{-- <div class="row justify-content-center">
         <div class="col-xl-11">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body p-4">
-
-                    {{-- Header --}}
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-primary fw-bold mb-0"> Payroll Records</h3>
-                        <a href="{{ route('payroll.create') }}" class="btn btn-sm btn-primary shadow-sm px-4 py-2 rounded-3">
-                             Add Payroll
-                        </a>
-                    </div>
-
+            <div class="card shadow-sm border-0 rounded-4"> --}}
+                <div class="card p-4">
                     {{-- Success Message --}}
                     @if(session('success'))
                         <div class="alert alert-success text-center shadow-sm">
@@ -25,9 +18,9 @@
                     @endif
 
                     {{-- Payroll Table --}}
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-dark text-center">
+                    {{-- <div class="table-responsive table table-bordered"> --}}
+                        <table class="table table-bordered">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>Name</th>
                                     <th>Role</th>
@@ -55,10 +48,10 @@
                                             ? (\App\Models\Branch::find($employee->branch_id)?->name ?? 'N/A')
                                             : 'N/A';
                                     @endphp
-                                    <tr class="text-center">
-                                        <td class="fw-semibold">{{ $employeeName }}</td>
+                                    <tr class="">
+                                        <td class="">{{ $employeeName }}</td>
                                         <td>
-                                            <span class="badge bg-secondary text-light px-3 py-1">{{ ucfirst($payroll->employee_type) }}</span>
+                                            <span class="badge bg-secondary">{{ ucfirst($payroll->employee_type) }}</span>
                                         </td>
                                         <td>{{ $branchName }}</td>
                                         <td>Rs. {{ number_format($payroll->basic_salary, 2) }}</td>
@@ -68,7 +61,7 @@
                                         <td>
                                             <span class="text-danger">− Rs. {{ number_format($payroll->deductions, 2) }}</span>
                                         </td>
-                                        <td class="fw-bold text-primary">Rs. {{ number_format($payroll->total_salary, 2) }}</td>
+                                        <td class=" text-primary">Rs. {{ number_format($payroll->total_salary, 2) }}</td>
                                         <td>{{ $payroll->month }}</td>
                                         <td>{{ $payroll->year }}</td>
                                     </tr>

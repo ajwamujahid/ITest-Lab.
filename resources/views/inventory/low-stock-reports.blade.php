@@ -4,26 +4,27 @@
 
 @section('content')
 <div class="container py-5">
-    <div class="card border-0 shadow-lg rounded-4">
+         {{-- Header --}}
+         <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class=" m-0">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i> 
+                Low Stock Reports
+            </h3>
+            <div>
+                <a href="#" onclick="window.print()" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-printer me-1"></i> Print
+                </a>
+                {{-- Optional: Export to PDF/Excel --}}
+                {{-- <a href="{{ route('low.stock.export') }}" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+                </a> --}}
+            </div>
+        </div>
+
+    <div class="card border-0">
         <div class="card-body p-4">
 
-            {{-- Header --}}
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold text-primary m-0">
-                    {{-- <i class="bi bi-exclamation-triangle-fill me-2"></i>  --}}
-                    Low Stock Reports
-                </h3>
-                <div>
-                    <a href="#" onclick="window.print()" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-printer me-1"></i> Print
-                    </a>
-                    {{-- Optional: Export to PDF/Excel --}}
-                    {{-- <a href="{{ route('low.stock.export') }}" class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
-                    </a> --}}
-                </div>
-            </div>
-
+       
             {{-- Success Message --}}
             @if(session('success'))
                 <div class="alert alert-success text-center shadow-sm">{{ session('success') }}</div>
@@ -31,9 +32,10 @@
 
             {{-- Table --}}
             <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle text-center" id="lowStockTable">
+                <table class="table table-bordered" id="lowStockTable">
                     <thead class="table-dark">
                         <tr>
+                            <th>#</th>
                             <th>Item Name</th>
                             <th>Branch</th>
                             <th>Quantity Reported</th>
@@ -45,7 +47,8 @@
                     <tbody>
                         @forelse ($reports as $report)
                         <tr>
-                            <td class="fw-semibold">{{ $report->item->item_name }}</td>
+                            <td class="">{{ $report->item->id }}</td>
+                            <td class="">{{ $report->item->item_name }}</td>
                             <td>{{ $report->branch->name }}</td>
                             <td>
                                 @if($report->quantity_reported < 10)
