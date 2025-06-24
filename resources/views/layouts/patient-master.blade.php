@@ -10,7 +10,10 @@
         <meta name="Description" content="Laravel Bootstrap Responsive Admin Web Dashboard Template">
         <meta name="Author" content="Spruko Technologies Private Limited">
         <meta name="keywords" content="dashboard bootstrap, laravel template, admin panel in laravel, php admin panel, admin panel for laravel, admin template bootstrap 5, laravel admin panel, admin dashboard template, hrm dashboard, vite laravel, admin dashboard, ecommerce admin dashboard, dashboard laravel, analytics dashboard, template dashboard, admin panel template, bootstrap admin panel template">
-        
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+@stack('styles')
         <!-- TITLE -->
 		<title>iTest Lab</title>
 
@@ -107,6 +110,19 @@
 
         
         <!-- END SCRIPTS -->
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- jQuery (required for Select2) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+<!-- Bootstrap JS Bundle (includes modal + popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Select2 JS (if using select2 dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Page-specific scripts -->
+@stack('scripts')
 
 	</body>
 </html>

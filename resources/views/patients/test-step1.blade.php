@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="text-end mt-4">
-                            <button class="btn btn-primary px-4">Next ⏩</button>
+                            <button class="btn btn-primary px-4">Next</button>
                         </div>
                     </form>
                 </div>
@@ -63,3 +63,61 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('patientForm');
+
+    form.addEventListener('submit', function (e) {
+        let isValid = true;
+        let errorMessage = '';
+
+        const fields = {
+            name: form.querySelector('[name="name"]'),
+            email: form.querySelector('[name="email"]'),
+            phone: form.querySelector('[name="phone"]'),
+            age: form.querySelector('[name="age"]'),
+            gender: form.querySelector('[name="gender"]'),
+            address: form.querySelector('[name="address"]'),
+        };
+
+        // Clear previous errors
+        for (let field in fields) {
+            fields[field].classList.remove('is-invalid');
+        }
+
+        // Validate each field
+        for (let key in fields) {
+            if (!fields[key].value.trim()) {
+                fields[key].classList.add('is-invalid');
+                isValid = false;
+                errorMessage = 'Please fill in all required fields.';
+            }
+        }
+
+        // Age must be between 1 and 120
+        const ageValue = parseInt(fields.age.value);
+        if (isNaN(ageValue) || ageValue < 1 || ageValue > 120) {
+            fields.age.classList.add('is-invalid');
+            errorMessage = 'Age must be between 1 and 120.';
+            isValid = false;
+        }
+
+        // Email format check
+        const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+        if (!emailPattern.test(fields.email.value)) {
+            fields.email.classList.add('is-invalid');
+            errorMessage = 'Please enter a valid email.';
+            isValid = false;
+        }
+
+        // Stop submission if invalid
+        if (!isValid) {
+            e.preventDefault();
+            alert(errorMessage);
+        }
+    });
+});
+</script>
+@endpush

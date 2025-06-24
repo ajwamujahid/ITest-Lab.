@@ -18,12 +18,17 @@
                 </div>
             @else
                 <ul class="list-group list-group-flush">
-                    @foreach($patients as $patient)
+                    @foreach($patients->sortByDesc('unread') as $patient)
+                    {{-- <div class="text-muted small">
+                        {{ $patient->last_message_time ? $patient->last_message_time->diffForHumans() : 'No messages yet' }}
+                    </div>
+                     --}}
                     <li class="list-group-item d-flex justify-content-between align-items-center py-3 px-4">
                         <div class="d-flex align-items-center gap-3">
                             <div class="rounded-circle bg-light d-flex justify-content-center align-items-center"
                                  style="width: 40px; height: 40px;">
                                 <i class="bx bx-user fs-4 text-primary"></i>
+                                
                             </div>
                             <div>
                                 <div class="fw-semibold">
@@ -35,11 +40,15 @@
                                 <div class="text-muted small">ID: {{ $patient->id }}</div>
                             </div>
                         </div>
-                
+                       
+                        <div class="text-muted small">
+                            {{ $patient->last_message_time ? $patient->last_message_time->diffForHumans() : 'No messages yet' }}
+                       
                         <a href="{{ route('chat.manager.view', ['patientId' => $patient->id]) }}"
                            class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
                             <i class="bx bx-chat"></i> Chat
                         </a>
+                    </div>
                     </li>
                 @endforeach
                 

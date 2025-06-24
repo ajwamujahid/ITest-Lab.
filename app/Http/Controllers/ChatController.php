@@ -11,32 +11,27 @@ use App\Models\Department;
 
 class ChatController extends Controller
 {
+    public function managerIndex()
+    {
+        $manager = Auth::guard('manager')->user();
     
-public function managerIndex()
-{
-    $manager = Auth::guard('manager')->user();
-
-    // 🛠 Manually get department where manager_id = current manager
-    $department = Department::where('manager_id', $manager->id)->first();
-    $departmentName = strtolower($department->name ?? '');
-
-    if ($departmentName !== 'chat') {
-        abort(403, 'Unauthorized');
-    }
-
-        // ✅ Get all patient IDs who messaged this manager
+        $department = Department::where('manager_id', $manager->id)->first();
+        if (strtolower($department->name ?? '') !== 'chat') {
+            abort(403, 'Unauthorized');
+        }
+    
         $patientIds = Message::where('receiver_type', 'manager')
-                        ->where('receiver_id', $manager->id)
-                        ->where('sender_type', 'patient')
-                        ->pluck('sender_id')
-                        ->unique();
+            ->where('receiver_id', $manager->id)
+            ->where('sender_type', 'patient')
+            ->pluck('sender_id')
+            ->unique();
     
         $patients = collect();
     
         foreach ($patientIds as $pid) {
             $patient = Patient::find($pid);
+    
             if ($patient) {
-                // 🔴 Count unread messages from this patient
                 $unreadCount = Message::where('sender_id', $pid)
                     ->where('sender_type', 'patient')
                     ->where('receiver_id', $manager->id)
@@ -44,13 +39,29 @@ public function managerIndex()
                     ->where('is_read', false)
                     ->count();
     
+                $lastMessage = Message::where(function ($q) use ($pid, $manager) {
+                    $q->where('sender_id', $pid)
+                      ->where('receiver_id', $manager->id)
+                      ->where('receiver_type', 'manager');
+                })->orWhere(function ($q) use ($pid, $manager) {
+                    $q->where('sender_id', $manager->id)
+                      ->where('receiver_id', $pid)
+                      ->where('receiver_type', 'patient');
+                })->latest()->first();
+    
                 $patients->push((object)[
                     'id' => $patient->id,
                     'name' => $patient->name,
                     'unread' => $unreadCount,
+                    'last_message_time' => optional($lastMessage)->created_at,
                 ]);
             }
         }
+    
+        // 🔽 Sort: First by unread > then latest message
+        $patients = $patients->sortByDesc('unread')
+                             ->sortByDesc('last_message_time')
+                             ->values(); // Reset keys
     
         return view('chat.manager', compact('patients'));
     }

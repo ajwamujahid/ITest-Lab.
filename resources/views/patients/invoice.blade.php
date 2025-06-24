@@ -2,7 +2,10 @@
 @section('title', 'Invoice')
 
 @section('content')
+
 <div class="container py-5">
+
+
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card shadow border-0 rounded-4">
@@ -69,7 +72,14 @@
                     {{-- Total --}}
                     <div class="d-flex justify-content-end">
                         <h4><strong>Total Amount: Rs {{ number_format($invoice->amount, 2) }}</strong></h4>
+                        
                     </div>
+                    {{-- 🔙 Back Button --}}
+<div class="text-start mt-4">
+    <a href="{{ route('test.step1') }}" class="btn btn-secondary">
+         Back to Test Form
+    </a>
+</div>
                 </div>
             </div>
         </div>
