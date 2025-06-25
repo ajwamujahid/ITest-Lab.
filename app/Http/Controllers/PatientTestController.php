@@ -77,22 +77,7 @@ class PatientTestController extends Controller
         $testNames = $tests->pluck('name')->join(', ');
         $testTypes = $tests->pluck('type')->unique();
         $finalType = $testTypes->count() === 1 ? $testTypes->first() : 'mixed';
-
-        $testRequest = TestRequest::create([
-            'patient_id' => $patientId,
-            'name' => $info['name'],
-            'email' => $info['email'],
-            'phone' => $info['phone'],
-            'age' => $info['age'],
-            'gender' => $info['gender'],
-            'address' => $info['address'],
-            'test_name' => $testNames,
-            'test_type' => $finalType,
-            'branch' => $request->branch,
-            'payment_method' => $request->payment_method,
-            'total_amount' => $total,
-        ]);
-
+       
         session()->forget('patient_info');
 
         return redirect()->route('test.step1')
@@ -153,20 +138,31 @@ class PatientTestController extends Controller
     public function showInvoice($id)
     {
         $invoice = Invoice::findOrFail($id);
-
-        $branch = \App\Models\Branch::find($invoice->branch_id);
-
+    
+        $branch = Branch::find($invoice->branch_id);
+    
         $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
             ->where('branch', $branch?->name)
             ->latest()
             ->first();
-
+    
         $selectedTests = collect();
+    
         if ($testRequest && $testRequest->test_name) {
             $names = explode(', ', $testRequest->test_name);
-            $selectedTests = collect($names)->map(fn($name) => ['name' => $name]);
+    
+            // 💡 Add type and price per test
+            $pricePerTest = $testRequest->total_amount / count($names);
+    
+            $selectedTests = collect($names)->map(function ($name) use ($testRequest, $pricePerTest) {
+                return [
+                    'name' => $name,
+                    'type' => $testRequest->test_type ?? 'N/A',
+                    'price' => $pricePerTest,
+                ];
+            });
         }
-
+    
         return view('patients.invoice', [
             'invoice' => $invoice,
             'patient' => $testRequest,
@@ -174,4 +170,5 @@ class PatientTestController extends Controller
             'branch' => $branch,
         ]);
     }
+    
 }

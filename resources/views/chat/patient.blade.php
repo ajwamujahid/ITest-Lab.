@@ -24,16 +24,36 @@
                             {{ $isPatient ? '👤 You' : '🧑‍💼 Support' }}
                         </div>
 
-                        <div class="mb-2">{{ $message->message }}</div>
+                        {{-- 💬 Message --}}
+                        @if ($message->message)
+                            <div class="mb-2">{{ $message->message }}</div>
+                        @endif
 
+                        {{-- 📎 Attachment --}}
                         @if ($message->attachment)
                             <div class="mt-2">
-                                <a href="{{ asset('storage/' . $message->attachment) }}" target="_blank" class="text-decoration-none text-primary">
-                                    📎 View Attachment
-                                </a>
+                                @php
+                                    $extension = pathinfo($message->attachment, PATHINFO_EXTENSION);
+                                    $isImage = in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                @endphp
+
+                                @if ($isImage)
+                                    {{-- 🖼️ Show image --}}
+                                    <a href="{{ asset('storage/' . $message->attachment) }}" target="_blank">
+                                        <img src="{{ asset('storage/' . $message->attachment) }}"
+                                             alt="image"
+                                             style="max-width: 200px; border-radius: 10px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                                    </a>
+                                @else
+                                    {{-- 📄 Show download link --}}
+                                    <a href="{{ asset('storage/' . $message->attachment) }}" target="_blank" class="text-decoration-none text-primary">
+                                        📎 View Attachment
+                                    </a>
+                                @endif
                             </div>
                         @endif
 
+                        {{-- 🕒 Timestamp + Seen Check --}}
                         <div class="text-muted small text-end mt-1 d-flex align-items-center justify-content-end gap-1">
                             <span>{{ $message->created_at->format('h:i A') }}</span>
                             
@@ -62,18 +82,18 @@
                 <input type="hidden" name="receiver_type" value="manager">
 
                 <div class="d-flex align-items-center gap-2">
-                    {{-- 📎 Attachment --}}
-                    <label for="attachment" class="btn btn-light border rounded-circle d-flex align-items-center justify-content-center"
-                           style="width: 42px; height: 42px;" title="Attach File">
-                        <i class="bx bx-paperclip fs-5 text-muted"></i>
-                    </label>
-                    <input id="attachment" type="file" name="attachment" class="d-none">
+                   {{-- 📎 Attachment --}}
+<label for="attachment" class="btn btn-light border rounded-circle d-flex align-items-center justify-content-center"
+style="width: 42px; height: 42px;" title="Attach File">
+<i class="bx bx-paperclip fs-5 text-muted"></i>
+</label>
+<input id="attachment" type="file" name="attachment" class="d-none" onchange="this.form.submit();">
 
-                    {{-- 💬 Message Textarea --}}
+                        {{-- 💬 Message Textarea --}}
                     <div class="flex-grow-1">
                         <textarea name="message"
                                   class="form-control border-0 bg-light rounded-pill px-4 py-2"
-                                  placeholder="Type a message..." rows="1" required
+                                  placeholder="Type a message..." rows="1"
                                   style="resize: none;"></textarea>
                     </div>
 
@@ -88,11 +108,47 @@
     </div>
 </div>
 
-{{-- 🔽 Scroll to bottom --}}
-@push('scripts')
+🔽 Scroll to bottom
+{{-- @push('scripts')
 <script>
     const chatBox = document.getElementById('chatBox');
     chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+@endpush --}}
+{{-- @push('scripts')
+<script>
+    const chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Optional: live attachment file preview (text only, not image)
+    function previewAttachment() {
+        const input = document.getElementById('attachment');
+        if (input.files.length > 0) {
+            const file = input.files[0];
+            console.log("📎 Selected file:", file.name);
+        }
+    }
+</script>
+@endpush --}}
+@push('scripts')
+<script>
+    // Scroll to bottom on load
+    const chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // 🔽 Manual trigger for hidden file input
+    document.getElementById('triggerAttachment').addEventListener('click', function () {
+        document.getElementById('attachment').click();
+    });
+
+    // ✅ Optional: show selected file in console
+    function previewAttachment() {
+        const input = document.getElementById('attachment');
+        if (input.files.length > 0) {
+            const file = input.files[0];
+            console.log("📎 Selected file:", file.name);
+        }
+    }
 </script>
 @endpush
 

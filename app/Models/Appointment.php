@@ -8,10 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     protected $fillable = [
-        'patient_id', 'branch_id', 'rider_id', 'test_type',
-        'amount', 'appointment_date', 'status', 'invoice_url',
-        'visit_status' // 👈 include this if it's fillable
+        'test_request_id',
+        'patient_id',
+        'branch_id',
+        'rider_id',
+        'test_type',
+        'appointment_date',
+        'status',
+        'visit_status',
+        'invoice_number',
+        'amount',
+        'invoice_url'
     ];
+    
 
     protected $casts = [
         'appointment_date' => 'datetime',
@@ -29,8 +38,13 @@ public function rider()
 }
 public function testRequest()
 {
-    return $this->hasOne(\App\Models\TestRequest::class, 'patient_id', 'patient_id')->latestOfMany();
+    return $this->belongsTo(\App\Models\TestRequest::class, 'test_request_id');
 }
+
+// public function testRequest()
+// {
+//     return $this->hasOne(\App\Models\TestRequest::class, 'patient_id', 'patient_id')->latestOfMany();
+// }
 public function branch()
 {
     return $this->belongsTo(\App\Models\Branch::class);

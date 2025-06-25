@@ -123,31 +123,37 @@ public function showPatientMessages($patientId)
 }
 
 
-    // 🔹 Send message from PATIENT
-    public function sendFromPatient(Request $request)
-    {
-        $data = $request->validate([
-            'receiver_id' => 'required|integer',
-            'receiver_type' => 'required|string',
-            'message' => 'nullable|string',
-            'attachment' => 'nullable|file',
-        ]);
+public function sendFromPatient(Request $request)
+{
+    $data = $request->validate([
+        'receiver_id' => 'required|integer',
+        'receiver_type' => 'required|string',
+        'message' => 'nullable|string',
+        'attachment' => 'nullable|file|max:5120', // max 5MB
+    ]);
 
-        $message = new Message();
-        $message->sender_id = auth('patient')->id();
-        $message->sender_type = 'patient';
-        $message->receiver_id = $data['receiver_id'];
-        $message->receiver_type = $data['receiver_type'];
-        $message->message = $data['message'];
-
-        if ($request->hasFile('attachment')) {
-            $message->attachment = $request->file('attachment')->store('attachments', 'public');
-        }
-
-        $message->save();
-
-        return back()->with('success', 'Message sent!');
+    // ✅ Custom Validation: At least one field must be filled
+    if (empty($data['message']) && !$request->hasFile('attachment')) {
+        return back()->with('error', 'Please type a message or attach a file.');
     }
+
+    $message = new Message();
+    $message->sender_id = auth('patient')->id();
+    $message->sender_type = 'patient';
+    $message->receiver_id = $data['receiver_id'];
+    $message->receiver_type = $data['receiver_type'];
+    $message->message = $data['message'];
+
+    // ✅ Handle Attachment Upload
+    if ($request->hasFile('attachment')) {
+        $path = $request->file('attachment')->store('attachments', 'public');
+        $message->attachment = $path;
+    }
+
+    $message->save();
+
+    return back()->with('success', 'Message sent!');
+}
 
     public function sendFromManager(Request $request)
 {

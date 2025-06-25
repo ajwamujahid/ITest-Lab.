@@ -31,6 +31,10 @@ return [
         'driver' => 'session',
         'provider' => 'branch_admins', // or maybe 'users' if you're reusing the user table
     ],
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'patients', // <-- important
+    ]
 ],
 
 
@@ -54,7 +58,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'patients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Patient::class, // <-- your model
+        ],
         'superadmins' => [
             'driver' => 'eloquent',
             'model' => App\Models\SuperAdmin::class,

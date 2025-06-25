@@ -18,6 +18,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
+                        <th>Patient name</th>
                         <th>Test Name(s)</th>
                         <th>Amount</th>
                         <th>Payment Method</th> {{-- ✅ NEW COLUMN --}}
@@ -32,16 +33,12 @@
                     @foreach($appointments as $appointment)
                         <tr>
                             <td>{{ $appointment->id }}</td>
-
+  {{-- ✅ Patient Name --}}
+  <td>{{ $appointment->testRequest->name ?? 'N/A' }}</td>
                             {{-- ✅ Convert comma-separated test_type into test names --}}
-                            <td>
-                                @php
-                                    $testIds = explode(',', $appointment->test_type);
-                                @endphp
-                                @foreach ($testIds as $testId)
-                                    {{ $tests->get((int)$testId)->name ?? 'Unknown Test' }}<br>
-                                @endforeach
-                            </td>
+                            <td>{{ $appointment->testRequest->test_name ?? 'N/A' }}</td>
+
+                            
 
                             <td>Rs. {{ number_format($appointment->amount, 2) }}</td>
                             {{-- <td>{{ ucfirst($appointment->payment_method ?? 'N/A') }}</td> --}}

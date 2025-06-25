@@ -327,7 +327,7 @@ use App\Http\Controllers\BranchInventoryReportController;
     // use App\Http\Controllers\ReportsController;
     Route::get('/patients/appointments', [PatientAppointmentController::class, 'myAppointments'])->name('patients.appointments');
 
-    // Route::prefix('branchadmin')->middleware(['auth:branchadmin'])->group(function () {
+    //Route::prefix('branchadmin')->middleware(['auth:branchadmin'])->group(function () {
         Route::get('/patient/track-rider/{appointment}', [\App\Http\Controllers\PatientAppointmentController::class, 'trackRider'])->name('patient.track.rider');
 
         // ✅ Patient Appointments (assign date + rider)
@@ -343,7 +343,10 @@ use App\Http\Controllers\BranchInventoryReportController;
     // web.php ya branchadmin.php mein
 Route::post('/appointments/{appointment}/assign', [PatientAppointmentController::class, 'assignAppointment'])
     ->name('branchadmin.appointments.assign');
-  
+  // In routes/web.php
+Route::post('/branchadmin/appointments/assign/{id}', [PatientAppointmentController::class, 'assignAppointment'])
+->name('branchadmin.appointments.assign');
+
     // });
     Route::middleware(['auth:rider'])->group(function () {
         Route::get('/rider/assigned-patients', [PatientAppointmentController::class, 'riderAppointments'])->name('rider.assigned');
@@ -412,7 +415,12 @@ Route::get('/manager/assigned-physical-tests', [PhysicalTestAppointmentControlle
 // Update visit status
 Route::post('/manager/update-visit-status', [PhysicalTestAppointmentController::class, 'updateVisitStatus'])
 ->name('manager.update.visit');
+use App\Http\Controllers\BranchAppointmentController;
 
+Route::middleware('auth:branchadmin')->group(function () {
+    Route::get('/branch/online-appointments', [BranchAppointmentController::class, 'showOnlineRequests'])->name('branch.online.requests');
+    Route::post('/branch/assign-appointment', [BranchAppointmentController::class, 'assignAppointment'])->name('branch.assign.appointment');
+});
 
 
 use App\Http\Controllers\AppointmentRescheduleController;

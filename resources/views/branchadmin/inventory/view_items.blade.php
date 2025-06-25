@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">📦 Inventory - Your Branch</h2>
+    <h2 class="mb-4">Inventory - Your Branch</h2>
 
     <table class="table table-bordered">
         <thead>

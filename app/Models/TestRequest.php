@@ -17,7 +17,8 @@ class TestRequest extends Model
         'age',
         'gender',
         'address',
-        'tests',        // ✅ Good
+        'test_name',
+        'test_type',        // ✅ Good
         'branch',
         'payment_method',
         'total_amount',
@@ -38,7 +39,11 @@ class TestRequest extends Model
     //     return $this->belongsTo(Patient::class, 'patient_id');
     // }
     
-  
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+    
     
     public function rider()
     {

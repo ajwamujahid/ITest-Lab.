@@ -44,46 +44,40 @@
                     </div>
 
                     {{-- Test Details --}}
-                    <div class="mb-4">
-                        <h5 class="text-muted mb-3">🧪 Selected Tests</h5>
+<div class="mb-4">
+    <h5 class="text-muted mb-3">🧪 Selected Tests</h5>
 
-                        <table class="table table-bordered align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Test</th>
-                                    <th class="text-end">Price (Rs)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $tests = is_array($patient->tests) ? $patient->tests : json_decode($patient->tests, true);
-                                @endphp
-                            
-                                @if(!empty($tests))
-                                @foreach($selectedTests as $test)
-                                <tr>
-                                    <td>{{ $test['name'] }}</td>
-                                    <td>{{ ucfirst($test['type']) }}</td>
-                                    <td class="text-end">{{ number_format($test['price'] ?? 0, 2) }}</td>
-                                </tr>
-                            @endforeach
-                            
-                            
-                                @else
-                                    <tr>
-                                        <td colspan="2" class="text-center text-muted">No tests found.</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            
-                        </table>
-                    </div>
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Test</th>
+                <th>Type</th>
+                <th class="text-end">Price (Rs)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if($selectedTests->count())
+                @foreach($selectedTests as $test)
+                    <tr>
+                        <td>{{ $test['name'] }}</td>
+                        <td>{{ ucfirst($test['type']) }}</td>
+                        <td class="text-end">{{ number_format($test['price'], 2) }}</td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No tests found.</td>
+                </tr>
+            @endif
+        </tbody>
+    </table>
+</div>
 
-                    {{-- Total --}}
-                    <div class="d-flex justify-content-end">
-                        <h4><strong>Total Amount: Rs {{ number_format($invoice->amount, 2) }}</strong></h4>
-                        
-                    </div>
+{{-- Total --}}
+<div class="d-flex justify-content-end">
+    <h4><strong>Total Amount: Rs {{ number_format($invoice->amount, 2) }}</strong></h4>
+</div>
+
                     {{-- 🔙 Back Button --}}
 <div class="text-start mt-4">
     <a href="{{ route('test.step1') }}" class="btn btn-secondary">

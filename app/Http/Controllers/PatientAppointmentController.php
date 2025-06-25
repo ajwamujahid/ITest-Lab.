@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\TestRequest;
 use App\Models\Rider;
 use App\Models\Test;
@@ -10,95 +10,109 @@ use Illuminate\Http\Request;
 
 class PatientAppointmentController extends Controller
 {
-    // ✅ Branch admin view — list appointments & tests (only online)
-    public function index()
-    {
-        $branchAdmin = auth('branchadmin')->user();
+    public function index(Request $request)
+{
+    $branchAdmin = auth('branchadmin')->user();
 
-        if (!$branchAdmin || !$branchAdmin->branch_id) {
-            abort(403, 'You must be logged in as a branch admin.');
-        }
-
-        $branchName = \App\Models\Branch::find($branchAdmin->branch_id)?->name;
-
-        if (!$branchName) {
-            abort(403, 'Branch not found.');
-        }
-
-        // Get appointments for this branch
-        $appointments = Appointment::whereHas('testRequest', function ($query) use ($branchName) {
-                $query->where('branch', $branchName);
-            })
-            ->whereIn('status', ['pending', 'scheduled'])
-            ->with(['rider', 'testRequest'])
-            ->latest()
-            ->paginate(10);
-
-        $riders = Rider::where('branch_id', $branchAdmin->branch_id)->get();
-
-        // ✅ Get only online tests
-
-        $branchId = auth('branchadmin')->user()->branch_id;
-$tests = \App\Models\Test::where('branch_id', $branchId)->get()->keyBy('id');
-
-        return view('branchadmin.patients.index', compact('appointments', 'riders', 'tests'));
+    if (!$branchAdmin || !$branchAdmin->branch_id) {
+        abort(403, 'Unauthorized.');
     }
 
-    // ✅ Assign or update appointment
+    $branch = \App\Models\Branch::find($branchAdmin->branch_id);
+    if (!$branch) {
+        abort(403, 'Branch not found.');
+    }
+
+    $statusFilter = $request->input('status');
+
+    $testRequests = collect();  // initialize empty collection
+    $appointments = collect();
+
+    if ($statusFilter == 'pending' || $statusFilter == null) {
+        // ✅ Show pending test requests
+        $assignedTestRequestIds = Appointment::pluck('test_request_id')->filter()->toArray();
+
+        $testRequests = TestRequest::where('branch', $branch->name)
+            ->where('status', 'pending')
+            ->where('test_type', 'online')
+            ->whereNotIn('id', $assignedTestRequestIds)
+            ->get();
+    }
+
+    if (in_array($statusFilter, ['scheduled', 'cancelled'])) {
+        // ✅ Show appointments of that status
+        $appointments = Appointment::with(['rider', 'testRequest'])
+            ->where('branch_id', $branch->id)
+            ->where('test_type', 'online')
+            ->where('status', $statusFilter)
+            ->latest()
+            ->get();
+    }
+
+    $riders = Rider::where('branch_id', $branchAdmin->branch_id)->get();
+
+    return view('branchadmin.patients.index', [
+        'testRequests' => $testRequests,
+        'appointments' => $appointments,
+        'riders' => $riders,
+        'statusFilter' => $statusFilter
+    ]);
+}
+
+
     public function assignAppointment(Request $request, $id)
     {
         $request->validate([
             'appointment_date' => 'required|date',
             'rider_id' => 'required|exists:riders,id',
         ]);
-
-        // Check if $id is Appointment ID or TestRequest ID
-        $appointment = Appointment::find($id);
-
-        if (!$appointment) {
-            // If no appointment — treat $id as TestRequest ID and create new appointment
-            $testRequest = TestRequest::findOrFail($id);
-
-            // Check if TestRequest has online tests only
-            $testIds = json_decode($testRequest->tests, true);
-            $hasOnline = Test::whereIn('id', $testIds)->where('type', 'online')->exists();
-
-            if (!$hasOnline) {
-                return back()->with('error', 'Only online tests can be assigned.');
-            }
-
-            // Create new appointment
-            $appointment = Appointment::create([
-                'test_request_id' => $testRequest->id,
-                'patient_id' => $testRequest->patient_id,
-                'branch_id' => $testRequest->branch_id,
-                'rider_id' => $request->rider_id,
-                'appointment_date' => $request->appointment_date,
-                'status' => 'scheduled',
-            ]);
-        } else {
-            // If appointment exists, update it
-            $appointment->update([
-                'rider_id' => $request->rider_id,
-                'appointment_date' => $request->appointment_date,
-                'status' => 'scheduled',
-            ]);
+    
+        $testRequest = TestRequest::find($id);
+    
+        if (!$testRequest) {
+            return back()->with('error', 'Test request not found.');
         }
-
+    
+        if ($testRequest->test_type !== 'online') {
+            return back()->with('error', 'Only online tests can be assigned.');
+        }
+    
+        // ✅ Get branch ID
+        $branch = \App\Models\Branch::where('name', $testRequest->branch)->first();
+        if (!$branch) {
+            return back()->with('error', 'Associated branch not found.');
+        }
+    
+        // ✅ Create appointment
+        Appointment::create([
+            'test_request_id'   => $testRequest->id,
+            'patient_id'        => $testRequest->patient_id,
+            'branch_id'         => $branch->id,
+            'rider_id'          => $request->rider_id,
+            'appointment_date'  => $request->appointment_date,
+            'status'            => 'scheduled',
+            'test_type'         => 'online',
+            'amount'            => $testRequest->total_amount ?? null,
+        ]);
+    
         return back()->with('success', 'Appointment assigned successfully.');
     }
-
-    // ✅ Optional: Rider view, patient view (unchanged)
+   
     public function myAppointments()
     {
-        $patientId = auth()->id();
-        $appointments = Appointment::with(['rider', 'testRequest', 'branch'])->latest()->paginate(10);
-
-        $tests = Test::where('type', 'online')->get()->keyBy('id');
-
-        return view('patients.appointments', compact('appointments', 'tests'));
+        $patientId = Auth::guard('patient')->id(); // Get logged-in patient ID
+    
+        $appointments = Appointment::with(['rider', 'testRequest', 'branch'])
+            ->where('patient_id', $patientId)
+            ->where('test_type', 'online')       // ✅ Only online tests
+            ->whereNotNull('rider_id')           // ✅ Must be assigned to a rider
+            ->latest()
+            ->paginate(10);
+    
+        return view('patients.appointments', compact('appointments'));
     }
-
+    
+    
     public function trackRider(Appointment $appointment)
     {
         $rider = $appointment->rider;
