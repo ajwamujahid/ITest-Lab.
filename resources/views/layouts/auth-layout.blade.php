@@ -25,12 +25,13 @@
 
         <!-- FAVICON -->
         {{-- <link rel="icon" href="#" type="image/x-icon"> --}}
-        <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" />
+        {{-- <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" /> --}}
         <!-- BOOTSTRAP CSS -->
 	    <link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
         <!-- ICONS CSS -->
         <link href="{{asset('build/assets/icon-fonts/icons.css')}}" rel="stylesheet">
+        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
         
         <!-- APP SCSS -->
         @vite(['resources/sass/app.scss'])

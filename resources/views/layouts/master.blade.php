@@ -11,6 +11,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="Description" content="Laravel Bootstrap Responsive Admin Web Dashboard Template">
         <meta name="Author" content="Spruko Technologies Private Limited">
+        <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" />
         <meta name="keywords" content="dashboard bootstrap, laravel template, admin panel in laravel, php admin panel, admin panel for laravel, admin template bootstrap 5, laravel admin panel, admin dashboard template, hrm dashboard, vite laravel, admin dashboard, ecommerce admin dashboard, dashboard laravel, analytics dashboard, template dashboard, admin panel template, bootstrap admin panel template">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Select2 CSS -->
@@ -32,8 +33,10 @@
 		<title> itest lab</title>
 
         <!-- FAVICON -->
-        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.ico')}}" type="image/x-icon">
-
+        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
+        
+            {{-- <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.ico')}}" type="image/x-icon"> --}}
+        {{-- <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" /> --}}
         <!-- BOOTSTRAP CSS -->
 	    <link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
