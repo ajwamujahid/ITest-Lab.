@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container mt-4">
-    <h3 class="mb-4">My Scheduled Appointments</h3>
+    <h3 class="mb-4 text-primary">
+        <i class="bx bx-calendar-check"></i> My Scheduled Appointments
+    </h3>
+    
 {{-- debug only --}}
 {{-- <pre>{{ print_r($appointments->pluck('patient_id'), true) }}</pre> --}}
 
@@ -14,7 +17,7 @@
 
     @else
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>

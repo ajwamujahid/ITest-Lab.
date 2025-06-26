@@ -11,7 +11,7 @@
 <div class="container py-5">
     {{-- Page Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold  m-0">
+        <h3 class="m-0">
             <i class="bi bi-clipboard-data me-2"></i> Inventory Stock Levels
         </h3>
         

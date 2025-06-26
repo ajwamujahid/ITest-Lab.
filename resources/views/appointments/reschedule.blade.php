@@ -3,7 +3,10 @@
 
 @section('content')
 <div class="container mt-4">
-    <h4 class="mb-3">Reschedule Cancelled Appointments</h4>
+    <h3 class="mb-4 text-primary fw-bold">
+        <i class="bx bx-calendar-edit me-2"></i> Reschedule Cancelled Appointments
+    </h3>
+    
 {{-- /<p class="text-muted">Only appointments with <strong>status = cancelled</strong> are shown here.</p> --}}
     
     @if(session('success'))

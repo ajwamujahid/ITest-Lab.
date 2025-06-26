@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h2>✅ Completed Tests</h2>
+    <h3 class="mt-4"><i class="bx bx-check-circle  me-2"></i> Completed Tests</h3>
+
 
     <table class="table table-bordered">
         <thead>

@@ -154,15 +154,19 @@ public function sendFromPatient(Request $request)
 
     return back()->with('success', 'Message sent!');
 }
-
-    public function sendFromManager(Request $request)
+public function sendFromManager(Request $request)
 {
     $data = $request->validate([
         'receiver_id' => 'required|integer',
         'receiver_type' => 'required|string',
         'message' => 'nullable|string',
-        'attachment' => 'nullable|file',
+        'attachment' => 'nullable|file|max:5120',
     ]);
+
+    // ✅ Custom validation: Must provide either message or file
+    if (empty($data['message']) && !$request->hasFile('attachment')) {
+        return back()->with('error', 'Please type a message or attach a file.');
+    }
 
     $message = new Message();
     $message->sender_id = auth('manager')->id();
@@ -170,10 +174,11 @@ public function sendFromPatient(Request $request)
     $message->receiver_id = $data['receiver_id'];
     $message->receiver_type = $data['receiver_type'];
     $message->message = $data['message'];
-    $message->is_read = false; // 👈 Important!
+    $message->is_read = false;
 
     if ($request->hasFile('attachment')) {
-        $message->attachment = $request->file('attachment')->store('attachments', 'public');
+        $path = $request->file('attachment')->store('attachments', 'public');
+        $message->attachment = $path;
     }
 
     $message->save();

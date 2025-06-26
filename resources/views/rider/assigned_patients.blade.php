@@ -16,7 +16,7 @@
                     <th>Date</th>
                     <th>Patient</th>
                     <th>Test Type</th>
-                    <th>Address</th> {{-- 🔄 Changed from "Branch" --}}
+                    <th>Address</th>
                     <th>Status</th>
                     <th>Location</th>
                 </tr>
@@ -24,22 +24,31 @@
             <tbody>
                 @forelse($appointments as $appt)
                     <tr>
+                        {{-- 📅 Date --}}
                         <td>
                             <span class="text-dark fw-semibold">
                                 {{ \Carbon\Carbon::parse($appt->appointment_date)->format('d M Y, h:i A') }}
                             </span>
                         </td>
-                        <td>
-                            <strong>{{ optional($appt->testRequest->patient)->name ?? 'N/A' }}</strong><br>
-                            <small class="text-muted">{{ optional($appt->testRequest->patient)->phone }}</small>
-                        </td>
-                        <td>{{ $appt->test_type ?? 'N/A' }}</td>
 
-                        {{-- 🏠 Address from test_requests --}}
+                        {{-- 👤 Patient Info --}}
                         <td>
-                            {{ $appt->testRequest->address ?? 'N/A' }}
+                            @if($appt->testRequest && $appt->testRequest->patient)
+                                <strong>{{ $appt->testRequest->patient->name }}</strong><br>
+                                <small class="text-muted">{{ $appt->testRequest->patient->phone }}</small>
+                            @else
+                                <strong>N/A</strong><br>
+                                <small class="text-muted">N/A</small>
+                            @endif
                         </td>
 
+                        {{-- 🧪 Test Type (name) --}}
+                        <td>{{ $appt->testRequest->test_name ?? 'N/A' }}</td>
+
+                        {{-- 🏠 Address --}}
+                        <td>{{ $appt->testRequest->address ?? 'N/A' }}</td>
+
+                        {{-- 📌 Status --}}
                         <td>
                             <span class="badge text-white 
                                 @if($appt->status == 'scheduled') bg-warning 
@@ -50,6 +59,8 @@
                                 {{ ucfirst($appt->status) }}
                             </span>
                         </td>
+
+                        {{-- 📍 Location Button --}}
                         <td>
                             <a href="{{ route('rider.track.patient', $appt->id) }}"
                                class="btn btn-sm btn-outline-primary">
@@ -68,7 +79,7 @@
         </table>
     </div>
 
-    <!-- Pagination -->
+    {{-- Pagination --}}
     <div class="mt-4">
         {{ $appointments->withQueryString()->links() }}
     </div>

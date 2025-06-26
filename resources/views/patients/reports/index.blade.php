@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4"> Your Medical Reports</h4>
+    <h3 class="mb-4 text-primary">
+        <i class="bx bx-notepad"></i> Your Medical Reports
+    </h3>
+    
 
     @if($testRequests->isEmpty())
         <div class="alert alert-info">
@@ -14,8 +17,11 @@
                 <div class="col">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body">
-                            <h5 class="card-title mb-2"> {{ $test->test_type ?? 'Test Report' }}</h5>
-                            <p class="card-text">
+                            <p class="card-text mt-4"> 
+                                <strong>Patient Name:</strong>{{ $test->name ?? 'Test Report' }}
+                                 <br>
+                                 <strong>Test Name:</strong> {{ $test->test_name ?? 'N/A' }} <br>
+                                 <strong>Test Type:</strong> {{ $test->test_type ?? 'N/A' }} <br>
                                 <strong>Date:</strong> {{ $test->created_at->format('d M, Y') }} <br>
                                 <strong>Report Status:</strong> 
                                 <span class="badge bg-success">Available</span>
@@ -23,7 +29,10 @@
 
                             @if($test->report_file_path)
                                 <a href="{{ asset('storage/' . $test->report_file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                    📥 View Report
+                                     View Report
+                                </a>
+                                <a href="{{ asset('storage/' . $test->report_file_path) }}" download class="btn btn-sm btn-primary">
+                                     Download
                                 </a>
                             @else
                                 <span class="text-muted">No file attached</span>

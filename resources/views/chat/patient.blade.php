@@ -6,7 +6,7 @@
     <div class="card shadow border-0 rounded-4 overflow-hidden">
         {{-- 🔰 Header --}}
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bx bx-headphone"></i> Chat with Support</h5>
+            <h5 class="mb-0 text-primary"><i class="bx bx-headphone"></i> Chat with Support</h5>
             <span class="badge bg-white text-primary fw-semibold px-3 py-1">Support Team</span>
         </div>
 

@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">Payment Records</h4>
+    <h4 class="mb-4">
+        <i class="bx bx-credit-card me-2"></i> Payment Records
+    </h4>
+    
 
     {{-- 🔎 Filter Form --}}
     <form method="GET" class="row g-3 align-items-end mb-4">

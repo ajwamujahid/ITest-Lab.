@@ -10,7 +10,10 @@
 
 <div class="container py-4">
 
-    <h2 class="mb-4">Total Expenses</h2>
+    <h3 class="mb-4">
+        <i class="bx bx-money-withdraw me-2"></i> Total Expenses
+    </h3>
+    
 
     {{-- 🔎 Filter Form --}}
     <form method="GET" action="{{ url('finance/expenses') }}" class="mb-4">

@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="container mt-5">
-        <h3 class=" mb-4">Departments</h3>
+    <h3 class="mb-4">
+        <i class="bx bx-network-chart"></i> Departments
+    </h3>
+    
         <a href="{{ route('departments.create') }}" class="btn btn-primary mb-3">
              Add New Department
         </a>

@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h2>⏳ Pending Tests</h2>
+   
+
+    <h3 class="mt-4"><i class="bi bi-clock-history  me-2"></i> Pending Tests</h3>
 
     <table class="table table-bordered">
         <thead>

@@ -26,12 +26,13 @@ class AppointmentCancelController extends Controller
     public function cancel($id)
     {
         $appointment = Appointment::where('id', $id)
-            ->where('patient_id', auth()->id()) // ✅ Ensure only own appointment can be canceled
+            ->where('patient_id', Auth::guard('patient')->id()) // 🔐 Correct guard
             ->firstOrFail();
-
+    
         $appointment->status = 'cancelled';
         $appointment->save();
-
+    
         return back()->with('success', 'Your appointment has been cancelled successfully.');
     }
+    
 }

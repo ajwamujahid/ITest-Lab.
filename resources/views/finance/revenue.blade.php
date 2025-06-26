@@ -10,7 +10,10 @@
 
 <div class="container py-4">
 
-    <h2 class="mb-4">Total Revenue Overview</h2>
+    <h3 class="mb-4">
+        <i class="bx bx-wallet-alt me-2"></i> Total Revenue Overview
+    </h3>
+    
 
     {{-- 🔎 Filter Form --}}
     <form method="GET" action="{{ url('finance/revenue') }}" class="mb-4">

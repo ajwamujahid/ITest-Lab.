@@ -36,5 +36,18 @@ public function physicalTests()
 
     return view('patients.appointments.physical', compact('appointments'));
 }
+// public function cancel($id)
+// {
+//     $appointment = Appointment::where('id', $id)
+//         ->where('patient_id', Auth::guard('patient')->id()) // ✅ secure
+//         ->firstOrFail();
+
+//     $appointment->status = 'cancelled';
+//     $appointment->save();
+
+//     return redirect()->back()->with('success', 'Appointment cancelled successfully!');
+// }
+
+
 
 } 

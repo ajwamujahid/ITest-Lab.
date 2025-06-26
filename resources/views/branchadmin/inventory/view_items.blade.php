@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Inventory - Your Branch</h2>
+    <h3 class="mt-4 text-primary fw-bold">
+        <i class="bx bx-package me-2"></i> Inventory - Your Branch
+    </h3>
 
     <table class="table table-bordered">
         <thead>
@@ -19,7 +21,7 @@
         <tbody>
             @forelse($items as $item)
                 <tr>
-                    <td>{{ $item->name }}</td>
+                    <td>{{ $item->item_name }}</td>
                     <td>{{ $item->sku }}</td>
                     <td>{{ $item->category->name ?? 'N/A' }}</td>
                     <td>{{ $item->quantity }}</td>

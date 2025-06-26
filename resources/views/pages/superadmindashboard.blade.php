@@ -23,12 +23,12 @@
                           
                         </div>
                         <div class="btn-list mt-md-0 mt-2">
-                            <button type="button" class="btn btn-primary btn-wave">
+                            {{-- <button type="button" class="btn btn-primary btn-wave">
                                 <i class="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Filters
                             </button>
                             <button type="button" class="btn btn-outline-secondary btn-wave">
                                 <i class="ri-upload-cloud-line me-2 align-middle d-inline-block"></i>Export
-                            </button>
+                            </button> --}}
                         </div>
                     </div>
 
@@ -299,7 +299,7 @@
                                         </div>
                                         <div class="col-xl-12">
                                             <div class="card custom-card">
-                                                <div class="card-header justify-content-between">
+                                                {{-- <div class="card-header justify-content-between">
                                                     <div class="card-title">
                                                         Revenue Analytics
                                                     </div>
@@ -313,11 +313,11 @@
                                                             <li><a class="dropdown-item" href="javascript:void(0);">This Week</a></li>
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Last Week</a></li>
                                                         </ul>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="content-wrapper">
-                                                        <div id="crm-revenue-analytics"></div>
+                                                        {{-- <div id="crm-revenue-analytics"></div> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -325,8 +325,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-12">
-                                    <div class="card custom-card">
-                                        <div class="card-header justify-content-between">
+                                    <div class="">
+                                        <div class="">
                                             {{-- <div class="card-title">
                                                 Deals Statistics
                                             </div> --}}
@@ -509,60 +509,60 @@
                                 <div class="col-xxl-12 col-xl-12">
                                     <div class="row">
                                         <div class="col-xl-12 col-xl-6">
-                                            <div class="card custom-card">
-                                                <div class="card-header justify-content-between">
-                                                    <div class="card-title">
+                                            <div class="">
+                                                <div class="">
+                                                    {{-- <div class="card-title">
                                                         Leads By Source
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="dropdown">
-                                                        <a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-sm btn-light" data-bs-toggle="dropdown">
+                                                        {{-- <a aria-label="anchor" href="javascript:void(0);" class="btn btn-icon btn-sm btn-light" data-bs-toggle="dropdown">
                                                             <i class="fe fe-more-vertical"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu">
+                                                        </a> --}}
+                                                        {{-- <ul class="dropdown-menu">
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Week</a></li>
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Month</a></li>
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Year</a></li>
-                                                        </ul>
+                                                        </ul> --}}
                                                     </div>
                                                 </div>
                                                 <div class="card-body p-0 overflow-hidden">
                                                     <div class="leads-source-chart d-flex align-items-center justify-content-center">
-                                                        <canvas id="leads-source" class="chartjs-chart w-100 p-4"></canvas>
+                                                        {{-- <canvas id="leads-source" class="chartjs-chart w-100 p-4"></canvas>
                                                         <div class="lead-source-value">
                                                             <span class="d-block fs-14">Total</span>
                                                             <span class="d-block fs-25 fw-bold">4,145</span>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                     <div class="row row-cols-12 border-top border-block-start-dashed">
                                                         <div class="col p-0">
-                                                            <div class="ps-4 py-3 pe-3 text-center border-end border-inline-end-dashed">
+                                                            {{-- <div class="ps-4 py-3 pe-3 text-center border-end border-inline-end-dashed">
                                                                 <span class="text-muted fs-12 mb-1 crm-lead-legend mobile d-inline-block">Mobile
                                                                 </span>
                                                                 <div><span class="fs-16 fw-semibold">1,624</span>
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                         <div class="col p-0">
-                                                            <div class="p-3 text-center border-end border-inline-end-dashed">
+                                                            {{-- <div class="p-3 text-center border-end border-inline-end-dashed">
                                                                 <span class="text-muted fs-12 mb-1 crm-lead-legend desktop d-inline-block">Desktop
                                                                 </span>
                                                                 <div><span class="fs-16 fw-semibold">1,267</span></div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                         <div class="col p-0">
-                                                            <div class="p-3 text-center border-end border-inline-end-dashed">
+                                                            {{-- <div class="p-3 text-center border-end border-inline-end-dashed">
                                                                 <span class="text-muted fs-12 mb-1 crm-lead-legend laptop d-inline-block">Laptop
                                                                 </span>
                                                                 <div><span class="fs-16 fw-semibold">1,153</span>
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                         <div class="col p-0">
-                                                            <div class="p-3 text-center">
+                                                            {{-- <div class="p-3 text-center">
                                                                 <span class="text-muted fs-12 mb-1 crm-lead-legend tablet d-inline-block">Tablet
                                                                 </span>
                                                                 <div><span class="fs-16 fw-semibold">679</span></div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -629,13 +629,13 @@
                                             </div>
                                         </div> --}}
                                         <div class="col-xxl-12 col-xl-6">
-                                            <div class="card custom-card">
-                                                <div class="card-header justify-content-between">
-                                                    <div class="card-title">
+                                            <div class="">
+                                                <div class="">
+                                                    {{-- <div class="card-title">
                                                         Recent Activity
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="dropdown">
-                                                        <a href="javascript:void(0);" class="p-2 fs-12 text-muted" data-bs-toggle="dropdown"
+                                                        {{-- <a href="javascript:void(0);" class="p-2 fs-12 text-muted" data-bs-toggle="dropdown"
                                                             aria-expanded="false">
                                                             View All<i class="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
                                                         </a>
@@ -643,11 +643,11 @@
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Today</a></li>
                                                             <li><a class="dropdown-item" href="javascript:void(0);">This Week</a></li>
                                                             <li><a class="dropdown-item" href="javascript:void(0);">Last Week</a></li>
-                                                        </ul>
+                                                        </ul> --}}
                                                     </div>
                                                 </div>
-                                                <div class="card-body">
-                                                    <div>
+                                                <div class="">
+                                                    {{-- <div>
                                                         <ul class="list-unstyled mb-0 crm-recent-activity">
                                                             <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
@@ -661,26 +661,26 @@
                                                                     </div>
                                                                     <div class="flex-fill text-end">
                                                                         <span class="d-block text-muted fs-11 op-7">4:45PM</span>
-                                                                    </div>
-                                                                </div>
+                                                                    </div> --}}
+                                                                {{-- </div>
                                                             </li>
-                                                            <li class="crm-recent-activity-content">
-                                                                <div class="d-flex align-items-top">
-                                                                    <div class="me-3">
+                                                            <li class="">
+                                                                <div class="d-flex"> --}}
+                                                                    {{-- <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-secondary-transparent avatar-rounded">
                                                                             <i class="bi bi-circle-fill fs-8"></i>
                                                                         </span>
-                                                                    </div>
-                                                                    <div class="crm-timeline-content">
+                                                                    </div> --}}
+                                                                    {{-- <div class="crm-timeline-content">
                                                                         <span>New theme for <span class="fw-semibold">Spruko Website</span> completed</span>
                                                                         <span class="d-block fs-12 text-muted">Lorem ipsum, dolor sit amet.</span>
-                                                                    </div>
-                                                                    <div class="flex-fill text-end">
+                                                                    </div> --}}
+                                                                    {{-- <div class="flex-fill text-end">
                                                                         <span class="d-block text-muted fs-11 op-7">3 hrs</span>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                                    </div> --}}
+                                                                {{-- </div>
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-success-transparent avatar-rounded">
@@ -694,8 +694,8 @@
                                                                         <span class="d-block text-muted fs-11 op-7">22 hrs</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-pink-transparent avatar-rounded">
@@ -709,8 +709,8 @@
                                                                         <span class="d-block text-muted fs-11 op-7">Today</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-warning-transparent avatar-rounded">
@@ -724,8 +724,8 @@
                                                                         <span class="d-block text-muted fs-11 op-7">22 hrs</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-info-transparent avatar-rounded">
@@ -739,8 +739,8 @@
                                                                         <span class="d-block text-muted fs-11 op-7">12 hrs</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-dark-transparent avatar-rounded">
@@ -754,8 +754,8 @@
                                                                         <span class="d-block text-muted fs-11 op-7">4 hrs</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
-                                                            <li class="crm-recent-activity-content">
+                                                            </li> --}}
+                                                            {{-- <li class="crm-recent-activity-content">
                                                                 <div class="d-flex align-items-top">
                                                                     <div class="me-3">
                                                                         <span class="avatar avatar-xs bg-purple-transparent avatar-rounded">
@@ -769,7 +769,7 @@
                                                                         <span class="d-block text-muted fs-11 op-7">4 hrs</span>
                                                                     </div>
                                                                 </div>
-                                                            </li>
+                                                            </li> --}}
                                                         </ul>
                                                     </div>
                                                 </div>

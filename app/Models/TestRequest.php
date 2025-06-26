@@ -57,10 +57,19 @@ public function riderVisit()
 }
 // App\Models\TestRequest.php
 
+// public function patient()
+// {
+//     return $this->belongsTo(Patient::class);
+// }
 public function patient()
 {
-    return $this->belongsTo(Patient::class);
+    return $this->belongsTo(\App\Models\Patient::class, 'patient_id');
 }
+
+// public function tests()
+// {
+//     return $this->belongsToMany(\App\Models\Test::class, 'test_request_test', 'test_request_id', 'test_id');
+// }
 
 // Optional: if you ever want to know visits from TestRequest
 public function visits()
@@ -72,6 +81,10 @@ public function tests()
     return $this->belongsToMany(Test::class, 'test_request_test')
         ->withPivot('quantity', 'price');
 }
+// public function tests()
+// {
+//     return $this->belongsToMany(Test::class)->withPivot('quantity', 'price');
+// }
 
 public function branch()
 {

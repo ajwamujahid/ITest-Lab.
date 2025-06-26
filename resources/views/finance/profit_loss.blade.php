@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">Profit & Loss Statement</h2>
+    <h3 class="mb-4">
+        <i class="bx bx-line-chart me-2"></i> Profit & Loss Statement
+    </h3>
+    
 
     {{-- 🔎 Filter Form --}}
     <form method="GET" action="{{ route('finance.profit-loss') }}" class="row g-3 align-items-end mb-4">

@@ -22,4 +22,13 @@ class BranchStaffController extends Controller
 
         return view('branchadmin.staff.index', compact('staff'));
     }
+    public function toggleStatus($id)
+{
+    $manager = Manager::findOrFail($id);
+    $manager->status = $manager->status === 'active' ? 'inactive' : 'active';
+    $manager->save();
+
+    return redirect()->back()->with('success', 'Staff status updated successfully.');
+}
+
 }

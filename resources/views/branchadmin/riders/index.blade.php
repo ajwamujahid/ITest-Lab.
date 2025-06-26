@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container">
-    <h2>All Riders</h2>
+    <h3 class="fw-bold text-primary mt-4">
+        <i class="bx bx-cycling me-2"></i> All Riders
+    </h3>
 
     <a href="{{ route('branchadmin.riders.create') }}" class="btn btn-primary mb-3">Add New Rider</a>
 

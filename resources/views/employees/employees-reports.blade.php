@@ -6,7 +6,10 @@
 @endpush
 
 <div class="container mt-4">
-    <h2>Manager Reports</h2>
+    <h3>
+        <i class="bx bx-bar-chart-alt me-2"></i> Manager Reports
+    </h3>
+    
 
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-3">

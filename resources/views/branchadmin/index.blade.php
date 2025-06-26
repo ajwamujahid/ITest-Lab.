@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container mt-5">
-    <h3 class="mb-4">Branch Managers</h3>
+    <h3 class="mb-4">
+        <i class="bx bx-building-house"></i> Branch Admins
+    </h3>
+    
     <a href="{{ route('branch-admin.create') }}" class="btn btn-primary mb-3">Add New Branch admin</a>
 
     <div class="card p-4">

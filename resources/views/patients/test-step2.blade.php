@@ -5,6 +5,8 @@
 @push('styles')
     {{-- Select2 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- SweetAlert2 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 @endpush
 
 <div class="container py-5">
@@ -15,7 +17,6 @@
                     <h2 class="text-center text-primary mb-4">Step 2: Select Your Tests</h2>
 
                     <form id="finalTestForm" action="{{ route('test.final.post') }}" method="POST">
-
                         @csrf
 
                         {{-- Test List Grouped by Branch --}}
@@ -43,7 +44,7 @@
                         {{-- Select Branch --}}
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Select Branch</label>
-                            <select name="branch" class="form-select select2 " required>
+                            <select name="branch" class="form-select select2" required>
                                 <option value="">-- Choose Branch --</option>
                                 @foreach($branches as $branch)
                                     <option value="{{ $branch->name }}">{{ $branch->name }}</option>
@@ -64,54 +65,34 @@
 
                         {{-- Total Amount --}}
                         <div class="mb-4 text-end">
-                            <h5><strong>Total: Rs <span id="totalAmount" class="">0.00</span></strong></h5>
+                            <h5><strong>Total: Rs <span id="totalAmount">0.00</span></strong></h5>
                         </div>
 
+                        {{-- Submit & Back --}}
                         <div class="text-end">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                            <button type="button" class="btn btn-primary" id="submitTestBtn">
                                 Submit Test Request
                             </button>
                             <a href="{{ route('test.step1') }}" class="btn btn-outline-secondary">
                                 Back to info
-                           </a>
+                            </a>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content rounded-4">
-        <div class="modal-header  text-black">
-          <h5 class="modal-title fw-bold" id="confirmModalLabel">Confirm Submission</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <p>Are you sure you want to submit your test request?</p>
-        </div>
-        <div class="modal-footer justify-content-between px-4">
-          <a href="{{ route('test.step1') }}" class="btn btn-outline-secondary">
-               Back to Patient Info
-          </a>
-          <button type="submit" class="btn btn-success" form="finalTestForm">
-              Confirm & Submit
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
 @endsection
-{{-- JS to calculate total and enable Select2 --}}
-@push('scripts')
-{{-- jQuery (required for Select2) --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+@push('scripts')
+{{-- jQuery --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {{-- Select2 JS --}}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{{-- SweetAlert2 JS --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -123,17 +104,59 @@
             document.getElementById('totalAmount').innerText = total.toFixed(2);
         };
 
+        // Run on load
+        updateTotal();
+
+        // Update total on checkbox change
         document.querySelectorAll('.test-checkbox').forEach(cb => {
             cb.addEventListener('change', updateTotal);
         });
 
-        updateTotal(); // initial load
-
-        // ✅ Enable Select2
+        // Enable Select2
         $('.select2').select2({
             placeholder: 'Select an option',
             width: '100%',
             allowClear: true
+        });
+
+        // Handle submission via SweetAlert
+        document.getElementById('submitTestBtn').addEventListener('click', function () {
+            const form = document.getElementById('finalTestForm');
+            const selectedTests = document.querySelectorAll('.test-checkbox:checked');
+            const branch = document.querySelector('select[name="branch"]').value;
+            const payment = document.querySelector('select[name="payment_method"]').value;
+
+            let errors = [];
+
+            if (!branch) errors.push("Please select a branch.");
+            if (!payment) errors.push("Please select a payment method.");
+            if (selectedTests.length === 0) errors.push("Please select at least one test.");
+
+            if (errors.length > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Form',
+                    html: errors.join('<br>'),
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            // SweetAlert confirmation
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to submit your test request?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, Submit',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
     });
 </script>

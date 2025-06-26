@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+
 use App\Models\TestRequest;
 use App\Models\Rider;
 use App\Models\Test;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // make sure this is at the top
 
 class PatientAppointmentController extends Controller
 {
@@ -60,6 +61,7 @@ class PatientAppointmentController extends Controller
 }
 
 
+
     public function assignAppointment(Request $request, $id)
     {
         $request->validate([
@@ -97,7 +99,8 @@ class PatientAppointmentController extends Controller
     
         return back()->with('success', 'Appointment assigned successfully.');
     }
-   
+    
+
     public function myAppointments()
     {
         $patientId = Auth::guard('patient')->id(); // Get logged-in patient ID
@@ -111,7 +114,6 @@ class PatientAppointmentController extends Controller
     
         return view('patients.appointments', compact('appointments'));
     }
-    
     
     public function trackRider(Appointment $appointment)
     {
@@ -128,14 +130,15 @@ class PatientAppointmentController extends Controller
     public function riderAppointments()
     {
         $riderId = auth()->id();
-
+    
         $appointments = Appointment::where('rider_id', $riderId)
-            ->with(['testRequest', 'branch'])
-            ->latest()
-            ->paginate(10);
-
+        ->with(['testRequest.patient', 'branch'])
+        ->latest()
+        ->paginate(10);
+    
         return view('rider.assigned_patients', compact('appointments'));
     }
+    
 
     public function sampleStatus()
     {
@@ -160,4 +163,6 @@ class PatientAppointmentController extends Controller
             'testRequest' => $appointment->testRequest,
         ]);
     }
+   
+
 }

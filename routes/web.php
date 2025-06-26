@@ -216,6 +216,7 @@ Route::middleware(['auth:manager'])->group(function () {
     
           use App\Http\Controllers\AppointmentController;
         Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+        // Route::post('/appointments/cancel/{id}', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
         Route::get('/appointments/{id}/download', [AppointmentController::class, 'download'])->name('appointments.download');
         Route::get('/appointments/{id}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
@@ -239,6 +240,7 @@ use App\Http\Controllers\BranchInventoryReportController;
     Route::get('/inventory/view_items', [BranchInventoryController::class, 'viewItems'])->name('branchadmin.inventory.view_items');
     use App\Http\Controllers\BranchStaffController;
     Route::get('/branchadmin/staff', [BranchStaffController::class, 'index'])->name('branchadmin.staff.index');
+    Route::post('/branch/staff/{id}/toggle-status', [BranchStaffController::class, 'toggleStatus'])->name('branch.staff.toggleStatus');
 
 
     use App\Http\Controllers\ExpenseController;
@@ -303,7 +305,9 @@ use App\Http\Controllers\BranchInventoryReportController;
         Route::get('/report/expenses', [BranchAdminReportController::class, 'expenses'])->name('branchadmin.report.expenses');
         Route::get('/report/appointments', [BranchAdminReportController::class, 'appointments'])->name('branchadmin.report.appointments');
     });
-
+    Route::get('/branch/profit-loss/export-pdf', [ProfitLossController::class, 'exportPdf'])->name('branch.profitloss.exportPdf');
+    Route::get('/branch/profit-loss/export-excel', [ProfitLossController::class, 'exportExcel'])->name('branch.profitloss.exportExcel');
+    
     use App\Http\Controllers\RiderController;
 
     Route::prefix('branchadmin')->middleware(['auth:branchadmin'])->group(function () {

@@ -1,75 +1,100 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container mt-4">
-    <h2>Create Role & Add Permission</h2>
+<div class="container py-5">
+    <h4 class="mb-3">
+        <i class="bx bx-lock-alt me-2"></i> Create Role & Assign Permissions
+    </h4>
+    <div class="card">
+        {{-- <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="bx bx-lock-alt me-2"></i> Create Role & Assign Permissions
+            </h4>
+        </div> --}}
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+        <div class="card-body">
+            {{-- ✅ Success Alert --}}
+            @if(session('success'))
+                <div class="alert alert-success">
+                    <i class="bx bx-check-circle me-1"></i> {{ session('success') }}
+                </div>
+            @endif
 
-    <form method="POST" action="{{ route('roles.storeWithPermission') }}">
-        @csrf
+            {{-- 📝 Role & Permission Form --}}
+            <form method="POST" action="{{ route('roles.storeWithPermission') }}">
+                @csrf
 
-        <!-- Role Name & New Permission in one row -->
-        <div class="row">
-            <!-- Role Name -->
-            <div class="col-md-6 mb-3">
-                <label for="role_name" class="form-label">Role Name</label>
-                <input 
-                    type="text" 
-                    name="name" 
-                    id="role_name" 
-                    class="form-control @error('name') is-invalid @enderror" 
-                    required 
-                    value="{{ old('name') }}"
-                >
-                @error('name')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-
-            <!-- Add New Permission -->
-            <div class="col-md-6 mb-3">
-                <label for="new_permission" class="form-label">Add New Permission (optional)</label>
-                <input 
-                    type="text" 
-                    name="new_permission" 
-                    id="new_permission" 
-                    class="form-control @error('new_permission') is-invalid @enderror" 
-                    value="{{ old('new_permission') }}"
-                    placeholder="Enter new permission name"
-                >
-                @error('new_permission')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
-        </div>
-
-        <!-- Permissions Section -->
-        <div class="mb-3">
-            <label class="form-label">Assign Existing Permissions</label>
-            <div class="border p-2 rounded" style="max-height: 200px; overflow-y: auto;">
-                @foreach($permissions as $permission)
-                    <div class="form-check">
+                <div class="row g-3 mb-4">
+                    {{-- 🏷️ Role Name --}}
+                    <div class="col-md-6">
+                        <label for="role_name" class="form-label fw-semibold">Role Name <span class="text-danger">*</span></label>
                         <input 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            name="permissions[]" 
-                            value="{{ $permission->id }}" 
-                            id="perm{{ $permission->id }}"
-                            {{ (is_array(old('permissions')) && in_array($permission->id, old('permissions'))) ? 'checked' : '' }}
+                            type="text" 
+                            name="name" 
+                            id="role_name" 
+                            class="form-control @error('name') is-invalid @enderror" 
+                            value="{{ old('name') }}" 
+                            required 
+                            placeholder="e.g. Chat Manager"
                         >
-                        <label class="form-check-label" for="perm{{ $permission->id }}">{{ $permission->name }}</label>
+                        @error('name')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
-                @endforeach
-            </div>
-            @error('permissions')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
 
-        <button type="submit" class="btn btn-primary">Create Role & Permission</button>
-    </form>
+                    {{-- ➕ New Permission --}}
+                    <div class="col-md-6">
+                        <label for="new_permission" class="form-label fw-semibold">Add New Permission (optional)</label>
+                        <input 
+                            type="text" 
+                            name="new_permission" 
+                            id="new_permission" 
+                            class="form-control @error('new_permission') is-invalid @enderror" 
+                            value="{{ old('new_permission') }}"
+                            placeholder="e.g. assign-chat-patient"
+                        >
+                        @error('new_permission')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- 📋 Existing Permissions --}}
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Assign Existing Permissions</label>
+                    <div class=" p-3" style=" overflow-y: auto;">
+                        @forelse($permissions as $permission)
+                            <div class="form-check mb-2">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    name="permissions[]" 
+                                    value="{{ $permission->id }}" 
+                                    id="perm{{ $permission->id }}"
+                                    {{ (is_array(old('permissions')) && in_array($permission->id, old('permissions'))) ? 'checked' : '' }}
+                                >
+                                <label class="form-check-label" for="perm{{ $permission->id }}">
+                                    {{ ucfirst(str_replace('-', ' ', $permission->name)) }}
+                                </label>
+                            </div>
+                        @empty
+                            <p class="text-muted">No permissions found.</p>
+                        @endforelse
+                    </div>
+                    @error('permissions')
+                        <small class="text-danger d-block mt-2">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- 🚀 Submit Button --}}
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary px-4">
+                        {{-- <i class="bx bx-plus-circle me-1"></i>  --}}
+                        Create Role 
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection

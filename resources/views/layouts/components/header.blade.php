@@ -39,9 +39,9 @@
                         <!-- Start::header-element -->
                         <div class="header-element header-search">
                             <!-- Start::header-link -->
-                            <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal" data-bs-target="#searchModal">
+                            {{-- <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="bx bx-search-alt-2 header-link-icon"></i>
-                            </a>
+                            </a> --}}
                             <!-- End::header-link -->
                         </div>
                         <!-- End::header-element -->
@@ -277,14 +277,14 @@
                               
                             <!-- End::main-header-dropdown -->
                             <div class="header-element notifications-dropdown">
-                                <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{-- <a href="javascript:void(0);" class="header-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bx bx-bell header-link-icon"></i>
                                     @if($unreadNotificationCount > 0)
                                         <span class="badge bg-secondary rounded-pill header-icon-badge pulse pulse-secondary" id="notification-icon-badge">
                                             {{ $unreadNotificationCount }}
                                         </span>
                                     @endif
-                                </a>
+                                </a> --}}
                             
                                 <div class="main-header-dropdown dropdown-menu dropdown-menu-end">
                                     <div class="p-3">
@@ -473,19 +473,19 @@
                         <!-- Start::header-element -->
                         <div class="header-element">
                             <!-- Start::header-link|dropdown-toggle -->
-                            <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-sm-2 me-0">
+                            {{-- <a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <div class="d-flex align-items-center"> --}}
+                                    {{-- <div class="me-sm-2 me-0">
                                         <img src="{{asset('build/assets/images/faces/9.jpg')}}" alt="img" width="32" height="32" class="rounded-circle">
-                                    </div>
+                                    </div> --}}
                                     {{-- <div class="d-sm-block d-none">
                                         <p class="fw-semibold mb-0 lh-1">Json Taylor</p>
                                         <span class="op-7 fw-normal d-block fs-11">Web Designer</span>
                                     </div> --}}
-                                </div>
-                            </a>
+                                {{-- </div>
+                            </a> --}}
                             <!-- End::header-link|dropdown-toggle -->
-                            <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
+                            {{-- <ul class="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end" aria-labelledby="mainHeaderProfile">
                                 <li><a class="dropdown-item d-flex" href="{{url('profile')}}"><i class="ti ti-user-circle fs-18 me-2 op-7"></i>Profile</a></li>
                                 <li><a class="dropdown-item d-flex" href="{{url('mail')}}"><i class="ti ti-inbox fs-18 me-2 op-7"></i>Inbox <span class="badge bg-success-transparent ms-auto">25</span></a></li>
                                 <li><a class="dropdown-item d-flex border-block-end" href="{{url('todo-list')}}"><i class="ti ti-clipboard-check fs-18 me-2 op-7"></i>Task Manager</a></li>
@@ -493,7 +493,7 @@
                                 <li><a class="dropdown-item d-flex border-block-end" href="javascript:void(0);"><i class="ti ti-wallet fs-18 me-2 op-7"></i>Bal: $7,12,950</a></li>
                                 <li><a class="dropdown-item d-flex" href="{{url('chat')}}"><i class="ti ti-headset fs-18 me-2 op-7"></i>Support</a></li>
                                 <li><a class="dropdown-item d-flex" href="{{url('signin-cover')}}"><i class="ti ti-logout fs-18 me-2 op-7"></i>Log Out</a></li>
-                            </ul>
+                            </ul> --}}
                         </div>  
                         <!-- End::header-element -->
 

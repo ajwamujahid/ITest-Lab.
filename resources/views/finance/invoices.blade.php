@@ -9,7 +9,10 @@
 @endpush
 
 <div class="container py-4">
-    <h3 class="mb-4"> Invoice Management</h3>
+    <h3 class="mb-4">
+        <i class="bx bx-receipt me-2"></i> Invoice Management
+    </h3>
+    
 
     {{-- 🔎 Filter --}}
     <form method="GET" class="mb-3">

@@ -1,13 +1,18 @@
 @extends('layouts.branch-master')
 
 @section('content')
-<div class="container">
-    <h3>Patient Appointment</h3>
+<div class="container py-4">
 
-    {{-- ✅ Filter --}}
-    <form method="GET" class="mb-4">
-        <label class="me-2 fw-bold">Filter by Status:</label>
-        <select name="status" onchange="this.form.submit()" class="form-select w-auto d-inline">
+    {{-- 🗓️ Heading --}}
+    <h3 class="mb-4 text-primary fw-bold">
+        <i class="bx bx-calendar-check fs-4 me-2 align-middle"></i>
+        Patient Appointment
+    </h3>
+
+    {{-- 🔍 Filter --}}
+    <form method="GET" class="mb-4 d-flex align-items-center gap-2">
+        <label class="fw-semibold text-dark mb-0">Filter by Status:</label>
+        <select name="status" onchange="this.form.submit()" class="form-select w-auto">
             <option value="" {{ $statusFilter == null ? 'selected' : '' }}>Pending</option>
             <option value="scheduled" {{ $statusFilter == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
             <option value="cancelled" {{ $statusFilter == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
@@ -22,8 +27,8 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
+    {{-- 📅 Scheduled / Cancelled Appointments --}}
     @if($statusFilter == 'scheduled' || $statusFilter == 'cancelled')
-        {{-- ✅ Appointments Table --}}
         @if($appointments->isEmpty())
             <div class="alert alert-info">No {{ ucfirst($statusFilter) }} appointments found.</div>
         @else
@@ -31,11 +36,11 @@
                 <table class="table table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>Appointment ID</th>
+                            <th>#</th>
                             <th>Patient</th>
                             <th>Test</th>
                             <th>Rider</th>
-                            <th>Time</th>
+                            <th>Date/Time</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -46,8 +51,13 @@
                             <td>{{ $appt->testRequest->name ?? 'N/A' }}</td>
                             <td>{{ $appt->testRequest->test_name ?? 'N/A' }}</td>
                             <td>{{ $appt->rider->name ?? 'N/A' }}</td>
-                            <td>{{ \Carbon\Carbon::parse($appt->appointment_date)->format('d M Y h:i A') }}</td>
-                            <td><span class="badge bg-{{ $appt->status == 'cancelled' ? 'danger' : 'success' }}">{{ ucfirst($appt->status) }}</span></td>
+                            <td>{{ \Carbon\Carbon::parse($appt->appointment_date)->format('d M Y, h:i A') }}</td>
+                            <td>
+                                <span class="badge 
+                                    {{ $appt->status == 'cancelled' ? 'bg-danger' : 'bg-success' }}">
+                                    {{ ucfirst($appt->status) }}
+                                </span>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -55,8 +65,8 @@
             </div>
         @endif
 
+    {{-- 🕗 Pending Test Requests --}}
     @else
-        {{-- ✅ Pending Test Requests Table --}}
         @if($testRequests->isEmpty())
             <div class="alert alert-info">No pending online test requests found.</div>
         @else
@@ -64,11 +74,11 @@
                 <table class="table table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <th>Patient</th>
                             <th>Test</th>
-                            <th>Date/Time</th>
-                            <th>Rider / Action</th>
+                            <th>Appointment Date/Time</th>
+                            <th>Assign Rider</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,15 +89,15 @@
                             <td>{{ $request->test_name ?? 'Online Test' }}</td>
                             <td>
                                 <input type="datetime-local"
-                                    name="appointment_date"
-                                    form="assign-form-{{ $request->id }}"
-                                    class="form-control"
-                                    required>
+                                       name="appointment_date"
+                                       form="assign-form-{{ $request->id }}"
+                                       class="form-control"
+                                       required>
                             </td>
                             <td>
                                 <form id="assign-form-{{ $request->id }}"
-                                    method="POST"
-                                    action="{{ route('branchadmin.appointments.assign', $request->id) }}">
+                                      method="POST"
+                                      action="{{ route('branchadmin.appointments.assign', $request->id) }}">
                                     @csrf
                                     <select name="rider_id" class="form-select mb-2" required>
                                         <option value="">Select Rider</option>
@@ -95,7 +105,7 @@
                                             <option value="{{ $rider->id }}">{{ $rider->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button type="submit" class="btn btn-primary btn-sm w-100">Assign</button>
+                                    <button type="submit" class="btn btn-sm btn-primary w-100">Assign</button>
                                 </form>
                             </td>
                         </tr>

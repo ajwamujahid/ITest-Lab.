@@ -4,7 +4,10 @@
 <div class="container mt-5">
     <div class="card shadow rounded">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">📍 Patient Location Tracking</h4>
+            <h4 class="mb-0 text-primary">
+                <i class="bx bx-map-pin text-primary me-1"></i> Patient Location Tracking
+            </h4>
+            
         </div>
 
         <div class="card-body">
@@ -22,7 +25,7 @@
                     </div>
                 </div>
             @else
-                <p class="text-danger">🚫 Patient information is currently not available.</p>
+                <p class="text-danger">Patient information is currently not available.</p>
             @endif
 
             <div id="map" style="height: 450px; width: 100%; border:1px solid #dee2e6;" class="rounded shadow-sm mt-3"></div>

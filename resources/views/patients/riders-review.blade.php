@@ -1,7 +1,9 @@
 @extends('layouts.patient-master')
 
 @section('content')
-<h3>Rider Review Section</h3>
+<h3 class="mb-4 text-primary">
+    <i class="bx bx-star"></i> Rider Review Section
+</h3>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>

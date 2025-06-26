@@ -3,7 +3,8 @@
 @section('content')
 <div class="container py-4">
 
-    <h2 class="mb-4">All Appointments</h2>
+    <h3 class="mb-4">
+        <i class="bx bx-calendar"></i>  All Appointments</h3>
 
     <!-- Filter Form -->
     <form method="GET" class="mb-4 flex flex-wrap gap-2">

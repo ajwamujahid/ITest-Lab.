@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h2>📋 All Tests</h2>
+    <h3 class="mt-4"><i class="bx bx-list-ul  me-2"></i> All Tests</h3>
+
 
     <table class="table table-bordered">
         <thead>

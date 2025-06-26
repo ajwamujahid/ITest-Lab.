@@ -4,7 +4,10 @@
 
 @section('content')
 <div class="container">
-    <h3 class=" mb-4"> Payroll Records</h3>
+    <h3 class="">
+        <i class="bx bx-money-withdraw me-2"></i> Payroll Records
+    </h3>
+    
     <a href="{{ route('payroll.create') }}" class="btn btn-primary mb-3">Add Payroll</a>
     {{-- <div class="row justify-content-center">
         <div class="col-xl-11">

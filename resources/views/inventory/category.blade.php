@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h3 class=" ">
-        {{-- <i class="bi bi-tags-fill me-2"></i> --}}
+        <i class="bi bi-tags-fill me-2"></i>
         Inventory Categories
     </h3>
     <div class="">

@@ -1,95 +1,120 @@
 @extends('layouts.branch-master')
 
 @section('content')
-<div class="container">
-    <h2>Profit & Loss Report</h2>
+<div class="container py-4">
 
-    {{-- Filter Form --}}
-    <form method="GET" class="mb-4">
-        <label>From:</label>
-        <input type="date" name="from" value="{{ $from->toDateString() }}">
-        <label>To:</label>
-        <input type="date" name="to" value="{{ $to->toDateString() }}">
-        <button type="submit" class="btn btn-primary">Filter</button>
+    {{-- 🧾 Page Title --}}
+    <h2 class="mb-4 text-primary fw-bold">
+        <i class="bx bx-line-chart me-2"></i> Profit & Loss Report
+    </h2>
+
+    {{-- 📅 Filter Form --}}
+    <form method="GET" class="row g-3 align-items-end mb-4">
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">From:</label>
+            <input type="date" name="from" class="form-control" value="{{ $from->toDateString() }}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-semibold">To:</label>
+            <input type="date" name="to" class="form-control" value="{{ $to->toDateString() }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bx bx-filter-alt me-1"></i> Filter
+            </button>
+        </div>
     </form>
 
-    {{-- Summary --}}
-    <div class="mb-4">
-        <h4>Total Income: Rs. {{ number_format($income) }}</h4>
-        <h4>Total Expenses: Rs. {{ number_format($expenses) }}</h4>
-        <h4>Net Profit: Rs. {{ number_format($profit) }}</h4>
-        <p>Expense Percentage: {{ $expensePercentage }}%</p>
-        <p>Profit Margin: {{ $profitMargin }}%</p>
+    {{-- 📊 Summary Section --}}
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="border rounded p-3 bg-light ">
+                <h5 class="text-success fw-bold">Total Income</h5>
+                <p class="fs-5 mb-0">Rs. {{ number_format($income) }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="border rounded p-3 bg-light ">
+                <h5 class="text-danger fw-bold">Total Expenses</h5>
+                <p class="fs-5 mb-0">Rs. {{ number_format($expenses) }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="border rounded p-3 bg-light ">
+                <h5 class="text-primary fw-bold">Net Profit</h5>
+                <p class="fs-5 mb-1">Rs. {{ number_format($profit) }}</p>
+                <small class="text-muted">Expense %: {{ $expensePercentage }}%</small><br>
+                <small class="text-muted">Profit Margin: {{ $profitMargin }}%</small>
+            </div>
+        </div>
     </div>
 
-    {{-- Chart --}}
-    <canvas id="profitChart" width="400" height="150"></canvas>
-
-    {{-- Breakdown Tables --}}
-    <h5 class="mt-5">Income Details</h5>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Invoice ID</th>
-                <th>Date</th>
-                <th>Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($incomeList as $inv)
+    {{-- 💰 Income Table --}}
+    <h5 class="fw-bold text-success mb-3">Income Details</h5>
+    <div class="table-responsive mb-5">
+        <table class="table">
+            <thead class="table-light">
                 <tr>
-                    <td>{{ $inv->id }}</td>
-                    <td>{{ $inv->created_at->toDateString() }}</td>
-                    <td>Rs. {{ number_format($inv->amount) }}</td>
+                    <th>Invoice ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <h5 class="mt-5">Expenses Details</h5>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Expense ID</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($expenseList as $exp)
-                <tr>
-                    <td>{{ $exp->id }}</td>
-                    <td>{{ $exp->expense_date }}</td>
-                    <td>Rs. {{ number_format($exp->amount) }}</td>
-                    <td>{{ $exp->description }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    {{-- Export & Print --}}
-    <div class="mt-4">
-        <a href="#" class="btn btn-primary">Export PDF</a>
-        <a href="#" class="btn btn-success">Download Excel</a>
-        <button onclick="window.print()" class="btn btn-secondary">Print</button>
+            </thead>
+            <tbody>
+                @forelse($incomeList as $inv)
+                    <tr>
+                        <td>{{ $inv->id }}</td>
+                        <td>{{ $inv->created_at->toDateString() }}</td>
+                        <td>Rs. {{ number_format($inv->amount) }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No income records found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
+
+    {{-- 💸 Expenses Table --}}
+    <h5 class="fw-bold text-danger mb-3">Expenses Details</h5>
+    <div class="table-responsive mb-5">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>Expense ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($expenseList as $exp)
+                    <tr>
+                        <td>{{ $exp->id }}</td>
+                        <td>{{ $exp->expense_date }}</td>
+                        <td>Rs. {{ number_format($exp->amount) }}</td>
+                        <td>{{ $exp->description }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No expense records found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4 d-flex gap-3">
+        <a href="{{ route('branch.profitloss.exportPdf', request()->query()) }}" class="btn btn-primary">
+            <i class="bx bxs-file-pdf me-1"></i> Export PDF
+        </a>
+        <a href="{{ route('branch.profitloss.exportExcel', request()->query()) }}" class="btn btn-success">
+            <i class="bx bxs-file-export me-1"></i> Download Excel
+        </a>
+        <button onclick="window.print()" class="btn btn-secondary">
+            <i class="bx bx-printer me-1"></i> Print
+        </button>
+    </div>
+    
 </div>
-
-{{-- Chart.js --}}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const ctx = document.getElementById('profitChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Income', 'Expenses', 'Profit'],
-            datasets: [{
-                label: 'Amount',
-                data: [{{ $income }}, {{ $expenses }}, {{ $profit }}],
-                backgroundColor: ['green', 'red', 'blue']
-            }]
-        }
-    });
-</script>
 @endsection

@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2>My Expenses</h2>
+    <h3 class="mb-4 text-primary fw-bold">
+        <i class="bi bi-wallet2 me-2"></i> My Expenses
+    </h3>
+    
 
     @if(session('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>
