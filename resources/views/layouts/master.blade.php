@@ -30,11 +30,12 @@
             </style>
             
         <!-- TITLE -->
+        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
+       
 		<title> itest lab</title>
 
         <!-- FAVICON -->
-        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
-        
+ 
             {{-- <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.ico')}}" type="image/x-icon"> --}}
         {{-- <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" /> --}}
         <!-- BOOTSTRAP CSS -->
