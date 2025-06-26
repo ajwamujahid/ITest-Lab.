@@ -1,62 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rider Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.auth-layout')
 
-    <!-- Bootstrap 5 CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.auth-layout')
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-
-                <div class="card shadow-lg rounded-4 border-0">
-                    <div class="card-header bg-primary text-white rounded-top-4">
-                        <h4 class="mb-0 text-center py-2">Rider Login</h4>
+@section('title', 'Rider Login')
+@section('content')
+<div class="container mt-2">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-body p-5">
+                    {{-- Header --}}
+                    <div class="text-center mb-4">
+                        <h4 class="mb-0 py-2 text-primary">Rider Login</h4>
+                        <p class="text-muted mb-0">Enter your credentials to access rider panel</p>
                     </div>
 
-                    <div class="card-body">
-                        @if($errors->any())
-                            <div class="alert alert-danger">
-                                {{ $errors->first() }}
+                    {{-- Errors --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger mb-3">{{ $errors->first() }}</div>
+                    @endif
+
+                    {{-- Form --}}
+                    <form method="POST" action="{{ route('rider.login.submit') }}">
+                        @csrf
+
+                        {{-- Email --}}
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="ri-mail-line"></i></span>
+                                <input type="email" name="email" class="form-control" placeholder="rider@example.com" required autofocus>
                             </div>
-                        @endif
+                            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
 
-                        <form method="POST" action="{{ route('rider.login.submit') }}">
-                            @csrf
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" name="email" class="form-control" required autofocus>
+                        {{-- Name --}}
+                        <div class="mb-3">
+                            <label class="form-label text-dark">Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="ri-user-line"></i></span>
+                                <input type="text" name="name" class="form-control" placeholder="Rider Name" required>
                             </div>
+                            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
 
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" name="name" class="form-control" required>
+                        {{-- Password --}}
+                        <div class="mb-4">
+                            <label class="form-label text-dark">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="ri-lock-line"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="********" required>
                             </div>
+                            @error('password') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label"> Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
+                        {{-- Submit --}}
+                        <div class="text-center mb-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ri-login-circle-line me-1"></i>  Login
+                            </button>
+                        </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                        </form>
-                    </div>
-            
-                <div class="card-footer text-center text-muted small">
-                    &copy; {{ date('Y') }} Patient Panel
+                        {{-- Optional link --}}
+                        <div class="text-center">
+                            <small class="text-muted">Need help? <a href="#">Contact Support</a></small>
+                        </div>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS (optional, for future alerts etc) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+</div>
+@endsection

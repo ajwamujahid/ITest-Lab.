@@ -1,38 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>@yield('title', 'Itest Lab Login')</title>
-    <link href="{{ asset('build/assets/libs/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-menu-styles="dark" data-toggled="close">
 
-    <style>
-        body {
-            background-color: #f7f9fc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-    </style>
-    @yield('styles')
-</head>
-<body>
-    <div class="login-container">
-        <h2 class="mb-4 text-primary text-center">🧪 Itest Lab</h2>
-        @yield('content')
-    </div>
+    <head>
 
-    <script src="{{ asset('build/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    @yield('scripts')
-</body>
+        <!-- META DATA -->
+		<meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="Description" content="Laravel Bootstrap Responsive Admin Web Dashboard Template">
+        <meta name="Author" content="Spruko Technologies Private Limited">
+        <meta name="keywords" content="dashboard bootstrap, laravel template, admin panel in laravel, php admin panel, admin panel for laravel, admin template bootstrap 5, laravel admin panel, admin dashboard template, hrm dashboard, vite laravel, admin dashboard, ecommerce admin dashboard, dashboard laravel, analytics dashboard, template dashboard, admin panel template, bootstrap admin panel template">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+
+@stack('styles')
+        <!-- TITLE -->
+		<title>@yield('title', 'iTest Lab')</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+
+        <!-- FAVICON -->
+        {{-- <link rel="icon" href="#" type="image/x-icon"> --}}
+        <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" />
+        <!-- BOOTSTRAP CSS -->
+	    <link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+        <!-- ICONS CSS -->
+        <link href="{{asset('build/assets/icon-fonts/icons.css')}}" rel="stylesheet">
+        
+        <!-- APP SCSS -->
+        @vite(['resources/sass/app.scss'])
+
+
+        @include('layouts.components.styles')
+
+        <!-- MAIN JS -->
+        <script src="{{asset('build/assets/main.js')}}"></script>
+
+        @yield('styles')
+
+	</head>
+
+	<body>
+
+        <!-- SWITCHER -->
+
+        @include('layouts.components.switcher')
+
+        <!-- END SWITCHER -->
+
+        <!-- LOADER -->
+		<div id="loader">
+			<img src="{{asset('build/assets/images/media/loader.svg')}}" alt="">
+		</div>
+		<!-- END LOADER -->
+
+        <!-- PAGE -->
+		<div class="page">
+
+            <!-- HEADER -->
+
+            {{-- @include('layouts.components.header') --}}
+
+            <!-- END HEADER -->
+
+            <!-- SIDEBAR -->
+            {{-- @include('layouts.components.patient-sidebar') --}}
+
+            <!-- END SIDEBAR -->
+
+            <!-- MAIN-CONTENT -->
+
+           
+
+                @yield('content')
+
+            
+            <!-- END MAIN-CONTENT -->
+
+            <!-- SEARCH-MODAL -->
+
+            {{-- @include('layouts.components.search-modal') --}}
+
+            <!-- END SEARCH-MODAL -->
+
+            <!-- FOOTER -->
+            
+            {{-- @include('layouts.components.footer') --}}
+
+            <!-- END FOOTER -->
+
+		</div>
+        <!-- END PAGE-->
+
+        <!-- SCRIPTS -->
+
+        @include('layouts.components.scripts')
+
+        @yield('scripts')
+
+        <!-- STICKY JS -->
+		<script src="{{asset('build/assets/sticky.js')}}"></script>
+
+        <!-- APP JS -->
+		@vite('resources/js/app.js')
+
+
+        <!-- CUSTOM-SWITCHER JS -->
+        @vite('resources/assets/js/custom-switcher.js')
+
+        
+        <!-- END SCRIPTS -->
+    {{-- Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- jQuery (required for Select2) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+<!-- Bootstrap JS Bundle (includes modal + popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Select2 JS (if using select2 dropdowns) -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Page-specific scripts -->
+@stack('scripts')
+
+	</body>
 </html>
