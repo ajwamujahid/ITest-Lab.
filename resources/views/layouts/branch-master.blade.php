@@ -13,6 +13,8 @@
         
         <!-- TITLE -->
 		<title>iTest Lab</title>
+        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+       
 
         <!-- FAVICON -->
         {{-- <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.ico')}}" type="image/x-icon"> --}}

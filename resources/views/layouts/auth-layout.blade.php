@@ -11,28 +11,19 @@
         <meta name="Author" content="Spruko Technologies Private Limited">
         <meta name="keywords" content="dashboard bootstrap, laravel template, admin panel in laravel, php admin panel, admin panel for laravel, admin template bootstrap 5, laravel admin panel, admin dashboard template, hrm dashboard, vite laravel, admin dashboard, ecommerce admin dashboard, dashboard laravel, analytics dashboard, template dashboard, admin panel template, bootstrap admin panel template">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
+       
 @push('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
-
-
-@stack('styles')
-        <!-- TITLE -->
-		<title>@yield('title', 'iTest Lab')</title>
+<title>@yield('title', 'iTest Lab')</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+        {{-- <link href="{{asset('build/assets/icon-fonts/icons.css')}}" rel="stylesheet">
+         --}}
+         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-
-        <!-- FAVICON -->
-        {{-- <link rel="icon" href="#" type="image/x-icon"> --}}
-        {{-- <link rel="icon" href="{{ asset('public/favicon.png') }}" type="image/png" /> --}}
-        <!-- BOOTSTRAP CSS -->
-	    <link  id="style" href="{{asset('build/assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
-
-        <!-- ICONS CSS -->
-        <link href="{{asset('build/assets/icon-fonts/icons.css')}}" rel="stylesheet">
-        <link rel="icon" href="{{asset('build/assets/images/brand-logos/favicon.png')}}" type="image/x-icon">
-        
         <!-- APP SCSS -->
         @vite(['resources/sass/app.scss'])
 
