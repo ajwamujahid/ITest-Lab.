@@ -11,18 +11,45 @@
 
                     <!-- Start::page-header -->
 
-                    <div class="d-md-flex d-block align-items-center justify-content-between my-4  mt-5 page-header-breadcrumb">
+                    <div class="d-md-flex d-block align-items-center justify-content-between my-4 mt-5 page-header-breadcrumb">
                         <div>
-                           
                             @if(Auth::check())
-                            <p class="fw-semibold fs-18 mb-0">Welcome back:  {{ Auth::user()->name }}</p>
-                        @else
-                            <p>No user logged in</p>
-                        @endif
-                            
+                                <p class="fw-semibold fs-18 mb-0">
+                                    Welcome back: {{ Auth::user()->name }}
+                                </p>
+                    
+                                {{-- Reminders Section
+                                @foreach($reminders as $reminder)
+                                    <div class="alert alert-info shadow-sm mb-2">
+                                        {{ $reminder->message }}
+                                    </div>
+                                @endforeach --}}
+                    
+                            @else
+                                <p>No user logged in</p>
+                            @endif
                         </div>
-                      
+                        @isset($appointment)
+                        <div class="alert alert-warning">
+                            🚴‍♂️ Your rider is arriving in 15 minutes. Please get ready.
+                        </div>
+                    @endisset
+                    
+      
                     </div>
+                    @php $dayBeforeReminder = $dayBeforeReminder ?? null; @endphp
+
+                    @if($dayBeforeReminder)
+                        <div class="alert alert-primary mt-3">
+                            📅 Reminder: You have an appointment <strong>tomorrow at {{ \Carbon\Carbon::parse($dayBeforeReminder->appointment_time)->format('g:i A') }}</strong>.
+                            Please be prepared!
+                        </div>
+                    @endif
+                    <pre>
+                        DayBeforeReminder:
+                        {{ print_r($dayBeforeReminder, true) }}
+                        </pre>
+                        
 
                     <!-- End::page-header -->
 

@@ -37,6 +37,8 @@ Route::post('patient/register', [PatientController::class, 'register'])->name('p
 
 Route::get('patient/login', [PatientController::class, 'showLoginForm'])->name('patient.login.form');
 Route::post('patient/login', [PatientController::class, 'login'])->name('patient.login');
+// web.php
+Route::get('/patient/dashboard', [PatientDashboardController::class, 'showDashboard'])->name('patient.dashboard');
 
 Route::middleware('auth:patient')->group(function () {
     Route::get('patient/dashboard', [PatientController::class, 'dashboard'])->name('patient.dashboard');
@@ -444,21 +446,29 @@ Route::post('/appointments/cancel/{id}', [AppointmentCancelController::class, 'c
 
 
 
-
-
-
-
-
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserWelcomeMail;
 
 Route::get('/test-mail', function () {
-    Mail::to('
-sandbox.smtp.mailtrap.io')->send(
+    Mail::to('demo@inbox.mailtrap.io')->send(
         new UserWelcomeMail('Test User', 'test@example.com', '123456', 'manager')
     );
-    return 'Test mail sent!';
+
+    return '✅ Test mail sent!';
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

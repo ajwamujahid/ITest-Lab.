@@ -14,6 +14,7 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'smtp'),
+'log_channel' => env('MAIL_LOG_CHANNEL', 'stack'),
 
     /*
     |--------------------------------------------------------------------------

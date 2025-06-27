@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB; // ✅ This line is required!
 use Illuminate\Http\Request;
 use App\Models\Patient;
 use App\Models\Branch;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RiderVisit;
+use Carbon\Carbon;
+use App\Models\Appointment;
 
 class PatientController extends Controller
 {
@@ -68,10 +70,41 @@ class PatientController extends Controller
             ->where('patient_id', auth()->id())
             ->latest()
             ->get();
-
-        return view('patients.dashboard', compact('patient', 'visits'));
+            $reminders = DB::table('patient_reminders')
+            ->where('patient_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+    
+        return view('patients.dashboard', compact('patient', 'visits', 'reminders'));
     }
-
+  
+    public function showDashboard()
+    {
+        $now = Carbon::now();
+    
+        // 🔔 Rider arriving in 15 minutes
+        $inFifteen = $now->copy()->addMinutes(15)->format('H:i');
+        $today = $now->format('Y-m-d');
+    
+        $riderReminder = Appointment::where('patient_id', Auth::id())
+            ->where('rider_id', '!=', null)
+            ->whereDate('appointment_date', $today)
+            ->whereTime('appointment_time', $inFifteen)
+            ->first();
+    
+            $targetDate = $now->copy()->addDay()->format('Y-m-d');
+            $targetTime = $now->copy()->addDay()->format('H:i');
+        
+            $dayBeforeReminder = Appointment::where('patient_id', Auth::id())
+                ->whereDate('appointment_date', $targetDate)
+                ->whereTime('appointment_time', $targetTime)
+                ->first();
+        return view('patients.dashboard', compact('riderReminder', 'dayBeforeReminder'));
+    }
+       
+    
+    
     public function logout(Request $request)
     {
         Auth::guard('patient')->logout();

@@ -9,17 +9,14 @@ class UserWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $name;
-    public $email;
-    public $password;
-    public $role;
+    public $name, $email, $password, $role;
 
     public function __construct($name, $email, $password, $role)
     {
-        $this->name     = $name;
-        $this->email    = $email;
+        $this->name = $name;
+        $this->email = $email;
         $this->password = $password;
-        $this->role     = $role;
+        $this->role = $role;
     }
 
     public function build()
