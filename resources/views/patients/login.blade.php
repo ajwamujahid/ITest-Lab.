@@ -8,8 +8,9 @@
 <div class="container  d-flex justify-content-center align-items-center py-5">
     <div class="col-md-6 col-lg-5">
         <div class="card  border-0">
-            <div class=" mt-3 text-center text-black ">
+            <div class=" mt-4 text-center text-black ">
                 <h4 class="mb-0 py-2 text-primary">Patient Login</h4>
+                <p>Access your patient dashboard securely </p>
             </div>
 
             <div class="card-body px-4 py-4">

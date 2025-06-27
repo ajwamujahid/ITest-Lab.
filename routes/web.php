@@ -449,7 +449,16 @@ Route::post('/appointments/cancel/{id}', [AppointmentCancelController::class, 'c
 
 
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserWelcomeMail;
 
+Route::get('/test-mail', function () {
+    Mail::to('
+sandbox.smtp.mailtrap.io')->send(
+        new UserWelcomeMail('Test User', 'test@example.com', '123456', 'manager')
+    );
+    return 'Test mail sent!';
+});
 
 
 

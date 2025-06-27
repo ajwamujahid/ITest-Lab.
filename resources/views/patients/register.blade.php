@@ -179,6 +179,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-4 text-center">
+                            {!! NoCaptcha::display() !!}
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                            @endif
+                        </div>
+                        {{-- <div class="g-recaptcha" data-sitekey="6LdCYW8rAAAAALaG5w67QWZMsp-kfGmUY4K6iQeo"></div> --}}
 
                         {{-- Submit --}}
                         <div class=" text-center mb-3">
@@ -202,17 +209,19 @@
 </div>
 @endsection
 @push('scripts')
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('.select2').select2({
-    placeholder: "Choose Branch",
-    allowClear: true,
-    width: '100%',
-    // margin-left: '20px',
-
-});
-
+            placeholder: "Choose Branch",
+            allowClear: true,
+            width: '100%',
+        });
     });
 </script>
+
+{{-- ✅ Google reCAPTCHA script --}}
+{!! NoCaptcha::renderJs() !!}
 @endpush

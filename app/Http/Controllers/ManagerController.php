@@ -1,12 +1,15 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail; // ✅ THIS LINE
 use App\Models\Branch;
+use App\Models\BranchAdmin;
 use App\Models\Manager;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-
+use App\Mail\UserWelcomeMail;
 class ManagerController extends Controller
 {
     public function create()
@@ -14,39 +17,58 @@ class ManagerController extends Controller
         $branches = Branch::select('id', 'name')->get();
         return view('branchadmin.create_manager', compact('branches'));
     }
-   
-public function store(Request $request)
-{
-    $request->validate([
-        'role' => 'required|in:manager,branch_admin',
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:managers,email|unique:branch_admins,email',
-        'password' => 'required|min:6|confirmed',
-        'phone' => 'required',
-        'branch_id' => 'required|exists:branches,id',
-        // add other validations...
-    ]);
-
-    $data = $request->except('photo', 'password', 'password_confirmation');
-    $data['password'] = bcrypt($request->password);
-
-    // Handle photo upload
-    if ($request->hasFile('photo')) {
-        $filename = time() . '.' . $request->photo->extension();
-        $request->photo->move(public_path('uploads/users'), $filename);
-        $data['photo'] = $filename;
+    public function store(Request $request)
+    {
+        $request->validate([
+            'role' => 'required|in:manager,branch_admin',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:managers,email|unique:branch_admins,email',
+            'password' => 'required|min:6|confirmed',
+            'phone' => 'required',
+            'branch_id' => 'required|exists:branches,id',
+            // other validations...
+        ]);
+    
+        $data = $request->except('photo', 'password', 'password_confirmation');
+        $plainPassword = $request->password;
+        $data['password'] = bcrypt($plainPassword);
+    
+        // 📸 Handle photo upload
+        if ($request->hasFile('photo')) {
+            $filename = time() . '.' . $request->photo->extension();
+            $request->photo->move(public_path('uploads/users'), $filename);
+            $data['photo'] = $filename;
+        }
+    
+        // 📤 Create user & send welcome mail
+        try {
+            if ($request->role === 'manager') {
+                $manager = Manager::create($data);
+    
+                Mail::to($manager->email)->send(new UserWelcomeMail(
+                    $manager->name,
+                    $manager->email,
+                    $plainPassword,
+                    'manager'
+                ));
+            } else {
+                $branchAdmin = BranchAdmin::create($data);
+    
+                Mail::to($branchAdmin->email)->send(new UserWelcomeMail(
+                    $branchAdmin->name,
+                    $branchAdmin->email,
+                    $plainPassword,
+                    'branch admin'
+                ));
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', '❌ Email sending failed: ' . $e->getMessage());
+        }
+    
+        return back()->with('success', '✅ User added successfully and welcome email sent!');
     }
-
-    if ($request->role == 'manager') {
-        Manager::create($data);
-    } else {
-        BranchAdmin::create($data);
-    }
-
-    return back()->with('success', 'User added successfully!');
-}
-
-
+    
+    
 
     public function toggleStatus($id)
     {

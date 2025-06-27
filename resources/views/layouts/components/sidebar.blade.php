@@ -8,9 +8,17 @@
                         <img src="{{asset('build/assets/images/brand-logos/toggle-logo.png')}}" alt="logo" class="toggle-logo">
                         <img src="{{asset('build/assets/images/brand-logos/desktop-dark.png')}}" alt="logo" class="desktop-dark">
                         <img src="{{asset('build/assets/images/brand-logos/toggle-dark.png')}}" alt="logo" class="toggle-dark">
-                        <img src="{{asset('build/assets/images/brand-logos/desktop-white.png')}}" alt="logo" class="desktop-white">
-                        <img src="{{asset('build/assets/images/brand-logos/toggle-white.png')}}" alt="logo" class="toggle-white"> --}}
-                    </a>
+                        <img src="{{asset('build/assets/images/brand-logos/desktop-white.png')}}" alt="logo" class="desktop-white">--}}
+                        <a href="{{ url('/') }}" class="d-inline-block text-center mb-0">
+                            <div style="height: 60px; width: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ asset('build/assets/images/brand-logos/img.png') }}" 
+                                     alt="iTest Logo" 
+                                     style=" max-width: 100%;
+  height: auto; border-radius: 30%; object-fit: cover;" 
+                                     class="toggle-white">
+                            </div>
+                        </a>
+                        
                 </div>
                 <!-- End::main-sidebar-header -->
 

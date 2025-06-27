@@ -27,6 +27,7 @@ class PatientController extends Controller
             'branch_id'  => 'required|exists:branches,id',
             'phone'      => 'nullable|string|max:20',
             'address'    => 'nullable|string|max:500',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
 
         $patient = Patient::create([

@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail; // ✅ THIS LINE
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\BranchAdmin;
 use App\Models\TestRequest;
-
+use App\Mail\BranchAdminWelcomeMail;
 class BranchAdminController extends Controller
 {
     public function create()
@@ -17,6 +17,7 @@ class BranchAdminController extends Controller
         return view('branchadmin.create', compact('branches'));
     }
 
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,18 +35,29 @@ class BranchAdminController extends Controller
             'profile_picture' => 'nullable|image|max:2048',
             'password'        => 'required|string|min:6|confirmed',
         ]);
-
+    
+        // 📦 Save profile picture if exists
         if ($request->hasFile('profile_picture')) {
             $path = $request->file('profile_picture')->store('admins', 'public');
             $validated['profile_picture'] = $path;
         }
-
+    
+        // 🛡 Store plain password before hashing (for email only)
+        $plainPassword = $validated['password'];
+    
+        // 🔐 Hash password
         $validated['password'] = Hash::make($validated['password']);
-        BranchAdmin::create($validated);
-
-        return redirect()->back()->with('success', 'Branch Admin added successfully.');
+    
+        // 💾 Create the branch admin
+        $admin = BranchAdmin::create($validated);
+    
+        // 📧 Send welcome email with credentials
+        Mail::to($admin->email)->send(new BranchAdminWelcomeMail($admin->name, $admin->email, $plainPassword));
+    
+        return redirect()->back()->with('success', 'Branch Admin added successfully and email sent!');
     }
-
+    
+    
     public function index()
     {
         $branchAdmins = BranchAdmin::with('branch')->get();
