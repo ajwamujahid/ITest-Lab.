@@ -110,7 +110,7 @@
                                         <a href="{{ url('departments') }}" class="side-menu__item">Departments</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('roles.create') }}" class="side-menu__item">Roles & Permissions</a>
+                                        <a href="{{ route('roles.index') }}" class="side-menu__item">Roles & Permissions</a>
                                     </li>
                                     <!-- Role-specific sections (Optional filtered views) -->
                                     {{-- <li class="slide has-sub">

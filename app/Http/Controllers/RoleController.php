@@ -36,14 +36,13 @@ class RoleController extends Controller
 
     return redirect()->route('roles.index')->with('success', 'Role created successfully.');
 }
+public function edit(Role $role)
+{
+    $permissions = Permission::all();
+    $rolePermissions = $role->permissions()->pluck('permissions.id')->toArray();
+    return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
+}
 
-    // Show edit form
-    public function edit(Role $role)
-    {
-        $permissions = Permission::all();
-        $rolePermissions = $role->permissions()->pluck('id')->toArray();
-        return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
-    }
 
     // Update role
     public function update(Request $request, Role $role)
