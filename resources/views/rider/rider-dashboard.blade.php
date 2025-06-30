@@ -15,12 +15,33 @@
                         <div>
                             <p class="fw-semibold fs-18 mb-0">
                                 @if(Auth::check())
-                                <p class="fw-semibold fs-18 mb-0">Wlcome Back: {{ Auth::user()->name }}</p>
+                                <p class="fw-semibold fs-18 mb-0">Welcome Back: {{ Auth::user()->name }}</p>
                             @else
                                 <p>No user logged in</p>
                             @endif
                             </p>
-                            <span class="fs-semibold text-muted">Track your sales activity, leads and deals here.</span>
+                            {{-- <p>Alert Flag: {{ auth('rider')->user()->new_review_alert ? 'YES' : 'NO' }}</p> --}}
+
+                            @if(auth('rider')->user()->new_review_alert)
+                            <div class="alert alert-info alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert">
+                                <span> You have received a new review from a patient!</span>
+                        
+                                <form method="POST" action="{{ route('rider.markAlertSeen') }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-light ms-3">Dismiss</button>
+                                </form>
+                            </div>
+                        @endif
+                        @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+                            {{-- <p>Rider ID: {{ auth('rider')->user()->id }}</p>
+                            <p>Alert Flag: {{ auth('rider')->user()->new_review_alert ? 'YES' : 'NO' }}</p>
+                             --}}
+                            {{-- <span class="fs-semibold text-muted">Track your sales activity, leads and deals here.</span> --}}
                         </div>
                         <div class="btn-list mt-md-0 mt-2">
                             <button type="button" class="btn btn-primary btn-wave">

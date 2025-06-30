@@ -372,6 +372,7 @@ Route::get('/rider/login', [RiderAuthController::class, 'showLoginForm'])->name(
 Route::post('/rider/login', [RiderAuthController::class, 'login'])->name('rider.login.submit');
 Route::post('/rider/logout', [RiderAuthController::class, 'logout'])->name('rider.logout');
 
+Route::post('/rider/alert-seen', [RiderAuthController::class, 'markAlertSeen'])->name('rider.markAlertSeen');
 
 Route::middleware('auth:rider')->group(function () {
     Route::get('/rider/dashboard', function () {

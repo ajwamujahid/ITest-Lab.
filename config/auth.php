@@ -12,6 +12,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+       
+    'manager' => [
+        'driver' => 'session',
+        'provider' => 'managers',
+    ],
 
         'superadmin' => [
             'driver' => 'session',
@@ -89,6 +94,10 @@ return [
         'model' => App\Models\Manager::class,
     ],
 
+    'managers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Manager::class,
+    ]
      
     ],
 

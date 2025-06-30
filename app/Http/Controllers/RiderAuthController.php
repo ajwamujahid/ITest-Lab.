@@ -43,5 +43,26 @@ class RiderAuthController extends Controller
     
         return redirect()->route('rider.login');
     }
+    public function dashboard()
+    {
+        $rider = auth('rider')->user();
+    
+        // Mark all unread reviews as read
+        \App\Models\RiderReview::where('rider_id', $rider->id)
+            ->where('is_read', 0)
+            ->update(['is_read' => 1]);
+    
+        return view('rider.dashboard');
+    }
+    public function markAlertSeen()
+{
+    $rider = auth('rider')->user();
+
+    $rider->new_review_alert = false;
+    $rider->save();
+
+    return redirect()->back()->with('success', 'Alert dismissed.');
+}
+
     
 }

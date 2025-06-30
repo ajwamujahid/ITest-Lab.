@@ -4,12 +4,14 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="mb-4 text-center">My Complaints</h2>
-
+    <h2 class="mb-4 text-primary">
+        <i class="bi bi-exclamation-diamond-fill me-2"></i> My Complaints
+      </h2>
+      
     @if($complaints->isEmpty())
         <div class="alert alert-info text-center">You have no complaints.</div>
     @else
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered ">
             <thead class="table-light">
                 <tr>
                     <th>#</th>

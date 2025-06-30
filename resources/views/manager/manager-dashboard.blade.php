@@ -25,12 +25,12 @@
                                         <i class="bx bx-user-circle text-primary" style="font-size: 3rem;"></i>
                                     </div>
                                     <div>
-                                        <h5 class="mb-1 fw-bold text-dark">👋 Welcome Back, {{ $manager->name }}</h5>
+                                        <h5 class="mb-1 fw-bold text-dark"> Welcome Back, {{ $manager->name }}</h5>
                                         <p class="mb-1 text-muted">
-                                            🔑 <strong>Role:</strong> <span class="text-dark">{{ ucfirst($role) }}</span>
+                                            <strong>Role:</strong> <span class="text-dark">{{ ucfirst($role) }}</span>
                                         </p>
                                         <p class="mb-0 text-muted">
-                                            🏢 <strong>Department:</strong> <span class="text-dark">{{ ucfirst($department) }}</span>
+                                             <strong>Department:</strong> <span class="text-dark">{{ ucfirst($department) }}</span>
                                         </p>
                                     </div>
                                 </div>

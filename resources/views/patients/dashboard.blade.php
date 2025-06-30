@@ -29,28 +29,27 @@
                                 <p>No user logged in</p>
                             @endif
                         </div>
-                        @isset($appointment)
-                        <div class="alert alert-warning">
-                            🚴‍♂️ Your rider is arriving in 15 minutes. Please get ready.
-                        </div>
-                    @endisset
-                    
-      
+                       
                     </div>
-                    @php $dayBeforeReminder = $dayBeforeReminder ?? null; @endphp
+                   
+                      {{-- Rider Reminder Alert --}}
+@isset($riderReminder)
+<div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+    🚴 <strong>Rider Alert:</strong> Rider is arriving at <strong>{{ \Carbon\Carbon::parse($riderReminder->appointment_date)->format('g:i A') }}</strong>. Get ready!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endisset
 
-                    @if($dayBeforeReminder)
-                        <div class="alert alert-primary mt-3">
-                            📅 Reminder: You have an appointment <strong>tomorrow at {{ \Carbon\Carbon::parse($dayBeforeReminder->appointment_time)->format('g:i A') }}</strong>.
-                            Please be prepared!
-                        </div>
-                    @endif
-                    <pre>
-                        DayBeforeReminder:
-                        {{ print_r($dayBeforeReminder, true) }}
-                        </pre>
-                        
+{{-- Day-Before Appointment Reminder --}}
+@isset($dayBeforeReminder)
+<div class="alert alert-primary alert-dismissible fade show mt-3" role="alert">
+    📅 <strong>Reminder:</strong> You have an appointment <strong>tomorrow at {{ \Carbon\Carbon::parse($dayBeforeReminder->appointment_date)->format('g:i A') }}</strong>.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endisset
 
+             
+                
                     <!-- End::page-header -->
 
                     <!-- Start::row-1 -->

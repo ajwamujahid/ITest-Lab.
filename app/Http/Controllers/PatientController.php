@@ -62,23 +62,76 @@ class PatientController extends Controller
         return back()->withErrors(['email' => 'Invalid email or password.']);
     }
 
+    // public function dashboard()
+    // {
+    //     $patient = Auth::guard('patient')->user();
+
+    //     $visits = RiderVisit::with(['rider', 'testRequest.tests'])
+    //         ->where('patient_id', auth()->id())
+    //         ->latest()
+    //         ->get();
+    //         $reminders = DB::table('patient_reminders')
+    //         ->where('patient_id', auth()->id())
+    //         ->orderBy('created_at', 'desc')
+    //         ->take(3)
+    //         ->get();
+    
+    //     return view('patients.dashboard', compact('patient', 'visits', 'reminders'));
+    // }
     public function dashboard()
     {
+        $now = Carbon::now();
+    
+        // Rider Reminder
+        $riderReminder = Appointment::where('patient_id', Auth::guard('patient')->id())
+            ->where('rider_id', '!=', null)
+            ->whereBetween('appointment_date', [
+                $now->copy()->addMinutes(14),
+                $now->copy()->addMinutes(16),
+            ])
+            ->first();
+    
+        // Day Before Reminder
+        $dayBeforeReminder = Appointment::where('patient_id', Auth::guard('patient')->id())
+            ->whereBetween('appointment_date', [
+                $now->copy()->addDay()->subMinutes(1),
+                $now->copy()->addDay()->addMinutes(1),
+            ])
+            ->first();
+    
         $patient = Auth::guard('patient')->user();
-
+    
         $visits = RiderVisit::with(['rider', 'testRequest.tests'])
-            ->where('patient_id', auth()->id())
+            ->where('patient_id', $patient->id)
             ->latest()
             ->get();
-            $reminders = DB::table('patient_reminders')
-            ->where('patient_id', auth()->id())
+    
+        // ✅ This was missing!
+        $reminders = DB::table('patient_reminders')
+            ->where('patient_id', $patient->id)
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
-    
-        return view('patients.dashboard', compact('patient', 'visits', 'reminders'));
+            // dd([
+            //     'now' => $now->toDateTimeString(),
+            //     'riderReminder' => $riderReminder,
+            //     'dayBeforeReminder' => $dayBeforeReminder,
+            // ]);
+            // dd([
+            //     'now' => Carbon::now()->toDateTimeString(),
+            //     'riderReminder' => $riderReminder,
+            //     'dayBeforeReminder' => $dayBeforeReminder,
+            // ]);
+            
+        return view('patients.dashboard', compact(
+            'patient',
+            'visits',
+            'reminders',
+            'riderReminder',
+            'dayBeforeReminder'
+        ));
     }
-  
+    
     public function showDashboard()
     {
         $now = Carbon::now();
@@ -100,6 +153,13 @@ class PatientController extends Controller
                 ->whereDate('appointment_date', $targetDate)
                 ->whereTime('appointment_time', $targetTime)
                 ->first();
+                dd([
+                    'now' => $now->toDateTimeString(),
+                    'auth_id' => Auth::id(),
+                    'route_hit' => true,
+                ]);
+                
+
         return view('patients.dashboard', compact('riderReminder', 'dayBeforeReminder'));
     }
        

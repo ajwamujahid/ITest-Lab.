@@ -13,7 +13,8 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <title>iTest Lab</title>
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-      
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 @stack('styles')
         <!-- TITLE -->
