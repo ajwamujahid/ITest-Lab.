@@ -9,20 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('riders', function (Blueprint $table) {
-            $table->boolean('new_review_alert')->default(false);
-        });
-        
-    }
+    public function up()
+{
+    Schema::table('roles', function (Blueprint $table) {
+        $table->text('permissions')->nullable();
+    });
+}
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('riders', function (Blueprint $table) {
+        Schema::table('roles', function (Blueprint $table) {
             //
         });
     }

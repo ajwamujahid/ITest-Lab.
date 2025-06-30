@@ -60,30 +60,15 @@
 
                         {{-- 📋 Existing Permissions --}}
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Assign Existing Permissions</label>
-                            <div class="row" style="max-height: 300px; overflow-y: auto;">
-                                @forelse($permissions as $permission)
-                                    <div class="col-md-6 mb-2">
-                                        <div class="form-check">
-                                            <input 
-                                                class="form-check-input" 
-                                                type="checkbox" 
-                                                name="permissions[]" 
-                                                value="{{ $permission->id }}" 
-                                                id="perm{{ $permission->id }}"
-                                                {{ (is_array(old('permissions')) && in_array($permission->id, old('permissions'))) ? 'checked' : '' }}
-                                            >
-                                            <label class="form-check-label" for="perm{{ $permission->id }}">
-                                                {{ ucwords(str_replace(['-', '_'], ' ', $permission->name)) }}
-                                            </label>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <div class="col-12">
-                                        <p class="text-muted">No permissions found.</p>
-                                    </div>
-                                @endforelse
-                            </div>
+                            <label for="permissions" class="form-label fw-semibold">Assign Existing Permissions</label>
+                            <select name="permissions[]" id="permissions" class="form-select select2" multiple>
+                                @foreach($permissions as $permission)
+                                    <option value="{{ $permission }}" 
+                                        {{ (is_array(old('permissions')) && in_array($permission, old('permissions'))) ? 'selected' : '' }}>
+                                        {{ ucwords(str_replace(['-', '_'], ' ', $permission)) }}
+                                    </option>
+                                @endforeach
+                            </select>
                             @error('permissions')
                                 <small class="text-danger d-block mt-2">{{ $message }}</small>
                             @enderror
@@ -98,11 +83,26 @@
                                 Create Role
                             </button>
                         </div>
-                        
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+{{-- ✅ Select2 --}}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#permissions').select2({
+            placeholder: "Select permissions",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 @endsection

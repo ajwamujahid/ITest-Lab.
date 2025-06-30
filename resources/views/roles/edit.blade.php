@@ -36,21 +36,22 @@
                             <label class="form-label fw-semibold">Assign Permissions</label>
                             <div class="row">
                                 @foreach($permissions as $permission)
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input
-                                                type="checkbox"
-                                                class="form-check-input"
-                                                name="permissions[]"
-                                                id="perm{{ $permission->id }}"
-                                                value="{{ $permission->id }}"
-                                                {{ in_array($permission->id, $rolePermissions) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="perm{{ $permission->id }}">
-                                                {{ ucwords(str_replace('_', ' ', $permission->name)) }}
-                                            </label>
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            name="permissions[]"
+                                            id="perm{{ $loop->index }}"
+                                            value="{{ $permission }}"
+                                            {{ in_array($permission, $rolePermissions) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="perm{{ $loop->index }}">
+                                            {{ ucwords(str_replace(['-', '_'], ' ', $permission)) }}
+                                        </label>
                                     </div>
-                                @endforeach
+                                </div>
+                            @endforeach
+                            
                             </div>
                         </div>
 

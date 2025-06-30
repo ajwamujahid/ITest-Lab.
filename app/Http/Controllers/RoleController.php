@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -10,51 +10,97 @@ class RoleController extends Controller
     // List all roles
     public function index()
     {
-        $roles = Role::with('permissions')->get();
+        $roles = Role::all();
         return view('roles.index', compact('roles'));
     }
 
+    // Show create role form
     public function create()
-{
-    $permissions = Permission::all();
-    return view('roles.create', compact('permissions'));
-}
+    {
+        // Collect all unique permissions from existing roles
+        $permissions = Role::pluck('permissions')
+            ->filter()
+            ->flatMap(fn ($p) => explode(',', $p))
+            ->map(fn ($p) => trim($p))
+            ->unique()
+            ->values()
+            ->toArray();
 
-
-    public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|unique:roles,name',
-        'permissions' => 'array',   // permissions selected
-    ]);
-
-    $role = Role::create(['name' => $request->name]);
-
-    if ($request->has('permissions')) {
-        $role->permissions()->sync($request->permissions);
+        return view('roles.create', compact('permissions'));
     }
 
-    return redirect()->route('roles.index')->with('success', 'Role created successfully.');
-}
-public function edit(Role $role)
-{
-    $permissions = Permission::all();
-    $rolePermissions = $role->permissions()->pluck('permissions.id')->toArray();
-    return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
-}
-
+    public function storeWithPermission(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|unique:roles,name',
+            'permissions' => 'array',
+            'new_permission' => 'nullable|string|max:255',
+        ]);
+    
+        // 1. Collect all permissions (selected + new)
+        $permissions = $request->permissions ?? [];
+    
+        if ($request->filled('new_permission')) {
+            $permissions[] = trim($request->new_permission);
+        }
+    
+        // 2. Clean and unique
+        $permissions = array_unique(array_map('trim', $permissions));
+    
+        // 3. Save role with comma-separated permissions
+        Role::create([
+            'name' => $request->name,
+            'permissions' => implode(',', $permissions),
+        ]);
+    
+        return redirect()->route('roles.index')->with('success', 'Role created with permissions!');
+    }
+    
+    public function edit(Role $role)
+    {
+        // All permissions from all roles
+        $allPermissions = Role::pluck('permissions')
+            ->filter()
+            ->flatMap(fn ($p) => explode(',', $p))
+            ->map(fn ($p) => trim($p))
+            ->filter()
+            ->toArray();
+    
+        // Current role's permissions
+        $rolePermissions = explode(',', $role->permissions ?? '');
+    
+        // Merge both and remove duplicates
+        $permissions = collect(array_merge($allPermissions, $rolePermissions))
+            ->map(fn ($p) => trim($p))
+            ->unique()
+            ->values()
+            ->toArray();
+    
+        return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
+    }
+    
 
     // Update role
     public function update(Request $request, Role $role)
     {
-        $data = $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
+        $request->validate([
+            'name' => 'required|string|unique:roles,name,' . $role->id,
             'permissions' => 'array',
-            'permissions.*' => 'exists:permissions,id',
+            'new_permission' => 'nullable|string|max:255',
         ]);
 
-        $role->update(['name' => $data['name']]);
-        $role->permissions()->sync($data['permissions'] ?? []);
+        $permissions = $request->permissions ?? [];
+
+        if ($request->filled('new_permission')) {
+            $permissions[] = trim($request->new_permission);
+        }
+
+        $permissions = array_unique(array_map('trim', $permissions));
+
+        $role->update([
+            'name' => $request->name,
+            'permissions' => implode(',', $permissions),
+        ]);
 
         return redirect()->route('roles.index')->with('success', 'Role updated successfully!');
     }
@@ -65,46 +111,4 @@ public function edit(Role $role)
         $role->delete();
         return redirect()->route('roles.index')->with('success', 'Role deleted successfully!');
     }
-    public function storeWithPermission(Request $request)
-{
-    // Validate
-    $request->validate([
-        'name' => 'required|string|unique:roles,name',
-        'permissions' => 'array|exists:permissions,id',
-        'new_permission' => 'nullable|string|unique:permissions,name',
-    ]);
-
-    \DB::beginTransaction();
-
-    try {
-        // 1. If new permission provided, create it
-        $newPermissionId = null;
-        if ($request->filled('new_permission')) {
-            $newPermission = Permission::create([
-                'name' => $request->new_permission,
-            ]);
-            $newPermissionId = $newPermission->id;
-        }
-
-        // 2. Create Role
-        $role = Role::create(['name' => $request->name]);
-
-        // 3. Collect all permission IDs (existing + new one if added)
-        $permissionIds = $request->input('permissions', []);
-        if ($newPermissionId) {
-            $permissionIds[] = $newPermissionId;
-        }
-
-        // 4. Attach permissions to role
-        $role->permissions()->sync($permissionIds);
-
-        \DB::commit();
-
-        return redirect()->back()->with('success', 'Role and permission created successfully!');
-    } catch (\Exception $e) {
-        \DB::rollback();
-        return redirect()->back()->withErrors('Error: ' . $e->getMessage())->withInput();
-    }
-}
-
 }
