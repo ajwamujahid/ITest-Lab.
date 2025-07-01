@@ -100,12 +100,14 @@ Route::get('/patient-complaints/view', [ComplaintController::class, 'viewComplai
 Route::post('inventory-add', [InventoryController::class, 'store'])->name('inventory.store');
 Route::get('inventory-items', [InventoryController::class, 'index'])->name('inventory.index');
 use App\Http\Controllers\InventoryCategoryController;
+
 Route::get('inventory-category', [InventoryCategoryController::class, 'index'])->name('inventory-category.index');
-Route::post('inventory-category/store', [InventoryCategoryController::class, 'store'])->name('inventory-category.store');
+//Route::post('inventory-category/store', [InventoryCategoryController::class, 'store'])->name('inventory-category.store');
 Route::delete('inventory-category/{id}', [InventoryCategoryController::class, 'destroy'])->name('inventory-category.destroy');
 Route::get('inventory-reports', [InventoryController::class, 'report'])->name('inventory.reports');
 Route::post('inventory-reports/generate', [InventoryController::class, 'generate'])->name('inventory.reports.generate');
 Route::get('inventory-stock-levels', [InventoryController::class, 'stockLevels'])->name('inventory.stock-levels');
+Route::post('/inventory-category/import', [InventoryCategoryController::class, 'import'])->name('inventory-category.import');
 
 
     Route::get('/low-stock-reports', [InventoryController::class, 'lowStockReports'])->name('low.stock.reports');
@@ -139,11 +141,14 @@ Route::get('finance/payments', [PaymentController::class, 'index'])->name('payme
 // Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
 // Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
 
-use App\Http\Controllers\PermissionController;
+// use App\Http\Controllers\PermissionController;
 
-Route::get('roles.permission', [PermissionController::class, 'index'])->name('permissions.index');
-Route::post('permissions', [PermissionController::class, 'store'])->name('permissions.store');
-Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+// Route::get('roles.permission', [PermissionController::class, 'index'])->name('permissions.index');
+// Route::post('permissions', [PermissionController::class, 'store'])->name('permissions.store');
+// Route::delete('permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+
+
+
 
 use App\Http\Controllers\EmployeeReportController;
 
@@ -156,6 +161,14 @@ use App\Http\Controllers\RoleController;
 
 Route::resource('roles', RoleController::class);
 Route::post('/roles/store-with-permission', [RoleController::class, 'storeWithPermission'])->name('roles.storeWithPermission');
+
+use App\Http\Controllers\PermissionController;
+// permission form route
+Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+
+
+
 
 use App\Http\Controllers\ManagerController;
 Route::get('/managers/create', [ManagerController::class, 'create'])->name('managers.create');

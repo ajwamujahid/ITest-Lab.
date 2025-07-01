@@ -6,7 +6,7 @@
         <i class="bi bi-tags-fill me-2"></i>
         Inventory Categories
     </h3>
-    <div class="">
+    {{-- <div class="">
         <form method="POST" action="{{ route('inventory-category.store') }}" class="d-flex gap-2 align-items-center">
             @csrf
             <label class="mb-0">
@@ -14,8 +14,18 @@
             </label>
             <button class="btn btn-primary" type="submit">Add</button>
         </form>
-    </div>
-    
+    </div> --}}
+    {{-- CSV Import Form --}}
+<div class="mt-3">
+    <form method="POST" action="{{ route('inventory-category.import') }}" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+        @csrf
+        <input type="file" name="csv_file" class="form-control" accept=".csv" required>
+        <button class="btn btn-success" type="submit">
+            <i class="bi bi-upload me-1"></i> Import CSV
+        </button>
+    </form>
+</div>
+
     {{-- <div class="row  mt-3">
         <div class="col-lg-10 col-md-12"> --}}
             <div class="card  mt-4 border-0">

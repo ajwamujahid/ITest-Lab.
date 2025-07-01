@@ -24,7 +24,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
-                            <th class="text-start px-4">Role Name</th>
+                            <th class="text-start">Role Name</th>
                             <th>Permissions</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -33,20 +33,17 @@
                         @forelse($roles as $role)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td class="px-4">
-                                    <strong>{{ ucfirst($role->name) }}</strong>
+                                <td>
+                                   {{ ucfirst($role->name) }}
                                 </td>
                                 <td>
-                                    @php
-                                        $permissions = explode(',', $role->permissions ?? '');
-                                    @endphp
-
-                                    @forelse($permissions as $perm)
-                                        <span class="badge bg-secondary text-white me-1">{{ trim($perm) }}</span>
+                                    @forelse($role->permissions as $permission)
+                                        <span class=" me-1">{{ $permission->name }}</span>
                                     @empty
                                         <span class="text-muted">No permissions</span>
                                     @endforelse
                                 </td>
+                                
                                 <td class="text-center">
                                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-warning me-1">
                                         <i class="bx bx-edit-alt"></i>
@@ -63,7 +60,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">
+                                <td colspan="3" class="text-center text-muted">
                                     No roles found.
                                 </td>
                             </tr>

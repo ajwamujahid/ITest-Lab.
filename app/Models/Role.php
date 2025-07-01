@@ -2,24 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+use Spatie\Permission\Models\Role as SpatieRole;
+
+class Role extends SpatieRole
 {
-    use HasFactory;
-    protected $fillable = ['name','permissions'];
-
-    public function employees()
-    {
-        return $this->hasMany(Employee::class);
- 
-   }
-   
-
-//    public function permissions()
-//    {
-//        return $this->belongsToMany(Permission::class, 'permission_role');
-//    }
-   
+    protected $hidden = ['pivot'];
 }

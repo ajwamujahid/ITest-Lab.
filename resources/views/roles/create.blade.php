@@ -1,108 +1,86 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow rounded-4">
-                <div class="card-header bg-primary text-white rounded-top-4">
-                    <h5 class="mb-0">
-                        <i class="bx bx-lock-alt me-2"></i> Create Role & Assign Permissions
-                    </h5>
-                </div>
+<div class="container mt-5">
+    <h4 class="mb-4">
+        <i class="bx bx-shield-plus me-1"></i> Create New Role & Assign Permissions
+    </h4>
 
-                <div class="card-body">
-                    {{-- ✅ Success Alert --}}
-                    @if(session('success'))
-                        <div class="alert alert-success">
-                            <i class="bx bx-check-circle me-1"></i> {{ session('success') }}
-                        </div>
-                    @endif
+    {{-- ✅ Success Flash --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            <i class="bx bx-check-circle me-1"></i> {{ session('success') }}
+        </div>
+    @endif
 
-                    {{-- 📝 Role & Permission Form --}}
-                    <form method="POST" action="{{ route('roles.storeWithPermission') }}">
-                        @csrf
+    {{-- ❌ Validation Errors --}}
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <strong><i class="bx bx-error-alt me-1"></i> Please fix the following:</strong>
+            <ul class="mt-2 mb-0">
+                @foreach($errors->all() as $error)
+                    <li><i class="bx bx-x-circle me-1"></i> {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-                        <div class="row mb-4">
-                            {{-- 🏷️ Role Name --}}
-                            <div class="col-md-6 mb-3">
-                                <label for="role_name" class="form-label fw-semibold">Role Name</label>
-                                <input 
-                                    type="text" 
-                                    name="name" 
-                                    id="role_name" 
-                                    class="form-control @error('name') is-invalid @enderror" 
-                                    value="{{ old('name') }}" 
-                                    required 
-                                    placeholder="e.g. Chat Manager"
-                                >
-                                @error('name')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+    {{-- 🧾 Form Starts --}}
+    <form action="{{ route('roles.storeWithPermission') }}" method="POST">
+        @csrf
+        <div class="card shadow rounded-4 p-4">
 
-                            {{-- ➕ New Permission --}}
-                            <div class="col-md-6 mb-3">
-                                <label for="new_permission" class="form-label fw-semibold">Add New Permission</label>
-                                <input 
-                                    type="text" 
-                                    name="new_permission" 
-                                    id="new_permission" 
-                                    class="form-control @error('new_permission') is-invalid @enderror" 
-                                    value="{{ old('new_permission') }}"
-                                    placeholder="e.g. assign-chat-patient"
-                                >
-                                @error('new_permission')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- 📋 Existing Permissions --}}
-                        <div class="mb-4">
-                            <label for="permissions" class="form-label fw-semibold">Assign Existing Permissions</label>
-                            <select name="permissions[]" id="permissions" class="form-select select2" multiple>
-                                @foreach($permissions as $permission)
-                                    <option value="{{ $permission }}" 
-                                        {{ (is_array(old('permissions')) && in_array($permission, old('permissions'))) ? 'selected' : '' }}>
-                                        {{ ucwords(str_replace(['-', '_'], ' ', $permission)) }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('permissions')
-                                <small class="text-danger d-block mt-2">{{ $message }}</small>
-                            @enderror
-                        </div>
-
-                        {{-- 🚀 Buttons --}}
-                        <div class="text-end">
-                            <a href="{{ route('roles.index') }}" class="btn btn-secondary me-2">
-                                <i class="bx bx-arrow-back"></i> Back
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                Create Role
-                            </button>
-                        </div>
-
-                    </form>
+            {{-- 🔤 1. Role Name --}}
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Role Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Lab Manager" required>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-@endsection
 
-@section('scripts')
-{{-- ✅ Select2 --}}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#permissions').select2({
-            placeholder: "Select permissions",
-            allowClear: true,
-            width: '100%'
-        });
-    });
-</script>
+            {{-- ➕ 2. Add New Permission --}}
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Add New Permission</label>
+                    <input type="text" name="new_permission" class="form-control" placeholder="View Reports, Edit Users">
+                    {{-- <small class="text-muted">This will be created and assigned to the role.</small> --}}
+                </div>
+            </div>
+
+            {{-- 🎯 3. Select Existing Permissions --}}
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <label class="form-label fw-bold">
+                         Assign Existing Permissions
+                    </label>
+            
+                    <div class="" style="max-height: 250px; overflow-y: auto;">
+                        @forelse($permissions as $perm)
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $perm }}" id="perm_{{ $loop->index }}">
+                                <label class="form-check-label" for="perm_{{ $loop->index }}">
+                                    {{ ucfirst($perm) }}
+                                </label>
+                            </div>
+                        @empty
+                            <p class="text-muted">No permissions available.</p>
+                        @endforelse
+                        </div>
+                </div>
+            </div>
+            
+            
+            {{-- 🎯 Submit --}}
+            <div class="d-flex">
+                <button type="submit" class="btn btn-success me-2">
+                    <i class="bx bx-check-circle me-1"></i> Save Role
+                </button>
+                <a href="{{ route('roles.index') }}" class="btn btn-outline-secondary">
+                    <i class="bx bx-arrow-back me-1"></i> Back to Roles
+                </a>
+            </div>
+
+        </div>
+    </form>
+</div>
 @endsection
