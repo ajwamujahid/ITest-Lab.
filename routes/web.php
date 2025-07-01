@@ -33,7 +33,10 @@ Route::post('/branches/store', [BranchController::class, 'store'])->name('branch
 Route::post('/branches', [BranchController::class, 'store'])->name('branches.store');
 use App\Http\Controllers\PatientController;
 Route::get('patient/register', [PatientController::class, 'showRegisterForm'])->name('patient.register.form');
-Route::post('patient/register', [PatientController::class, 'register'])->name('patient.register');
+//Route::post('patient/register', [PatientController::class, 'register'])->name('patient.register');
+Route::post('/patient/register', [PatientController::class, 'register'])
+    ->middleware('check.age')
+    ->name('patient.register');
 
 Route::get('patient/login', [PatientController::class, 'showLoginForm'])->name('patient.login.form');
 Route::post('patient/login', [PatientController::class, 'login'])->name('patient.login');
@@ -67,7 +70,7 @@ Route::post('/complaints', [ComplaintController::class, 'store'])->name('complai
 
 Route::get('/patient-complaints/view', [ComplaintController::class, 'viewComplaints']) ->name('complaints.view');
     Route::patch('/complaints/{id}/status', [ComplaintController::class, 'updateStatus'])->name('complaints.updateStatus');
-    Route::get('/complaints', [App\Http\Controllers\ComplaintController::class, 'myComplaints'])->middleware('auth');
+    Route::get('/complaints', [App\Http\Controllers\ComplaintController::class, 'myComplaints']);
 
     use App\Http\Controllers\BranchAdminController;
 

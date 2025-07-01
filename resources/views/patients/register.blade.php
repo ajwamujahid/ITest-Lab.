@@ -117,7 +117,7 @@
                                 <label class="form-label fs-14 text-dark">Date of Birth</label>
                                 <div class="input-group">
                                     <div class="input-group-text"><i class="ri-calendar-line"></i></div>
-                                    <input type="date" name="dob" class="form-control" value="{{ old('dob') }}">
+                                    <input type="date" name="dob" class="form-control" value="{{ old('dob') }}" required>
                                 </div>
                             </div>
 
