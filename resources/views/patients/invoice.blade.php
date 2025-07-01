@@ -135,7 +135,7 @@
                 {{-- Back Button --}}
                 <div class="text-start print-hide">
                     <a href="{{ route('test.step1') }}" class="btn btn-secondary">
-                        ⬅ Back to Test Form
+                         Back to Test Form
                     </a>
                 </div>
 
