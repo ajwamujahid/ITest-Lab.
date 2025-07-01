@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\RiderVisit;
 use Carbon\Carbon;
 use App\Models\Appointment;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomePatientMail;
 
 class PatientController extends Controller
 {
@@ -17,7 +19,7 @@ class PatientController extends Controller
         $branches = Branch::all();
         return view('patients.register', compact('branches'));
     }
-
+     
     public function register(Request $request)
     {
         $request->validate([
@@ -31,7 +33,7 @@ class PatientController extends Controller
             'address'    => 'nullable|string|max:500',
             'g-recaptcha-response' => 'required|captcha',
         ]);
-
+    
         $patient = Patient::create([
             'name'       => $request->name,
             'email'      => $request->email,
@@ -42,9 +44,13 @@ class PatientController extends Controller
             'phone'      => $request->phone,
             'address'    => $request->address,
         ]);
-
+    
+        // ✅ Send welcome email using queue
+        Mail::to($patient->email)->queue(new WelcomePatientMail($patient));
+    
         return redirect()->route('patient.login.form')->with('success', 'Registered successfully! Please login.');
     }
+    
 
     public function showLoginForm()
     {
