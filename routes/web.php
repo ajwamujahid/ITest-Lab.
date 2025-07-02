@@ -48,20 +48,85 @@ Route::middleware('auth:patient')->group(function () {
     Route::post('patient/logout', [PatientController::class, 'logout'])->name('patient.logout');
 });
 
-use App\Http\Controllers\PatientTestController;
+// use App\Http\Controllers\PatientTestController;
+// use App\Http\Controllers\StripeController;
+// // Group all patient test routes & protect with auth:patient
+// // use App\Http\Controllers\PatientTestController;
 
-// Group all patient test routes & protect with auth:patient
-Route::middleware('auth:patient')->prefix('patient')->group(function () {
+// Route::get('/test/stripe-success', [PatientTestController::class, 'stripeSuccess'])->name('test.stripe.success');
+// Route::middleware('auth:patient')->prefix('patient')->group(function () {
+//     Route::get('/test-step1', [PatientTestController::class, 'step1'])->name('test.step1');
+//     Route::post('/test-step1', [PatientTestController::class, 'storeStep1'])->name('test.step1.post');
+
+//     Route::get('/test-step2', [PatientTestController::class, 'step2'])->name('test.step2');
+//     Route::post('/submit-test', [PatientTestController::class, 'store'])->name('test.final.post');
+//     Route::post('/test/final', [PatientTestController::class, 'postFinalStep'])->name('test.final.post');
+    
+// Route::get('/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name('test.invoice');
+
+// });
+
+
+// Route::middleware('auth:patient')->group(function () {
+//     Route::get('/test/step1', [PatientTestController::class, 'step1'])->name('test.step1');
+//     Route::post('/test/step1', [PatientTestController::class, 'storeStep1'])->name('test.step1.post');
+//     Route::get('/test/step2', [PatientTestController::class, 'step2'])->name('test.step2');
+//     Route::post('/test/final', [PatientTestController::class, 'postFinalStep'])->name('test.final.post');
+//     Route::post('/test/stripe-success', [PatientTestController::class, 'stripeSuccess'])->name('test.stripe.success');
+//     Route::get('/test/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name('test.invoice');
+// });
+
+// Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent'])->name('stripe.payment.intent');
+
+// Route::post('/stripe/intent', [StripeController::class, 'createIntent'])->name('stripe.intent');
+// use App\Http\Controllers\StripeController;
+
+// Route::post('/stripe/create-intent', [StripeController::class, 'createIntent'])->name('stripe.intent');
+// use App\Http\Controllers\StripeController;
+
+// Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent'])->name('stripe.payment.intent');
+
+//Route::post('/stripe/session', [StripeController::class, 'createSession'])->name('stripe.session');
+// Route::get('/test/success', [TestController::class, 'success'])->name('test.success');
+// use App\Http\Controllers\PatientTestController;
+// use App\Http\Controllers\StripeController;
+
+// Route::get('/test-step1', [PatientTestController::class, 'step1'])->name('test.step1');
+// Route::post('/test-step1', [PatientTestController::class, 'storeStep1'])->name('test.step1.post');
+
+// Route::get('/test-step2', [PatientTestController::class, 'step2'])->name('test.step2');
+// Route::post('/test/final', [PatientTestController::class, 'postFinalStep'])->name('test.final.post');
+// Route::post('/test/stripe-success', [PatientTestController::class, 'stripeSuccess'])->name('test.stripe.success');
+
+// Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent'])->name('stripe.payment.intent');
+
+// Route::get('/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name('test.invoice');
+use App\Http\Controllers\PatientTestController;
+use App\Http\Controllers\StripeController;
+
+Route::middleware('auth:patient')->group(function () {
     Route::get('/test-step1', [PatientTestController::class, 'step1'])->name('test.step1');
     Route::post('/test-step1', [PatientTestController::class, 'storeStep1'])->name('test.step1.post');
 
     Route::get('/test-step2', [PatientTestController::class, 'step2'])->name('test.step2');
-    Route::post('/submit-test', [PatientTestController::class, 'store'])->name('test.final.post');
     Route::post('/test/final', [PatientTestController::class, 'postFinalStep'])->name('test.final.post');
-    
-Route::get('/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name('test.invoice');
 
+    Route::post('/stripe/payment-intent', [StripeController::class, 'createPaymentIntent'])->name('stripe.payment.intent');
+    Route::post('/test/stripe-success', [PatientTestController::class, 'stripeSuccess'])->name('test.stripe.success');
+
+    Route::get('/invoice/{id}', [PatientTestController::class, 'showInvoice'])->name('test.invoice');
 });
+
+use App\Http\Controllers\PayPalController;
+
+Route::middleware('auth:patient')->prefix('patient')->group(function () {
+    Route::post('/paypal/pay', [PayPalController::class, 'payWithPayPal'])->name('paypal.pay');
+});
+
+Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
+Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+
 
     
 use App\Http\Controllers\ComplaintController;
@@ -454,6 +519,42 @@ use App\Http\Controllers\AppointmentCancelController;
 
 Route::get('/appointments/schedule', [AppointmentCancelController::class, 'index'])->name('appointments.cancel.view');
 Route::post('/appointments/cancel/{id}', [AppointmentCancelController::class, 'cancel'])->name('appointments.cancel');
+
+//Route::post('/stripe/session', [App\Http\Controllers\StripeController::class, 'createSession'])->name('stripe.session');
+// Route::get('/test/success', [App\Http\Controllers\TestController::class, 'success'])->name('test.success');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Route::get('/sample-kits', [RiderSampleKitController::class, 'index'])->name('rider.samplekits');
 // Route::put('/sample-kits/{id}', [RiderSampleKitController::class, 'update'])->name('rider.samplekits.update');

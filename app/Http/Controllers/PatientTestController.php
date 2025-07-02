@@ -3,90 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Patient;
-use App\Models\Invoice;
 use App\Models\Test;
 use App\Models\Branch;
+use App\Models\Invoice;
 use App\Models\TestRequest;
 use Illuminate\Support\Facades\Auth;
 
 class PatientTestController extends Controller
 {
-    /**
-     * Step 1: Show patient info form.
-     */
     public function step1()
     {
         return view('patients.test-step1');
     }
 
-    /**
-     * Handle Step 1 form submit: Save info to session.
-     */
     public function storeStep1(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'age' => 'required|integer',
-            'gender' => 'required',
-            'address' => 'required',
-        ]);
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'phone' => 'required',
+        'age' => 'required|integer',
+        'gender' => 'required',
+        'address' => 'required',
+    ]);
 
-        session([
-            'patient_info' => $request->only(
-                'name', 'email', 'phone', 'age', 'gender', 'address'
-            )
-        ]);
+    session(['patient_info' => $request->only('name', 'email', 'phone', 'age', 'gender', 'address')]);
 
-        return redirect()->route('test.step2');
-    }
+    return redirect()->route('test.step2');
+}
 
-    /**
-     * Step 2: Show tests grouped by branch.
-     */
     public function step2()
     {
+        if (!session('patient_info')) return redirect()->route('test.step1');
+
         $branches = Branch::all();
         $testsGrouped = Test::with('branch')->get()->groupBy('branch.name');
 
         return view('patients.test-step2', compact('branches', 'testsGrouped'));
     }
 
-    /**
-     * Store test request (for multi-step).
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'tests' => 'required|array',
-            'branch' => 'required',
-            'payment_method' => 'required',
-        ]);
-
-        $patientId = Auth::guard('patient')->id();
-        if (!$patientId) {
-            abort(403, 'Patient not authenticated.');
-        }
-
-        $info = session('patient_info');
-        $tests = Test::whereIn('id', $request->tests)->get();
-        $total = $tests->sum('price');
-
-        $testNames = $tests->pluck('name')->join(', ');
-        $testTypes = $tests->pluck('type')->unique();
-        $finalType = $testTypes->count() === 1 ? $testTypes->first() : 'mixed';
-       
-        session()->forget('patient_info');
-
-        return redirect()->route('test.step1')
-            ->with('success', 'Test request submitted successfully!');
-    }
-
-    /**
-     * Store final step + create invoice.
-     */
     public function postFinalStep(Request $request)
     {
         $request->validate([
@@ -94,81 +49,95 @@ class PatientTestController extends Controller
             'branch' => 'required',
             'payment_method' => 'required',
         ]);
-
-        $patientId = Auth::guard('patient')->id();
-        if (!$patientId) {
-            abort(403, 'Patient not authenticated.');
+    
+        if ($request->payment_method === 'Stripe') {
+            session([
+                'stripe_tests' => $request->tests,
+                'stripe_branch' => $request->branch,
+            ]);
+            return response()->json(['status' => 'session saved']);
         }
-
-        $info = session('patient_info');
-        $tests = Test::whereIn('id', $request->tests)->get();
-        $total = $tests->sum('price');
-
-        $testNames = $tests->pluck('name')->join(', ');
-        $testTypes = $tests->pluck('type')->unique();
-        $finalType = $testTypes->count() === 1 ? $testTypes->first() : 'mixed';
-
-        $testRequest = TestRequest::create([
-            'patient_id' => $patientId,
-            'name' => $info['name'],
-            'email' => $info['email'],
-            'phone' => $info['phone'],
-            'age' => $info['age'],
-            'gender' => $info['gender'],
-            'address' => $info['address'],
-            'test_name' => $testNames,
-            'test_type' => $finalType,
-            'branch' => $request->branch,
-            'payment_method' => $request->payment_method,
-            'total_amount' => $total,
-        ]);
-
-        $invoice = Invoice::create([
-            'invoice_number' => 'INV-' . strtoupper(uniqid()),
-            'branch_id' => Branch::where('name', $request->branch)->value('id'),
-            'amount' => $total,
-            'test_request_id' => $testRequest->id,
-        ]);
-
-        session()->forget('patient_info');
-
+    
+        $invoice = $this->createTestAndInvoice($request, $request->tests, $request->branch, 'Cash');
         return redirect()->route('test.invoice', $invoice->id);
     }
-
-    public function showInvoice($id)
+    
+    public function stripeSuccess(Request $request)
     {
-        $invoice = Invoice::findOrFail($id);
+        $info = session('patient_info');
+        $tests = session('stripe_tests');
+        $branch = session('stripe_branch');
     
-        $branch = Branch::find($invoice->branch_id);
-    
-        $testRequest = $invoice->testRequest ?? TestRequest::where('total_amount', $invoice->amount)
-            ->where('branch', $branch?->name)
-            ->latest()
-            ->first();
-    
-        $selectedTests = collect();
-    
-        if ($testRequest && $testRequest->test_name) {
-            $names = explode(', ', $testRequest->test_name);
-    
-            // 💡 Add type and price per test
-            $pricePerTest = $testRequest->total_amount / count($names);
-    
-            $selectedTests = collect($names)->map(function ($name) use ($testRequest, $pricePerTest) {
-                return [
-                    'name' => $name,
-                    'type' => $testRequest->test_type ?? 'N/A',
-                    'price' => $pricePerTest,
-                ];
-            });
+        $patientId = Auth::guard('patient')->id();
+        if (!$patientId || !$info || !$tests || !$branch) {
+            return response()->json(['error' => 'Session expired or missing info'], 403);
         }
     
-        return view('patients.invoice', [
-            'invoice' => $invoice,
-            'patient' => $testRequest,
-            'selectedTests' => $selectedTests,
-            'branch' => $branch,
-        ]);
-    }
+        $invoice = $this->createTestAndInvoice($request, $tests, $branch, 'Stripe');
     
+        return response()->json(['invoice_id' => $invoice->id]);
+    }
+    private function createTestAndInvoice($request, $testsIds, $branchName, $paymentMethod)
+{
+    $patientId = Auth::guard('patient')->id();
+    $info = session('patient_info');
+
+    $tests = Test::whereIn('id', $testsIds)->get();
+    $total = $tests->sum('price');
+
+    $testRequest = TestRequest::create([
+        'patient_id' => $patientId,
+        'name' => $info['name'],
+        'email' => $info['email'],
+        'phone' => $info['phone'],
+        'age' => $info['age'],
+        'gender' => $info['gender'],
+        'address' => $info['address'],
+        'test_name' => $tests->pluck('name')->join(', '),
+        'test_type' => $tests->pluck('type')->unique()->count() === 1 ? $tests->first()->type : 'mixed',
+        'branch' => $branchName,
+        'payment_method' => $paymentMethod,
+        'total_amount' => $total,
+    ]);
+
+    $invoice = Invoice::create([
+        'invoice_number' => 'INV-' . strtoupper(uniqid()),
+        'branch_id' => Branch::where('name', $branchName)->value('id'),
+        'amount' => $total,
+        'test_request_id' => $testRequest->id,
+    ]);
+
+    session()->forget(['patient_info', 'stripe_tests', 'stripe_branch']);
+
+    return $invoice;
+}
+public function showInvoice($id)
+{
+    $invoice = Invoice::with('testRequest')->findOrFail($id);
+    $testRequest = $invoice->testRequest;
+
+    // if (!$testRequest) {
+    //     abort(404, 'Test request not found for invoice.');
+    // }
+
+    $branch = Branch::find($testRequest->branch_id);
+
+    $tests = explode(', ', $testRequest->test_name ?? '');
+    $testCount = count($tests) ?: 1;
+
+    $selectedTests = collect($tests)->map(function ($name) use ($testRequest, $invoice, $testCount) {
+        return [
+            'name' => $name,
+            'type' => $testRequest->test_type ?? 'N/A',
+            'price' => round($invoice->amount / $testCount, 2),
+        ];
+    });
+
+    return view('patients.invoice', [
+        'invoice' => $invoice,
+        'branch' => $branch,
+        'patient' => $testRequest,
+        'selectedTests' => $selectedTests,
+    ]);
+}
 }

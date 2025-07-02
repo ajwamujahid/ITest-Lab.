@@ -48,4 +48,10 @@ class TestController extends Controller
         $test->delete();
         return back()->with('success', 'Test deleted successfully!');
     }
+    public function success()
+{
+    // Save booking if needed or show success message
+    return view('patients.test-success');
+}
+
 }

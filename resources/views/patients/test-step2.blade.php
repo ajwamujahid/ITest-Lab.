@@ -1,163 +1,202 @@
 @extends('layouts.patient-master')
 @section('title', 'Step 2: Select Tests')
 
-@section('content')
 @push('styles')
-    {{-- Select2 CSS --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    {{-- SweetAlert2 CSS --}}
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<style>
+    #card-element {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 12px;
+    }
+</style>
 @endpush
 
+@section('content')
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-xl-10 col-lg-11">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body p-5">
-                    <h2 class="text-center text-primary mb-4">Step 2: Select Your Tests</h2>
+    <form id="finalTestForm" method="POST">
+        @csrf
 
-                    <form id="finalTestForm" action="{{ route('test.final.post') }}" method="POST">
-                        @csrf
-
-                        {{-- Test List Grouped by Branch --}}
-                        <div class="mb-4">
-                            @foreach($testsGrouped as $branchName => $tests)
-                                <h5 class="text-secondary mb-3">{{ $branchName }}</h5>
-                                <div class="row g-2">
-                                    @foreach($tests as $test)
-                                        <div class="col-md-4">
-                                            <div class="form-check px-3 py-2">
-                                                <input class="form-check-input test-checkbox" type="checkbox"
-                                                       name="tests[]" id="test{{ $test->id }}"
-                                                       value="{{ $test->id }}" data-price="{{ $test->price }}">
-                                                <label class="form-check-label" for="test{{ $test->id }}">
-                                                    {{ $test->name }} <span class="text-muted">(Rs {{ $test->price }})</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <hr class="my-4">
-                            @endforeach
-                        </div>
-
-                        {{-- Select Branch --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Select Branch</label>
-                            <select name="branch" class="form-select select2" required>
-                                <option value="">-- Choose Branch --</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{ $branch->name }}">{{ $branch->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        {{-- Payment Method --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Payment Method</label>
-                            <select name="payment_method" class="form-select select2" required>
-                                <option value="">Select Payment Option</option>
-                                <option value="Cash">Cash</option>
-                                <option value="Card">Card</option>
-                                <option value="Online">Online</option>
-                            </select>
-                        </div>
-
-                        {{-- Total Amount --}}
-                        <div class="mb-4 text-end">
-                            <h5><strong>Total: Rs <span id="totalAmount">0.00</span></strong></h5>
-                        </div>
-
-                        {{-- Submit & Back --}}
-                        <div class="text-end">
-                            <button type="button" class="btn btn-primary" id="submitTestBtn">
-                                Submit Test Request
-                            </button>
-                            <a href="{{ route('test.step1') }}" class="btn btn-outline-secondary">
-                                Back to info
-                            </a>
-                        </div>
-                    </form>
-
+        {{-- Tests --}}
+        @foreach($testsGrouped as $branchName => $tests)
+            <h5>{{ $branchName }}</h5>
+            @foreach($tests as $test)
+                <div>
+                    <input type="checkbox" name="tests[]" class="test-checkbox"
+                        value="{{ $test->id }}" data-price="{{ $test->price }}">
+                    {{ $test->name }} (Rs {{ $test->price }})
                 </div>
-            </div>
+            @endforeach
+            <hr>
+        @endforeach
+
+        {{-- Branch --}}
+        <div>
+            <label>Branch</label>
+            <select name="branch" class="form-select select2" required>
+                <option value="">Select Branch</option>
+                @foreach($branches as $branch)
+                    <option value="{{ $branch->name }}">{{ $branch->name }}</option>
+                @endforeach
+            </select>
         </div>
-    </div>
+
+        {{-- Payment Method --}}
+        <div>
+            <label>Payment Method</label>
+            <select name="payment_method" id="paymentMethod" class="form-select" required>
+                <option value="">Select</option>
+                <option value="Cash">Cash</option>
+                <option value="Stripe">Stripe</option>
+            </select>
+        </div>
+
+        {{-- Stripe Card --}}
+        <div id="stripeCardContainer" style="display:none">
+            <label>Card Details</label>
+            <div id="card-element"></div>
+            <div id="card-errors" class="text-danger mt-2"></div>
+        </div>
+
+        <h5>Total: Rs <span id="totalAmount">0.00</span></h5>
+
+        <div>
+            <button type="button" id="submitTestBtn" class="btn btn-primary">Submit</button>
+            <button type="button" id="payNowBtn" class="btn btn-success" style="display:none">Pay Now</button>
+        </div>
+    </form>
 </div>
 @endsection
-
 @push('scripts')
-{{-- jQuery --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{{-- Select2 JS --}}
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-{{-- SweetAlert2 JS --}}
+<script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const updateTotal = () => {
-            let total = 0;
-            document.querySelectorAll('.test-checkbox:checked').forEach(cb => {
-                total += parseFloat(cb.dataset.price || 0);
-            });
-            document.getElementById('totalAmount').innerText = total.toFixed(2);
-        };
+let stripe = Stripe("{{ env('STRIPE_KEY') }}");
+let elements = stripe.elements();
+let cardElement = elements.create('card');
+let clientSecret = null;
 
-        // Run on load
-        updateTotal();
-
-        // Update total on checkbox change
-        document.querySelectorAll('.test-checkbox').forEach(cb => {
-            cb.addEventListener('change', updateTotal);
-        });
-
-        // Enable Select2
-        $('.select2').select2({
-            placeholder: 'Select an option',
-            width: '100%',
-            allowClear: true
-        });
-
-        // Handle submission via SweetAlert
-        document.getElementById('submitTestBtn').addEventListener('click', function () {
-            const form = document.getElementById('finalTestForm');
-            const selectedTests = document.querySelectorAll('.test-checkbox:checked');
-            const branch = document.querySelector('select[name="branch"]').value;
-            const payment = document.querySelector('select[name="payment_method"]').value;
-
-            let errors = [];
-
-            if (!branch) errors.push("Please select a branch.");
-            if (!payment) errors.push("Please select a payment method.");
-            if (selectedTests.length === 0) errors.push("Please select at least one test.");
-
-            if (errors.length > 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Incomplete Form',
-                    html: errors.join('<br>'),
-                    confirmButtonColor: '#3085d6'
-                });
-                return;
-            }
-
-            // SweetAlert confirmation
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Do you want to submit your test request?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#198754',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Yes, Submit',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
+// Update Total
+function updateTotal() {
+    let total = 0;
+    $('.test-checkbox:checked').each(function () {
+        total += parseFloat($(this).data('price'));
     });
+    $('#totalAmount').text(total.toFixed(2));
+}
+$('.test-checkbox').on('change', updateTotal);
+updateTotal();
+
+// Show/hide Stripe card input based on payment method
+$('#paymentMethod').on('change', function () {
+    if ($(this).val() === 'Stripe') {
+        $('#stripeCardContainer, #payNowBtn').show();
+        $('#submitTestBtn').hide();
+        createStripeIntent();
+    } else {
+        $('#stripeCardContainer, #payNowBtn').hide();
+        $('#submitTestBtn').show();
+    }
+});
+
+// Create PaymentIntent from backend
+function createStripeIntent() {
+    const selectedTests = $('.test-checkbox:checked').map(function () {
+        return $(this).val();
+    }).get();
+
+    if (!selectedTests.length) {
+        Swal.fire('Please select at least one test.');
+        return;
+    }
+
+    fetch("{{ route('stripe.payment.intent') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": $("input[name=_token]").val()
+        },
+        body: JSON.stringify({ tests: selectedTests })
+    })
+    .then(res => res.json())
+    .then(data => {
+        clientSecret = data.clientSecret;
+        cardElement.mount("#card-element");
+    });
+}
+
+// Handle Stripe Payment
+$('#payNowBtn').on('click', async function () {
+    const branch = $('select[name="branch"]').val();
+    const tests = $('.test-checkbox:checked').map(function () {
+        return $(this).val();
+    }).get();
+
+    if (!branch || !tests.length) {
+        return Swal.fire('Missing Info', 'Please select tests and branch.', 'warning');
+    }
+
+    // Save session before payment
+    await fetch("{{ route('test.final.post') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': $("input[name=_token]").val()
+        },
+        body: JSON.stringify({
+            tests: tests,
+            branch: branch,
+            payment_method: 'Stripe'
+        })
+    });
+
+    // Confirm card payment
+    const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+            card: cardElement
+        }
+    });
+
+    if (error) {
+        $('#card-errors').text(error.message);
+    } else if (paymentIntent.status === 'succeeded') {
+        Swal.fire({
+            title: 'Success',
+            text: 'Payment Successful. Redirecting to invoice...',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+        });
+
+        // Final call to generate invoice
+        fetch("{{ route('test.stripe.success') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': $("input[name=_token]").val()
+            },
+            body: JSON.stringify({})
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.invoice_id) {
+                window.location.href = `/invoice/${data.invoice_id}`;
+            } else {
+                Swal.fire('Error', data.error || 'Invoice creation failed.', 'error');
+            }
+        });
+    }
+});
+
+// Handle normal cash form submit
+$('#submitTestBtn').on('click', function () {
+    const payment = $('#paymentMethod').val();
+    if (payment === 'Stripe') {
+        Swal.fire('Please use "Pay Now" button for Stripe payment.');
+    } else {
+        $('#finalTestForm').attr('action', "{{ route('test.final.post') }}").submit();
+    }
+});
 </script>
 @endpush

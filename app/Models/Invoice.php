@@ -18,7 +18,16 @@ class Invoice extends Model
         'amount',
         // Add any other columns you want to allow for mass assignment
     ];
-    
+//     public function testRequest()
+// {
+//     return $this->belongsTo(TestRequest::class);
+// }
+// Invoice.php
+public function testRequest()
+{
+    return $this->hasOne(TestRequest::class);
+}
+
     use HasFactory;
     
 }

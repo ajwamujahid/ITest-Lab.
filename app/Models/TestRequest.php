@@ -32,6 +32,10 @@ class TestRequest extends Model
 {
     return $this->hasOne(Appointment::class, 'test_request_id'); // ✅ best and clean
 }
+public function patient()
+{
+    return $this->belongsTo(Patient::class);
+}
 
     
     // public function patient()
@@ -61,10 +65,10 @@ public function riderVisit()
 // {
 //     return $this->belongsTo(Patient::class);
 // }
-public function patient()
-{
-    return $this->belongsTo(\App\Models\Patient::class, 'patient_id');
-}
+// public function patient()
+// {
+//     return $this->belongsTo(\App\Models\Patient::class, 'patient_id');
+// }
 
 // public function tests()
 // {

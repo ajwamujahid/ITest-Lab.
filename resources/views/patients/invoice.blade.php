@@ -73,16 +73,17 @@
                 <div class="mb-4">
                     <div class="invoice-section-title mb-2">Branch Information</div>
                     @if($branch)
-                        <div class="invoice-info">
-                            <p><strong>Name:</strong> {{ $branch->name }}</p>
-                            <p><strong>Zip Code:</strong> {{ $branch->zip_code ?? 'N/A' }}</p>
-                            <p><strong>City:</strong> {{ $branch->city ?? 'N/A' }}</p>
-                            <p><strong>State:</strong> {{ $branch->state ?? 'N/A' }}</p>
-                            <p><strong>Country:</strong> {{ $branch->country ?? 'N/A' }}</p>
-                        </div>
-                    @else
-                        <p class="text-danger">Branch info not available.</p>
-                    @endif
+                    <div class="invoice-info">
+                        <p><strong>Name:</strong> {{ $branch->name }}</p>
+                        <p><strong>Zip Code:</strong> {{ $branch->zip_code ?? 'N/A' }}</p>
+                        <p><strong>City:</strong> {{ $branch->city ?? 'N/A' }}</p>
+                        <p><strong>State:</strong> {{ $branch->state ?? 'N/A' }}</p>
+                        <p><strong>Country:</strong> {{ $branch->country ?? 'N/A' }}</p>
+                    </div>
+                @else
+                    <p class="text-danger">Branch info not available.</p>
+                @endif
+                
                 </div>
 
                 {{-- Patient Info --}}
